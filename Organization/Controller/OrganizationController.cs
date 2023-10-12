@@ -1,8 +1,7 @@
 ﻿using IS_5.Organization.Service;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using SupportLibrary.Model.Organization;
-using SupportLibrary.View;
+using ModelLibrary.Model.Organization;
+using ModelLibrary.View;
 
 namespace IS_5.Controler
 {
@@ -29,10 +28,10 @@ namespace IS_5.Controler
         }
 
         [HttpPost(Name = "CreateOrganization")]
-        public void Create([FromBody] OrganizationViewCreate organization) => _service.Create(organization);
+        public void Create([FromBody] OrganizationViewEdit organization) => _service.Create(organization);
 
         [HttpPut("{id}", Name = "UpdateOrganization")]
-        public void Update(int id, OrganizationViewCreate view) => _service.Update(id, view);
+        public void Update(int id, OrganizationViewEdit view) => _service.Update(id, view);
 
         [HttpDelete("{id}", Name = "DeleteOrganization")]
         public void Delete(int id) => _service.Delete(id);

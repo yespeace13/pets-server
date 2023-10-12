@@ -1,9 +1,8 @@
 ﻿using IS_5.Organization.Model;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using SupportLibrary.Model.Locality;
-using SupportLibrary.Model.Organization;
+using PetsServer.Locality.Model;
+using PetsServer.Organization.Model;
 
 namespace PetsServer.Context
 {

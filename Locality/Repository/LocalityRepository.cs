@@ -1,7 +1,7 @@
 ﻿using IS_5;
-using SupportLibrary.Model.Locality;
+using PetsServer.Locality.Model;
 
-namespace PetsServer.Locality
+namespace PetsServer.Locality.Repository
 {
     internal class LocalityRepository
     {

@@ -1,5 +1,5 @@
 ﻿using IS_5.Organization.Model;
-using SupportLibrary.Model.Organization;
+using PetsServer.Organization.Model;
 
 namespace IS_5.Organization.Repository
 {

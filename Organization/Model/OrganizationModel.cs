@@ -1,5 +1,5 @@
-﻿using SupportLibrary.Model.Locality;
-using SupportLibrary.Model.Organization;
+﻿using PetsServer.Locality.Model;
+using PetsServer.Organization.Model;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IS_5.Organization.Model

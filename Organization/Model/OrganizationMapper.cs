@@ -1,7 +1,7 @@
-﻿using IS_5.Interfaces;
-using IS_5.Organization.Repository;
-using PetsServer.Locality;
-using SupportLibrary.Model.Organization;
+﻿using IS_5.Organization.Repository;
+using ModelLibrary.Model.Organization;
+using PetsServer.Interfaces;
+using PetsServer.Locality.Repository;
 
 namespace IS_5.Organization.Model
 {
@@ -52,7 +52,7 @@ namespace IS_5.Organization.Model
                 );
         }
 
-        public OrganizationModel FromViewToModel(OrganizationViewCreate view)
+        public OrganizationModel FromViewToModel(OrganizationViewEdit view)
         {
             return new OrganizationModel(
                 0,

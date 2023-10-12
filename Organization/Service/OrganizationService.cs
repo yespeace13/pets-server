@@ -1,8 +1,8 @@
-﻿using IS_5.Controler;
-using IS_5.Organization.Model;
+﻿using IS_5.Organization.Model;
 using IS_5.Organization.Repository;
-using SupportLibrary.Model.Organization;
-using SupportLibrary.View;
+using ModelLibrary.Model.Organization;
+using ModelLibrary.View;
+using PetsServer.Organization.Model;
 
 namespace IS_5.Organization.Service
 {
@@ -10,13 +10,13 @@ namespace IS_5.Organization.Service
     {
         private OrganizationRepository _organizationRepository = new OrganizationRepository();
 
-        public void Create(OrganizationViewCreate view)
+        public void Create(OrganizationViewEdit view)
         {
             var organization = new OrganizationMapper().FromViewToModel(view);
             _organizationRepository.Create(organization);
         }
 
-        public void Update(int id, OrganizationViewCreate view)
+        public void Update(int id, OrganizationViewEdit view)
         {
             var organization = new OrganizationMapper().FromViewToModel(view);
             organization.Id = id;

@@ -1,6 +1,6 @@
 ﻿using IS_5.Organization.Model;
-using SupportLibrary.Model.Locality;
-using SupportLibrary.Model.Organization;
+using PetsServer.Locality.Model;
+using PetsServer.Organization.Model;
 
 namespace IS_5
 {
