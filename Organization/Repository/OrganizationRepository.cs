@@ -65,6 +65,9 @@ namespace IS_5.Organization.Repository
         {
             var oldOrg = TestData.OrganizationsModel.First(o => o.Id == organization.Id);
             oldOrg.NameOrganization = organization.NameOrganization;
+            oldOrg.TypeOrganization = organization.TypeOrganization;
+            oldOrg.LegalType = organization.LegalType;
+            oldOrg.Locality = organization.Locality;
         }
 
         internal void Delete(int id)

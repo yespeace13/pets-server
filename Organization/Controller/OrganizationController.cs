@@ -19,11 +19,11 @@ namespace IS_5.Controler
 
         [HttpGet(Name = "GetOrganizations")]
         public PageSettings<OrganizationViewList> GetPage(
-            [FromHeader] int? page,
-            [FromHeader] int? pages,
-            [FromHeader] string? filter,
-            [FromHeader] string? sortField,
-            [FromHeader] int? sortType)
+            int? page,
+            int? pages,
+            string? filter,
+            string? sortField,
+            int? sortType)
         {
             return _service.GetPage(page, pages, filter, sortField, sortType);
         }
@@ -39,10 +39,10 @@ namespace IS_5.Controler
         //}
 
         [HttpPost(Name = "CreateOrganization")]
-        public void Create([FromBody] OrganizationViewEdit organization) => _service.Create(organization);
+        public void Create([FromBody] OrganizationEdit organization) => _service.Create(organization);
 
         [HttpPut("{id}", Name = "UpdateOrganization")]
-        public void Update(int id, OrganizationViewEdit view) => _service.Update(id, view);
+        public void Update(int id, OrganizationEdit view) => _service.Update(id, view);
 
         [HttpDelete("{id}", Name = "DeleteOrganization")]
         public void Delete(int id) => _service.Delete(id);

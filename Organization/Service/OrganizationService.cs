@@ -10,13 +10,13 @@ namespace IS_5.Organization.Service
     {
         private OrganizationRepository _organizationRepository = new OrganizationRepository();
 
-        public void Create(OrganizationViewEdit view)
+        public void Create(OrganizationEdit view)
         {
             var organization = new OrganizationMapper().FromViewToModel(view);
             _organizationRepository.Create(organization);
         }
 
-        public void Update(int id, OrganizationViewEdit view)
+        public void Update(int id, OrganizationEdit view)
         {
             var organization = new OrganizationMapper().FromViewToModel(view);
             organization.Id = id;
@@ -48,7 +48,7 @@ namespace IS_5.Organization.Service
             return _organizationRepository.GetOne(id);
         }
 
-        public PageSettings<OrganizationViewList> GetPage(int? pageQuery, int? pagesQuery, string? filter, string? sortField, int? sortType)
+        public PageSettings<OrganizationViewList> GetPage(int? pageQuery, int? pagesQuery, string filter, string? sortField, int? sortType)
         {
             var organizations = _organizationRepository.GetAll();
             var pageSettings = new PageSettings<OrganizationViewList>();

@@ -52,7 +52,7 @@ namespace IS_5.Organization.Model
                 );
         }
 
-        public OrganizationModel FromViewToModel(OrganizationViewEdit view)
+        public OrganizationModel FromViewToModel(OrganizationEdit view)
         {
             return new OrganizationModel(
                 0,
