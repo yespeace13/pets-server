@@ -1,7 +1,9 @@
 ﻿using IS_5.Organization.Model;
 using IS_5.Organization.Repository;
+using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
+using PetsServer;
 using PetsServer.Organization.Model;
 
 namespace IS_5.Organization.Service
@@ -164,13 +166,13 @@ namespace IS_5.Organization.Service
 
         
 
-        public void ExportToExcel(string[] columns, List<FilterSetting> filter)
+        public byte[] ExportToExcel(string filters)
         {
-            //ExportDataToExcel.Export<OrganizationViewEdit>(
-            //    columns, "Организации", FilterOrganizations(_organizationRepository.GetAll(), filter)
-            //    .Select(o => new OrganizationMapper().FromModelToView(o))
-            //    .ToList()
-            //    );
+            return ExportDataToExcel.Export(
+                "Организации", FilterOrganizations(_organizationRepository.GetAll(), filters)
+                .Select(o => new OrganizationMapper().FromModelToView(o))
+                .ToList()
+                );
         }
     }
 }

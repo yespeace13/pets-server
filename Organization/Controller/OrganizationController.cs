@@ -47,7 +47,6 @@ namespace IS_5.Controler
         [HttpDelete("{id}", Name = "DeleteOrganization")]
         public void Delete(int id) => _service.Delete(id);
 
-        //public void ExportToExcel(string[] columns, List<FilterSetting> filters)
-        //    => _service.ExportToExcel(columns, filters);
+            
     }
 }
