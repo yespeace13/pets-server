@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
+using PetsServer.Organization.Model;
 
 namespace IS_5.Controler
 {
@@ -26,6 +27,16 @@ namespace IS_5.Controler
         {
             return _service.GetPage(page, pages, filter, sortField, sortType);
         }
+        //[HttpGet(Name = "GetTypeOrganizations")]
+        //public List<TypeOrganizationModel> GetTypesOrganization()
+        //{
+        //    return _service.GetTypesOrganization();
+        //}
+        //[HttpGet(Name = "GetLegalTypes")]
+        //public List<LegalTypeModel> GetLegalTypes()
+        //{
+        //    return _service.GetLegalTypes();
+        //}
 
         [HttpPost(Name = "CreateOrganization")]
         public void Create([FromBody] OrganizationViewEdit organization) => _service.Create(organization);

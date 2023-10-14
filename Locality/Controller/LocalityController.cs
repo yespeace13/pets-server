@@ -13,6 +13,7 @@ namespace PetsServer.Locality.Controller
         {
             return new ActionResult<List<LocalityModel>>(new LocalityRepository().GetLocalitys());
         }
+
         [HttpGet("{id}", Name = "GetLocality")]
         public ActionResult<LocalityModel> Details(int id)
         {
