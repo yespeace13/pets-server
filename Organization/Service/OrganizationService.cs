@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
 using PetsServer;
+using PetsServer.Authorization.Model;
 using PetsServer.Organization.Model;
+using System.Security.Claims;
 
 namespace IS_5.Organization.Service
 {
@@ -45,13 +47,25 @@ namespace IS_5.Organization.Service
             return _organizationRepository.GetLegalTypes();
         }
 
-        public OrganizationModel GetOne(int id)
+        public OrganizationViewList GetOne(int id)
         {
-            return _organizationRepository.GetOne(id);
+            return new OrganizationMapper().FromModelToView(_organizationRepository.GetOne(id));
         }
 
-        public PageSettings<OrganizationViewList> GetPage(int? pageQuery, int? pagesQuery, string filter, string? sortField, int? sortType)
+        public PageSettings<OrganizationViewList> GetPage(int? pageQuery, int? pagesQuery, string filter, string? sortField, int? sortType, UserModel user)
         {
+            //if (UserSession.User.Privilege.Organizations.Item1 == Restrictions.Organizations)
+            //    orgs = TestData.OrganizationsModel
+            //        .Where(org => org.NameOrganization == UserSession.User.Organization.NameOrg);
+            //else if (UserSession.User.Privilege.Organizations.Item1 == Restrictions.Locality)
+            //    orgs = TestData.OrganizationsModel
+            //        .Where(org => org.Locality.Name == UserSession.User.Locality.Name);
+            //else
+            //    orgs = TestData.OrganizationsModel;
+            //if (UserSession.User.Privilege.Organizations.Item3 != null)
+            //    orgs = orgs.Where(o => UserSession.User.Privilege.Organizations.Item3.Contains(o.TypeOrganization.Id));
+
+
             var organizations = _organizationRepository.GetAll();
             var pageSettings = new PageSettings<OrganizationViewList>();
             if (pageQuery.HasValue && pageQuery > 0)
@@ -60,6 +74,8 @@ namespace IS_5.Organization.Service
             if (pagesQuery.HasValue && pagesQuery.Value > 0)
                 size = pagesQuery.Value;
             
+
+
             organizations = SortOrganizations(FilterOrganizations(organizations, filter), sortField, sortType).ToList();
             pageSettings.Pages = (int)Math.Ceiling((double)organizations.Count / size);
             pageSettings.Items = organizations

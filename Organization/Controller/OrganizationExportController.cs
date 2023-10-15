@@ -11,12 +11,10 @@ namespace PetsServer.Organization.Controller
     [ApiController]
     public class OrganizationExportController : ControllerBase
     {
-        // GET: api/<ValuesController>
         [HttpGet]
         public IActionResult Get(string? filters)
         {
-            var fileName = $"test.xlsx";
-            var filepath = $"controllers/test/{fileName}";
+            var fileName = $"Организации.xlsx";
             var mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             var file = new OrganizationService().ExportToExcel(filters);
             return File(file, mimeType, fileName);

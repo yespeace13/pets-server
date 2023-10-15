@@ -1,42 +1,46 @@
 ﻿using IS_5.Organization.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
+using PetsServer.Authorization.Model;
 using PetsServer.Organization.Model;
+using System.Net;
+using System.Security.Claims;
 
 namespace IS_5.Controler
 {
     [ApiController]
     [Route("organizations")]
+    [Authorize]
     public class OrganizationController : Controller
     {
         private OrganizationService _service;
+        private UserModel _user;
 
         public OrganizationController()
         {
             _service = new OrganizationService();
+            
         }
 
         [HttpGet(Name = "GetOrganizations")]
-        public PageSettings<OrganizationViewList> GetPage(
+        public ActionResult<PageSettings<OrganizationViewList>> GetPage(
             int? page,
             int? pages,
             string? filter,
             string? sortField,
             int? sortType)
         {
-            return _service.GetPage(page, pages, filter, sortField, sortType);
+            _user = TestData.Users.Find(u => u.Login == User.Identity.Name);
+            return new ActionResult<PageSettings<OrganizationViewList>>(_service.GetPage(page, pages, filter, sortField, sortType, _user));
         }
-        //[HttpGet(Name = "GetTypeOrganizations")]
-        //public List<TypeOrganizationModel> GetTypesOrganization()
-        //{
-        //    return _service.GetTypesOrganization();
-        //}
-        //[HttpGet(Name = "GetLegalTypes")]
-        //public List<LegalTypeModel> GetLegalTypes()
-        //{
-        //    return _service.GetLegalTypes();
-        //}
+
+        [HttpGet("{id}", Name = "GetOrganization")]
+        public ActionResult<OrganizationViewList> GetOne(int id)
+        {
+            return new ActionResult<OrganizationViewList>(_service.GetOne(id));
+        }
 
         [HttpPost(Name = "CreateOrganization")]
         public void Create([FromBody] OrganizationEdit organization) => _service.Create(organization);
@@ -47,6 +51,6 @@ namespace IS_5.Controler
         [HttpDelete("{id}", Name = "DeleteOrganization")]
         public void Delete(int id) => _service.Delete(id);
 
-            
+
     }
 }

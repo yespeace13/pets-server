@@ -1,4 +1,5 @@
 ﻿using IS_5.Organization.Model;
+using PetsServer.Authorization.Model;
 using PetsServer.Locality.Model;
 using PetsServer.Organization.Model;
 
@@ -9,9 +10,9 @@ namespace IS_5
         public static List<OrganizationModel> OrganizationsModel { get; set; }
         public static List<TypeOrganizationModel> TypeOrganizationsModel { get; set; }
         public static List<LegalTypeModel> LegalTypesModel { get; set; }
-        //public static List<User> Users { get; set; }
+        public static List<UserModel> Users { get; set; }
         public static List<LocalityModel> Localitys { get; set; }
-        //public static List<Role> Roles { get; set; }
+        public static List<Role> Roles { get; set; }
 
         //public static List<Act> Acts { get; set; }
         //public static List<Contract> Contracts { get; set; }
@@ -25,8 +26,8 @@ namespace IS_5
             CreateTypeOwnerOrganizations();
             CreateLocalitys();
             CreateOrganizations();
-            //CreateRoles();
-            //CreateUsers();
+            CreateRoles();
+            CreateUsers();
             //CreateContracts();
             //CreateContentPlans();
             //CreatePlans();
@@ -87,81 +88,80 @@ namespace IS_5
                 { new LocalityModel(3, "Ялуторовский муниципальный район") }
             };
         }
-        //private static void CreateRoles()
-        //{
-        //    Roles = new List<Role>
-        //    {
-        //        {
-        //            new Role(1, "Куратор ВетСлужбы",
-        //                new Tuple<Restrictions, Possibilities[]>(
-        //                    //Что будет отображать датагрид
-        //                    Restrictions.All,
-        //                    //Что он может делать на форме
-        //                    new Possibilities[] {Possibilities.OpenAndEdit}),
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null),
-        //                new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.All, null, null),
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null))
-        //        },
-        //        {
-        //            new Role(2, "Оператор ВетСлужбы",
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.All,
-        //                    new Possibilities[] {Possibilities.OpenAndEdit}),
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null),
-        //                new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.All,
-        //                    new Possibilities[]
-        //                    {
-        //                        Possibilities.Add, Possibilities.Delete, Possibilities.Change,
-        //                        Possibilities.AddFile, Possibilities.DelFile
-        //                    },
-        //                    new int[]{ 2, 3, 7}),
-        //                new Tuple<Restrictions, Possibilities[]>(
-        //                    Restrictions.All, null))
-        //        },
-        //        {
-        //            new Role(3, "Оператор ОМСУ",
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality,
-        //                    new Possibilities[] { Possibilities.OpenAndEdit }),
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality, null),
-        //                new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.Locality,
-        //                    new Possibilities[]
-        //                    {
-        //                        Possibilities.Add, Possibilities.Delete, Possibilities.Change,
-        //                        Possibilities.AddFile, Possibilities.DelFile
-        //                    },
-        //                    new int[]{ 4, 5, 6, 7, 9, 10, 11}),
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality,
-        //                    new Possibilities[]
-        //                    {
-        //                        Possibilities.Add, Possibilities.Change, Possibilities.Delete,
-        //                        Possibilities.AddFile, Possibilities.DelFile
-        //                    }))
-        //        },
-        //        {
-        //            new Role(4, "Оператор по отлову",
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality,
-        //                    new Possibilities[] { Possibilities.OpenAndEdit, Possibilities.Add, Possibilities.Delete }),
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality, new Possibilities[]
-        //                {
-        //                    Possibilities.Add, Possibilities.Delete, Possibilities.Change,
-        //                        Possibilities.AddFile, Possibilities.DelFile
-        //                    }),
-        //                new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.None, null, null),
-        //                new Tuple<Restrictions, Possibilities[]>(Restrictions.None, null))
-        //        }
+        private static void CreateRoles()
+        {
+            Roles = new List<Role>
+            {
+                {
+                    new Role(1, "Куратор ВетСлужбы",
+                        new Tuple<Restrictions, Possibilities[]>(
+                            //Что будет отображать датагрид
+                            Restrictions.All,
+                            //Что он может делать на форме
+                            new Possibilities[] {Possibilities.Insert, Possibilities.Update, Possibilities.Delete}),
+                        new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null),
+                        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.All, null, null),
+                        new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null))
+                },
+                {
+                    new Role(2, "Оператор ВетСлужбы",
+                        new Tuple<Restrictions, Possibilities[]>(Restrictions.All,
+                            new Possibilities[] {Possibilities.Insert, Possibilities.Update, Possibilities.Delete}),
+                        new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null),
+                        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.All,
+                            new Possibilities[]
+                            {
+                                Possibilities.Insert, Possibilities.Delete, Possibilities.Update
+                            },
+                            new int[]{ 2, 3, 7}),
+                        new Tuple<Restrictions, Possibilities[]>(
+                            Restrictions.All, null))
+                },
+                //{
+                //    new Role(3, "Оператор ОМСУ",
+                //        new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality,
+                //            new Possibilities[] { Possibiliti }),
+                //        new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality, null),
+                //        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.Locality,
+                //            new Possibilities[]
+                //            {
+                //                Possibilities.Add, Possibilities.Delete, Possibilities.Change,
+                //                Possibilities.AddFile, Possibilities.DelFile
+                //            },
+                //            new int[]{ 4, 5, 6, 7, 9, 10, 11}),
+                //        new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality,
+                //            new Possibilities[]
+                //            {
+                //                Possibilities.Add, Possibilities.Change, Possibilities.Delete,
+                //                Possibilities.AddFile, Possibilities.DelFile
+                //            }))
+                //},
+                //{
+                //    new Role(4, "Оператор по отлову",
+                //        new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality,
+                //            new Possibilities[] { Possibilities.OpenAndEdit, Possibilities.Add, Possibilities.Delete }),
+                //        new Tuple<Restrictions, Possibilities[]>(Restrictions.Locality, new Possibilities[]
+                //        {
+                //            Possibilities.Add, Possibilities.Delete, Possibilities.Change,
+                //                Possibilities.AddFile, Possibilities.DelFile
+                //            }),
+                //        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.None, null, null),
+                //        new Tuple<Restrictions, Possibilities[]>(Restrictions.None, null))
+                //}
 
-        //    };
-        //}
+            };
+        }
 
-        //private static void CreateUsers()
-        //{
-        //    Users = new List<User>
-        //    {
-        //        { new User(1, "User1", "1234", Localitys[0], null, Roles[0]) },
-        //        { new User(2, "User2", "1234", null, null, Roles[1])},
-        //        { new User(3, "User3", "1234", Localitys[2], null, Roles[2])}
-        //        //{ new User(4, "User4", "1234", null, Organizations[5], Roles[3])}
-        //    };
-        //}
+        private static void CreateUsers()
+        {
+            Users = new List<UserModel>
+            {
+                { new UserModel(1, "User1", "1234", Localitys[0], null, Roles[0]) },
+                { new UserModel(2, "User2", "1234", null, null, Roles[1])},
+                { new UserModel(3, "User3", "1234", Localitys[2], null, Roles[1])}
+                //{ new User(4, "User4", "1234", null, Organizations[5], Roles[3])}
+            };
+        }
 
         private static void CreateTypeOrganizations()
         {

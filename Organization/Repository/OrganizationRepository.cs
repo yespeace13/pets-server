@@ -1,11 +1,14 @@
 ﻿using IS_5.Organization.Model;
+using Microsoft.EntityFrameworkCore;
+using PetsServer.Context;
 using PetsServer.Organization.Model;
+using System.Security.Claims;
 
 namespace IS_5.Organization.Repository
 {
     public class OrganizationRepository
     {
-        
+
 
         public OrganizationModel GetOne(int id)
         {
@@ -40,23 +43,18 @@ namespace IS_5.Organization.Repository
         }
         public List<OrganizationModel> GetAll()
         {
-            IEnumerable<OrganizationModel> orgs = TestData.OrganizationsModel;
-            //if (UserSession.User.Privilege.Organizations.Item1 == Restrictions.Organizations)
-            //    orgs = TestData.OrganizationsModel
-            //        .Where(org => org.NameOrganization == UserSession.User.Organization.NameOrg);
-            //else if (UserSession.User.Privilege.Organizations.Item1 == Restrictions.Locality)
-            //    orgs = TestData.OrganizationsModel
-            //        .Where(org => org.Locality.Name == UserSession.User.Locality.Name);
-            //else
-            //    orgs = TestData.OrganizationsModel;
-            //if (UserSession.User.Privilege.Organizations.Item3 != null)
-            //    orgs = orgs.Where(o => UserSession.User.Privilege.Organizations.Item3.Contains(o.TypeOrganization.Id));
-            return orgs.ToList();
+            using (var context = new PetsContext())
+            {
+                return context.Organizations.Include(o => o.TypeOrganization)
+                    .Include(o => o.LegalType)
+                    .Include(o => o.Locality)
+                    .ToList();
+            }
         }
 
         internal void Create(OrganizationModel organization)
         {
-            var newId = TestData.OrganizationsModel.Max(o => o.Id); 
+            var newId = TestData.OrganizationsModel.Max(o => o.Id);
             organization.Id = ++newId;
             TestData.OrganizationsModel.Add(organization);
         }
@@ -75,6 +73,6 @@ namespace IS_5.Organization.Repository
             TestData.OrganizationsModel.Remove(TestData.OrganizationsModel.First(o => o.Id == id));
         }
 
-        
+
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using PetsServer.Locality.Model;
 using PetsServer.Organization.Model;
+using System.Reflection.Metadata;
 
 namespace PetsServer.Context
 {
@@ -16,15 +17,13 @@ namespace PetsServer.Context
         public DbSet<OrganizationModel> Organizations { get; set; }
 
 
+        // Добавить в миграцию migrationBuilder.Sql(File.ReadAllText("InitData.sql"));
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=pets;User Id=postgres;Password=1234;");
+        => optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=pets;User Id=postgres;Password=1234;Include Error Detail=True");
 
-        protected void Up(MigrationBuilder migrationBuilder)
-        {
-
-            migrationBuilder.Sql(File.ReadAllText("")) ;
-
-        }
-
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+            
+        //}
     }
 }

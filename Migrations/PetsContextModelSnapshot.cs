@@ -25,34 +25,41 @@ namespace PetsServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("address");
 
                     b.Property<string>("Inn")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("inn");
 
                     b.Property<string>("KPP")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("kpp");
 
                     b.Property<int>("LegalTypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("legal_type_id");
 
                     b.Property<int>("LocalityId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("locality_id");
 
                     b.Property<string>("NameOrganization")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name_organization");
 
                     b.Property<int>("TypeOrganizationId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("type_organization_id");
 
                     b.HasKey("Id");
 
@@ -62,75 +69,81 @@ namespace PetsServer.Migrations
 
                     b.HasIndex("TypeOrganizationId");
 
-                    b.ToTable("Organizations");
+                    b.ToTable("organization");
                 });
 
-            modelBuilder.Entity("SupportLibrary.Model.Organization.LegalTypeModel", b =>
+            modelBuilder.Entity("PetsServer.Locality.Model.LocalityModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("LegalTypeModel");
+                    b.ToTable("locality");
                 });
 
-            modelBuilder.Entity("SupportLibrary.Model.Organization.LocalityModel", b =>
+            modelBuilder.Entity("PetsServer.Organization.Model.LegalTypeModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Localitys");
+                    b.ToTable("legal_type");
                 });
 
-            modelBuilder.Entity("SupportLibrary.Model.Organization.TypeOrganizationModel", b =>
+            modelBuilder.Entity("PetsServer.Organization.Model.TypeOrganizationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TypeOrganizations");
+                    b.ToTable("type_organization");
                 });
 
             modelBuilder.Entity("IS_5.Organization.Model.OrganizationModel", b =>
                 {
-                    b.HasOne("SupportLibrary.Model.Organization.LegalTypeModel", "LegalType")
+                    b.HasOne("PetsServer.Organization.Model.LegalTypeModel", "LegalType")
                         .WithMany()
                         .HasForeignKey("LegalTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SupportLibrary.Model.Organization.LocalityModel", "Locality")
+                    b.HasOne("PetsServer.Locality.Model.LocalityModel", "Locality")
                         .WithMany()
                         .HasForeignKey("LocalityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SupportLibrary.Model.Organization.TypeOrganizationModel", "TypeOrganization")
+                    b.HasOne("PetsServer.Organization.Model.TypeOrganizationModel", "TypeOrganization")
                         .WithMany()
                         .HasForeignKey("TypeOrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)

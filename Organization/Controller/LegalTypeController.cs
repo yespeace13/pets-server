@@ -1,4 +1,5 @@
 ﻿using IS_5.Organization.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Organization.Model;
 
@@ -8,6 +9,7 @@ namespace PetsServer.Organization.Controller
 {
     [Route("legaltype")]
     [ApiController]
+    [Authorize]
     public class LegalTypeController : ControllerBase
     {
         [HttpGet]
