@@ -1,17 +1,19 @@
 ﻿using IS_5.Organization.Repository;
+using ModelLibrary.Model.Animal;
 using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
 using PetsServer;
+using PetsServer.Animal.Repository;
 using PetsServer.Authorization.Model;
 using PetsServer.Organization.Model;
 
-namespace PetsServer.Organization.Service
+namespace PetsServer.Animal.Service
 {
-    public class OrganizationService
+    public class AnimalService
     {
-        private OrganizationRepository _organizationRepository = new OrganizationRepository();
+        private AnimalRepository _animalRepository = new AnimalRepository();
 
-        public void Create(OrganizationEdit view)
+        public void Create(AnimalEdit view)
         {
             var organization = new OrganizationMapper().FromViewToModel(view);
             _organizationRepository.Create(organization);

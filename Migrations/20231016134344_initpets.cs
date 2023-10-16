@@ -6,12 +6,33 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PetsServer.Migrations
 {
     /// <inheritdoc />
-    public partial class InitPets : Migration
+    public partial class initpets : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            
+            migrationBuilder.CreateTable(
+                name: "animal",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    category_animal = table.Column<string>(type: "text", nullable: false),
+                    sex_animal = table.Column<bool>(type: "boolean", nullable: true),
+                    breed_animal = table.Column<string>(type: "text", nullable: true),
+                    size_animal = table.Column<double>(type: "double precision", nullable: true),
+                    wool_animal = table.Column<string>(type: "text", nullable: true),
+                    color_animal = table.Column<string>(type: "text", nullable: true),
+                    ears_animal = table.Column<string>(type: "text", nullable: true),
+                    tail_animal = table.Column<string>(type: "text", nullable: true),
+                    specialSigns_animal = table.Column<string>(type: "text", nullable: true),
+                    identificationLabel_animal = table.Column<string>(type: "text", nullable: true),
+                    chipNumber_animal = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_animal", x => x.id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "legal_type",
@@ -110,6 +131,9 @@ namespace PetsServer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "animal");
+
             migrationBuilder.DropTable(
                 name: "organization");
 

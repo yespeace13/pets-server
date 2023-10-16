@@ -1,5 +1,4 @@
-﻿using IS_5.Organization.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PetsServer.Context;
 using PetsServer.Organization.Model;
 

@@ -1,12 +1,9 @@
-﻿using IS_5.Organization.Service;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
 using PetsServer.Authorization.Model;
-using PetsServer.Organization.Model;
-using System.Net;
-using System.Security.Claims;
+using PetsServer.Organization.Service;
 
 namespace IS_5.Controler
 {

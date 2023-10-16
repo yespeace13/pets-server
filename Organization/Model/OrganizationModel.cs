@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection.Metadata;
 
-namespace IS_5.Organization.Model
+namespace PetsServer.Organization.Model
 {
     [Table("organization")]
     public class OrganizationModel

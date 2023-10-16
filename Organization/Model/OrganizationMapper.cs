@@ -3,7 +3,7 @@ using ModelLibrary.Model.Organization;
 using PetsServer.Interfaces;
 using PetsServer.Locality.Repository;
 
-namespace IS_5.Organization.Model
+namespace PetsServer.Organization.Model
 {
     public class OrganizationMapper : IMapper<OrganizationModel, OrganizationViewList>
     {

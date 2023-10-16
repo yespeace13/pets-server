@@ -1,11 +1,7 @@
-﻿using IS_5.Organization.Model;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
+﻿using Microsoft.EntityFrameworkCore;
+using PetsServer.Animal.Model;
 using PetsServer.Locality.Model;
 using PetsServer.Organization.Model;
-using System.Reflection.Emit;
-using System.Reflection.Metadata;
 
 namespace PetsServer.Context
 {
@@ -17,6 +13,8 @@ namespace PetsServer.Context
 
         public DbSet<LocalityModel> Localities { get; set; }
         public DbSet<OrganizationModel> Organizations { get; set; }
+
+        public DbSet<AnimalModel> Animals { get; set; }
 
 
         // Добавить в миграцию migrationBuilder.Sql(File.ReadAllText("InitData.sql"));

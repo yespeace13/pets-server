@@ -1,5 +1,5 @@
-﻿using IS_5.Organization.Model;
-using PetsServer.Locality.Model;
+﻿using PetsServer.Locality.Model;
+using PetsServer.Organization.Model;
 
 namespace PetsServer.Authorization.Model
 {
