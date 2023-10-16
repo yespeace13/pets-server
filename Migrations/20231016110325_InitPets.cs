@@ -11,12 +11,14 @@ namespace PetsServer.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            
+
             migrationBuilder.CreateTable(
                 name: "legal_type",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -29,7 +31,7 @@ namespace PetsServer.Migrations
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -42,7 +44,7 @@ namespace PetsServer.Migrations
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -55,7 +57,7 @@ namespace PetsServer.Migrations
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     name_organization = table.Column<string>(type: "text", nullable: false),
                     inn = table.Column<string>(type: "text", nullable: false),
                     kpp = table.Column<string>(type: "text", nullable: true),

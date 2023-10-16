@@ -54,9 +54,9 @@ namespace IS_5.Organization.Model
             Inn = inn;
             KPP = kpp;
             Address = address;
-            TypeOrganization = typeOrganizations;
-            LegalType = legalType;
-            Locality = locality;
+            TypeOrganizationId = typeOrganizations.Id;
+            LegalTypeId = legalType.Id;
+            LocalityId = locality.Id;
         }
     }
 }

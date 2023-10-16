@@ -2,75 +2,100 @@
 using Microsoft.EntityFrameworkCore;
 using PetsServer.Context;
 using PetsServer.Organization.Model;
-using System.Security.Claims;
 
 namespace IS_5.Organization.Repository
 {
+    /**
+     * Пока выглядит немного убого, скорее всего буду переделывать
+    */
     public class OrganizationRepository
     {
 
-
         public OrganizationModel GetOne(int id)
         {
-            return TestData.OrganizationsModel.First(x => x.Id == id);
+            using var context = new PetsContext();
+            return context.Organizations.Where(o => o.Id == id)
+                .Include(o => o.TypeOrganization)
+                .Include(o => o.LegalType)
+                .Include(o => o.Locality)
+                .First();
         }
 
         public TypeOrganizationModel GetTypeOrganization(string typeOrganization)
         {
-            return TestData.TypeOrganizationsModel.First(t => t.Name == typeOrganization);
+            using var context = new PetsContext();
+            return context.TypeOrganizations.Where(t => t.Name == typeOrganization)
+                .First();
         }
 
         public TypeOrganizationModel GetTypeOrganization(int id)
         {
-            return TestData.TypeOrganizationsModel.First(t => t.Id == id);
+            using var context = new PetsContext();
+            return context.TypeOrganizations.Where(t => t.Id == id)
+                .First();
         }
         public LegalTypeModel GetLegalType(string legalType)
         {
-            return TestData.LegalTypesModel.First(t => t.Name == legalType);
+            using var context = new PetsContext();
+            return context.LegalTypes.Where(l => l.Name == legalType)
+                .First();
         }
         public LegalTypeModel GetLegalType(int id)
         {
-            return TestData.LegalTypesModel.First(t => t.Id == id);
+            using var context = new PetsContext();
+            return context.LegalTypes.Where(l => l.Id == id)
+                .First();
         }
-        internal List<TypeOrganizationModel> GetTypesOrganization()
+        public List<TypeOrganizationModel> GetTypesOrganization()
         {
-            return TestData.TypeOrganizationsModel;
+            using var context = new PetsContext();
+            return context.TypeOrganizations.ToList();
         }
 
-        internal List<LegalTypeModel> GetLegalTypes()
+        public List<LegalTypeModel> GetLegalTypes()
         {
-            return TestData.LegalTypesModel;
+            using var context = new PetsContext();
+            return context.LegalTypes.ToList();
         }
         public List<OrganizationModel> GetAll()
         {
-            using (var context = new PetsContext())
-            {
-                return context.Organizations.Include(o => o.TypeOrganization)
-                    .Include(o => o.LegalType)
-                    .Include(o => o.Locality)
-                    .ToList();
-            }
+            using var context = new PetsContext();
+            return context.Organizations.Include(o => o.TypeOrganization)
+                .Include(o => o.LegalType)
+                .Include(o => o.Locality)
+                .ToList();
         }
 
-        internal void Create(OrganizationModel organization)
+        public void Create(OrganizationModel organization)
         {
-            var newId = TestData.OrganizationsModel.Max(o => o.Id);
-            organization.Id = ++newId;
-            TestData.OrganizationsModel.Add(organization);
+            using var context = new PetsContext();
+            context.Add(organization);
+            context.SaveChanges();
         }
 
-        internal void Update(OrganizationModel organization)
+        public void Update(OrganizationModel organization)
         {
-            var oldOrg = TestData.OrganizationsModel.First(o => o.Id == organization.Id);
+            using var context = new PetsContext();
+            var oldOrg = context.Organizations.Where(o => o.Id == organization.Id)
+                .First();
             oldOrg.NameOrganization = organization.NameOrganization;
-            oldOrg.TypeOrganization = organization.TypeOrganization;
-            oldOrg.LegalType = organization.LegalType;
-            oldOrg.Locality = organization.Locality;
+            oldOrg.Inn = organization.Inn;
+            oldOrg.KPP = organization.KPP;
+            oldOrg.Address = organization.Address;
+            oldOrg.TypeOrganizationId = organization.TypeOrganizationId;
+            oldOrg.LegalTypeId = organization.LegalTypeId;
+            oldOrg.LocalityId = organization.LocalityId;
+            context.Organizations.Update(oldOrg);
+            context.SaveChanges();
         }
 
-        internal void Delete(int id)
+        public void Delete(int id)
         {
-            TestData.OrganizationsModel.Remove(TestData.OrganizationsModel.First(o => o.Id == id));
+            using var context = new PetsContext();
+            var organization = context.Organizations.Where(o => o.Id == id)
+                .First();
+            context.Organizations.Remove(organization);
+            context.SaveChanges();
         }
 
 
