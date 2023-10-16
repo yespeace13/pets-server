@@ -7,15 +7,6 @@ namespace PetsServer
     {
         public static byte[] Export<T>(string name, List<T> objects)
         {
-            //Application app = new Application
-            //{
-            //    Visible = false,
-            //    SheetsInNewWorkbook = 1
-            //};
-
-            //Workbook workBook = app.Workbooks.Add(Type.Missing);
-            //app.DisplayAlerts = false;
-            //Worksheet sheet = (Worksheet)app.Worksheets.get_Item(1);
             var package = new ExcelPackage();
             var sheet = package.Workbook.Worksheets.Add(name);
 
