@@ -31,7 +31,7 @@ namespace PetsServer.Organization.Model
         public int TypeOrganizationId { get; set; }
 
         [ForeignKey(nameof(TypeOrganizationId))]
-        public TypeOrganizationModel TypeOrganization { get; set; } = null!;
+        public TypeOrganizationModel TypeOrganization { get; set; }
 
 
         [Column(name: "legal_type_id")]

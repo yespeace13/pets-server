@@ -47,9 +47,10 @@ public class AnimalModel
 
     public AnimalModel() { }
     public AnimalModel(
-            string category, bool sex, string breed, double size, string wool, string color,
+            int id, string category, bool sex, string breed, double size, string wool, string color,
             string ears, string tail, string specialSigns, string identificationLabel, string chipNumber)
     {
+        Id = id;
         Category = category;
         Sex = sex;
         Breed = breed;
