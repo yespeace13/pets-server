@@ -29,6 +29,7 @@
     <Folder Include="Authorization\Repository\" />
     <Folder Include="Authorization\Service\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Animal\" />
   </ItemGroup>
 
 </Project>
