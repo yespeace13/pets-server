@@ -19,7 +19,7 @@ namespace PetsServer.Organization.Model
         public string NameOrganization { get; set; }
 
         [Column("inn")]
-        public string Inn { get; set; }
+        public string INN { get; set; }
 
         [Column("kpp")]
         public string? KPP { get; set; }
@@ -51,7 +51,7 @@ namespace PetsServer.Organization.Model
         {
             Id = id;
             NameOrganization = name;
-            Inn = inn;
+            INN = inn;
             KPP = kpp;
             Address = address;
             TypeOrganizationId = typeOrganizations.Id;

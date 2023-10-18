@@ -16,6 +16,7 @@ namespace PetsServer.Authorization.Model
 
     public enum Possibilities
     {
+        Read,
         Insert,
         Update,
         Delete

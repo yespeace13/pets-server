@@ -46,6 +46,8 @@ namespace PetsServer
                 });
             });
 
+            // Автомаппер
+            builder.Services.AddAutoMapper(typeof(AutoMapper));
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer")

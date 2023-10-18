@@ -99,7 +99,7 @@ namespace IS_5
                             //Что он может делать на форме
                             new Possibilities[] {Possibilities.Insert, Possibilities.Update, Possibilities.Delete}),
                         new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null),
-                        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.All, null, null),
+                        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.Locality, new Possibilities[] {Possibilities.Insert, Possibilities.Delete }, null),
                         new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null))
                 },
                 {
@@ -155,7 +155,7 @@ namespace IS_5
         {
             Users = new List<UserModel>
             {
-                { new UserModel(1, "User1", "1234", Localitys[0], null, Roles[0]) },
+                { new UserModel(1, "User1", "1234", Localitys[0], OrganizationsModel[0], Roles[0]) },
                 { new UserModel(2, "User2", "1234", null, null, Roles[1])},
                 { new UserModel(3, "User3", "1234", Localitys[2], null, Roles[1])}
                 //{ new User(4, "User4", "1234", null, Organizations[5], Roles[3])}

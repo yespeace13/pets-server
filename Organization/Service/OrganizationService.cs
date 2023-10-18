@@ -11,16 +11,13 @@ namespace PetsServer.Organization.Service
     {
         private OrganizationRepository _organizationRepository = new OrganizationRepository();
 
-        public void Create(OrganizationEdit view)
+        public void Create(OrganizationModel organization)
         {
-            var organization = new OrganizationMapper().FromViewToModel(view);
             _organizationRepository.Create(organization);
         }
 
-        public void Update(int id, OrganizationEdit view)
+        public void Update(OrganizationModel organization)
         {
-            var organization = new OrganizationMapper().FromViewToModel(view);
-            organization.Id = id;
             _organizationRepository.Update(organization);
         }
 
@@ -44,51 +41,66 @@ namespace PetsServer.Organization.Service
             return _organizationRepository.GetLegalTypes();
         }
 
-        public OrganizationViewList GetOne(int id)
+        public OrganizationModel GetOne(int id)
         {
-            return new OrganizationMapper().FromModelToView(_organizationRepository.GetOne(id));
+            return _organizationRepository.GetOne(id);
         }
 
-        public PageSettings<OrganizationViewList> GetPage(int? pageQuery, int? pagesQuery, string filter, string? sortField, int? sortType, UserModel user)
+        public PageSettings<OrganizationModel> GetPage(int? pageQuery, int? limitQuery, string filter, string? sortField, int? sortType, UserModel user)
         {
-            //if (UserSession.User.Privilege.Organizations.Item1 == Restrictions.Organizations)
-            //    orgs = TestData.OrganizationsModel
-            //        .Where(org => org.NameOrganization == UserSession.User.Organization.NameOrg);
-            //else if (UserSession.User.Privilege.Organizations.Item1 == Restrictions.Locality)
-            //    orgs = TestData.OrganizationsModel
-            //        .Where(org => org.Locality.Name == UserSession.User.Locality.Name);
-            //else
-            //    orgs = TestData.OrganizationsModel;
-            //if (UserSession.User.Privilege.Organizations.Item3 != null)
-            //    orgs = orgs.Where(o => UserSession.User.Privilege.Organizations.Item3.Contains(o.TypeOrganization.Id));
+            
+            // создаем страницу с настройками
+            var pageSettings = new PageSettings<OrganizationModel>();
 
-
-            var organizations = _organizationRepository.GetAll();
-            var pageSettings = new PageSettings<OrganizationViewList>();
+            // проверяем, что передано значение для номера страницы
             if (pageQuery.HasValue && pageQuery > 0)
                 pageSettings.Page = pageQuery.Value;
-            int size = 10;
-            if (pagesQuery.HasValue && pagesQuery.Value > 0)
-                size = pagesQuery.Value;
             
+            // проверяем, что есть значение для объема страницы
+            if (limitQuery.HasValue && limitQuery.Value > 0)
+                pageSettings.Limit = limitQuery.Value;
 
+            // берем организации по этим правилам
+            var organizations = _organizationRepository.GetAll();
 
-            organizations = SortOrganizations(FilterOrganizations(organizations, filter), sortField, sortType).ToList();
-            pageSettings.Pages = (int)Math.Ceiling((double)organizations.Count / size);
+            if (user.Privilege.Organizations.Item1 == Restrictions.Organizations)
+                organizations = organizations
+                    .Where(org => org.Id == user.Organization.Id);
+
+            else if (user.Privilege.Organizations.Item1 == Restrictions.Locality)
+                organizations = organizations
+                    .Where(org => org.Locality.Id == user.Locality.Id);
+
+            if (user.Privilege.Organizations.Item3 != null)
+                organizations = organizations.Where(o => user.Privilege.Organizations.Item3.Contains(o.TypeOrganization.Id));
+
+            // Фильтрация
+            organizations = FilterOrganizations(organizations, filter);
+
+            // Сортировка
+            organizations = SortOrganizations(organizations, sortField, sortType);
+
+            // Количество страниц всего
+            pageSettings.Pages = (int)Math.Ceiling((double)organizations.Count() / pageSettings.Limit);
+
+            // Добавляем элементы в страницу с необходимым количеством
             pageSettings.Items = organizations
-                .Skip(size * (pageSettings.Page - 1))
-                .Take(size)
-                .Select(o => new OrganizationMapper().FromModelToView(o))
+                .Skip(pageSettings.Limit * (pageSettings.Page - 1))
+                .Take(pageSettings.Limit)
                 .ToList();
+
             return pageSettings;
         }
 
         private IEnumerable<OrganizationModel> SortOrganizations(IEnumerable<OrganizationModel> orgs, string sortField, int? sortType)
         {
             var sort = new SortSettings(sortField, 0);
+
             if(sortType.HasValue) sort.Direction = sortType.Value;
-            if (sort == null) return orgs.OrderBy(org => org.Id);
+            
             IEnumerable<OrganizationModel> result;
+
+            // Сортировка в зависимости от колонки
             switch (sort.Column)
             {
                 case "Id":
@@ -101,8 +113,8 @@ namespace PetsServer.Organization.Service
                         : orgs.OrderByDescending(org => org.NameOrganization);
                 case "INN":
                     return result = sort.Direction == 0 ?
-                        orgs.OrderBy(org => org.Inn)
-                        : orgs.OrderByDescending(org => org.Inn);
+                        orgs.OrderBy(org => org.INN)
+                        : orgs.OrderByDescending(org => org.INN);
                 case "KPP":
                     return result = sort.Direction == 0 ?
                         orgs.OrderBy(org => org.KPP)
@@ -128,19 +140,19 @@ namespace PetsServer.Organization.Service
             }
         }
 
-        public IEnumerable<OrganizationModel> FilterOrganizations(List<OrganizationModel> organizations, string filter)
+        public IEnumerable<OrganizationModel> FilterOrganizations(IEnumerable<OrganizationModel> organizations, string filtersQuery)
         {
             var filters = new FilterSetting(typeof(OrganizationModel));
-            if (filter != null)
+            if (!String.IsNullOrEmpty(filtersQuery))
             {
-                var f = filter.Split(";");
-                foreach (string c in f)
+                var filtersKeyValue = filtersQuery.Split(";");
+                foreach (string filter in filtersKeyValue)
                 {
-                    var a = c.Split(":");
-                    filters[a[0]] = Uri.UnescapeDataString(a[1]);
+                    var ketValue = filter.Split(":");
+                    filters[ketValue[0]] = Uri.UnescapeDataString(ketValue[1]);
                 }
             }
-            if (filters == null || filters.Count == 0)
+            if (filters.CountEmptyFileds == 0)
                 return organizations;
 
             IEnumerable<OrganizationModel> filteredOrgs = organizations;
@@ -154,36 +166,44 @@ namespace PetsServer.Organization.Service
                         filteredOrgs = filteredOrgs.Where(o => o.NameOrganization.Contains(value));
                         break;
                     case "INN":
-                        filteredOrgs = filteredOrgs.Where(o => o.Inn.Contains(value));
+                        filteredOrgs = filteredOrgs.Where(o => o.INN.Contains(value));
                         break;
                     case "KPP":
-                        filteredOrgs = organizations.Where(o => o.KPP.Contains(value));
+                        filteredOrgs = filteredOrgs.Where(o => o.KPP.Contains(value));
                         break;
                     case "Address":
-                        filteredOrgs = organizations.Where(o => o.Address.Contains(value));
+                        filteredOrgs = filteredOrgs.Where(o => o.Address.Contains(value));
                         break;
                     case "TypeOrganization":
-                        filteredOrgs = organizations.Where(o => o.TypeOrganization.Name.Contains(value));
+                        filteredOrgs = filteredOrgs.Where(o => o.TypeOrganization.Name.Contains(value));
                         break;
                     case "LegalType":
-                        filteredOrgs = organizations.Where(o => o.LegalType.Name.Contains(value));
+                        filteredOrgs = filteredOrgs.Where(o => o.LegalType.Name.Contains(value));
                         break;
                     case "Locality":
-                        filteredOrgs = organizations.Where(o => o.Locality.Name.Contains(value));
+                        filteredOrgs = filteredOrgs.Where(o => o.Locality.Name.Contains(value));
                         break;
                 }
             }
             return filteredOrgs;
         }
 
-
-        
-
         public byte[] ExportToExcel(string filters)
         {
             return ExportDataToExcel.Export(
                 "Организации", FilterOrganizations(_organizationRepository.GetAll(), filters)
-                .Select(o => new OrganizationMapper().FromModelToView(o))
+                // TODO Надо что-то придумать! Это дичь
+                .Select(o => new OrganizationViewList()
+                {
+                    Id = o.Id,
+                    NameOrganization = o.NameOrganization,
+                    INN = o.INN,
+                    KPP = o.KPP,
+                    Address = o.Address,
+                    TypeOrganization = o.TypeOrganization.Name,
+                    LegalType = o.LegalType.Name,
+                    Locality = o.Locality.Name
+                })
                 .ToList()
                 );
         }
