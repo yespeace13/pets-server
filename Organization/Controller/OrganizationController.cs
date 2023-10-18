@@ -1,4 +1,6 @@
-﻿using IS_5.Organization.Service;
+﻿using AutoMapper;
+using IS_5.Organization.Model;
+using IS_5.Organization.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Organization;
