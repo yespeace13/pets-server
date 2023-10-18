@@ -9,12 +9,24 @@ namespace PetsServer.Organization.Controller
     [ApiController]
     public class OrganizationExportController : ControllerBase
     {
+
+        // Маппер для данных
+        private readonly IMapper _mapper;
+
+        private OrganizationService _service;
+
+        public OrganizationExportController(IMapper mapper)
+        {
+            _service = new OrganizationService();
+            _mapper = mapper;
+        }
+
         [HttpGet]
         public IActionResult Get(string? filters)
         {
             var fileName = $"Организации.xlsx";
             var mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            var file = new OrganizationService().ExportToExcel(filters);
+            var file = _service.ExportToExcel(filters);
             return File(file, mimeType, fileName);
         }
     }

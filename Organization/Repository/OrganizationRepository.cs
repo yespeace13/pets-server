@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModelLibrary.View;
 using PetsServer.Context;
 using PetsServer.Organization.Model;
 
@@ -56,7 +57,7 @@ namespace IS_5.Organization.Repository
             using var context = new PetsContext();
             return context.LegalTypes.ToList();
         }
-        public List<OrganizationModel> GetAll()
+        public IEnumerable<OrganizationModel> GetAll()
         {
             using var context = new PetsContext();
             return context.Organizations.Include(o => o.TypeOrganization)
@@ -75,10 +76,9 @@ namespace IS_5.Organization.Repository
         public void Update(OrganizationModel organization)
         {
             using var context = new PetsContext();
-            var oldOrg = context.Organizations.Where(o => o.Id == organization.Id)
-                .First();
+            var oldOrg = GetOne(organization.Id);
             oldOrg.NameOrganization = organization.NameOrganization;
-            oldOrg.Inn = organization.Inn;
+            oldOrg.INN = organization.INN;
             oldOrg.KPP = organization.KPP;
             oldOrg.Address = organization.Address;
             oldOrg.TypeOrganizationId = organization.TypeOrganizationId;
@@ -91,8 +91,7 @@ namespace IS_5.Organization.Repository
         public void Delete(int id)
         {
             using var context = new PetsContext();
-            var organization = context.Organizations.Where(o => o.Id == id)
-                .First();
+            var organization = GetOne(id);
             context.Organizations.Remove(organization);
             context.SaveChanges();
         }
