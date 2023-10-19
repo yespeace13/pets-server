@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PetsServer.Locality.Model;
 using PetsServer.Locality.Repository;
 
 namespace PetsServer.Locality.Controller
@@ -11,15 +10,15 @@ namespace PetsServer.Locality.Controller
     public class LocalityController : ControllerBase
     {
         [HttpGet(Name = "GetLocalitys")]
-        public ActionResult<List<LocalityModel>> Index()
+        public IActionResult GetAll()
         {
-            return new ActionResult<List<LocalityModel>>(new LocalityRepository().GetLocalitys());
+            return Ok(new LocalityRepository().GetLocalitys());
         }
 
         [HttpGet("{id}", Name = "GetLocality")]
-        public ActionResult<LocalityModel> Details(int id)
+        public IActionResult GetOne(int id)
         {
-            return new ActionResult<LocalityModel>(new LocalityRepository().GetOne(id));
+            return Ok(GetOne(id));
         }
     }
 }

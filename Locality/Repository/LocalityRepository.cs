@@ -1,33 +1,17 @@
-﻿using IS_5;
-using PetsServer.Context;
+﻿using PetsServer.Context;
 using PetsServer.Locality.Model;
 
 namespace PetsServer.Locality.Repository
 {
-    internal class LocalityRepository
+    public class LocalityRepository
     {
-        public List<LocalityModel> GetLocalitys()
-        {
-            using(var context = new PetsContext())
-            {
-                return context.Localities.ToList();
-            }
-        }
+        private PetsContext _context;
 
-        public LocalityModel GetOne(int id)
-        {
-            using (var context = new PetsContext())
-            {
-                return context.Localities.First(l => l.Id == id);
-            }
-        }
+        public LocalityRepository() => _context = new PetsContext();
 
-        public LocalityModel GetOne(string name)
-        {
-            using (var context = new PetsContext())
-            {
-                return context.Localities.First(l => l.Name == name);
-            }
-        }
+        public List<LocalityModel> GetLocalitys() => _context.Localities.ToList();
+
+        public LocalityModel? GetOne(int id) => _context.Localities.Find(id);
+
     }
 }

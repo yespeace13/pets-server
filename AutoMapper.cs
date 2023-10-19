@@ -18,13 +18,7 @@ namespace PetsServer
                 .ForMember(dest => dest.Locality, opt => opt.MapFrom(src => src.Locality.Name));
 
             // Из wiew для создания/изменения в модель
-            CreateMap<OrganizationEdit, OrganizationModel>()
-                .ForMember(dest => dest.TypeOrganizationId, opt => opt.MapFrom(src => src.TypeOrganization))
-                .ForMember(dest => dest.LegalTypeId, opt => opt.MapFrom(src => src.LegalType))
-                .ForMember(dest => dest.LocalityId, opt => opt.MapFrom(src => src.Locality))
-                .ForMember(dest => dest.TypeOrganization, opt => opt.Ignore())
-                .ForMember(dest => dest.LegalType, opt => opt.Ignore())
-                .ForMember(dest => dest.Locality, opt => opt.Ignore());
+            CreateMap<OrganizationEdit, OrganizationModel>();
         }
     }
 }

@@ -1,16 +1,16 @@
 ﻿using PetsServer.Authorization.Model;
+using PetsServer.Context;
+using PetsServer.Locality.Controller;
 using PetsServer.Locality.Model;
+using PetsServer.Locality.Repository;
 using PetsServer.Organization.Model;
+using PetsServer.Organization.Service;
 
 namespace IS_5
 {
     public static class TestData
     {
-        public static List<OrganizationModel> OrganizationsModel { get; set; }
-        public static List<TypeOrganizationModel> TypeOrganizationsModel { get; set; }
-        public static List<LegalTypeModel> LegalTypesModel { get; set; }
         public static List<UserModel> Users { get; set; }
-        public static List<LocalityModel> Localitys { get; set; }
         public static List<Role> Roles { get; set; }
 
         //public static List<Act> Acts { get; set; }
@@ -21,10 +21,6 @@ namespace IS_5
 
         static TestData()
         {
-            CreateTypeOrganizations();
-            CreateTypeOwnerOrganizations();
-            CreateLocalitys();
-            CreateOrganizations();
             CreateRoles();
             CreateUsers();
             //CreateContracts();
@@ -78,15 +74,6 @@ namespace IS_5
         //    //};
         //}
 
-        private static void CreateLocalitys()
-        {
-            Localitys = new List<LocalityModel>
-            {
-                { new LocalityModel(1, "Тюменский муниципальный район") },
-                { new LocalityModel(2, "Сорокинский муниципальный район") },
-                { new LocalityModel(3, "Ялуторовский муниципальный район") }
-            };
-        }
         private static void CreateRoles()
         {
             Roles = new List<Role>
@@ -153,58 +140,14 @@ namespace IS_5
 
         private static void CreateUsers()
         {
+            var locality = new LocalityRepository();
+            var organization = new OrganizationService();
             Users = new List<UserModel>
             {
-                { new UserModel(1, "User1", "1234", Localitys[0], OrganizationsModel[0], Roles[0]) },
+                { new UserModel(1, "User1", "1234", locality.GetOne(1), organization.GetOne(0), Roles[0]) },
                 { new UserModel(2, "User2", "1234", null, null, Roles[1])},
-                { new UserModel(3, "User3", "1234", Localitys[2], null, Roles[1])}
+                { new UserModel(3, "User3", "1234", locality.GetOne(2), null, Roles[1])}
                 //{ new User(4, "User4", "1234", null, Organizations[5], Roles[3])}
-            };
-        }
-
-        private static void CreateTypeOrganizations()
-        {
-            TypeOrganizationsModel = new List<TypeOrganizationModel>
-            {
-                { new TypeOrganizationModel(1, "Значения справочника")},
-                { new TypeOrganizationModel(2, "Исполнительный орган государственной власти")},
-                { new TypeOrganizationModel(3, "Орган местного самоуправления") },
-                { new TypeOrganizationModel(4, "Организация по отлову") },
-                { new TypeOrganizationModel(5, "Организация по отлову и приют") },
-                { new TypeOrganizationModel(6, "Организация по транспортировке") },
-                { new TypeOrganizationModel(7, "Ветеринарная клиника: государственная")},
-                { new TypeOrganizationModel(8, "Ветеринарная клиника: муниципальная")},
-                { new TypeOrganizationModel(9, "Ветеринарная клиника: частная")},
-                { new TypeOrganizationModel(10, "Благотворительный фонд")},
-                { new TypeOrganizationModel(11, "Организации по продаже товаров и предоставлению услуг для животных")},
-                { new TypeOrganizationModel(12, "Заявитель (для регистрации представителя юридического лица, подающего заявку на отлов)")}
-            };
-        }
-
-        private static void CreateOrganizations()
-        {
-            OrganizationsModel = new List<OrganizationModel>
-            {
-                { new OrganizationModel(1, "Организация1", "123", "123", "1234", TypeOrganizationsModel[1], LegalTypesModel[0], Localitys[1])},
-                { new OrganizationModel(2, "Организация2", "123", "123", "1234", TypeOrganizationsModel[2], LegalTypesModel[1], Localitys[0]) },
-                { new OrganizationModel(3, "Организация3", "123", "123", "1234", TypeOrganizationsModel[3], LegalTypesModel[1], Localitys[2]) },
-                { new OrganizationModel(4, "Организация4", "123", "123", "1234", TypeOrganizationsModel[4], LegalTypesModel[0], Localitys[0]) },
-                { new OrganizationModel(5, "Организация5", "123", "123", "1234", TypeOrganizationsModel[5], LegalTypesModel[0], Localitys[2]) },
-                { new OrganizationModel(6, "Организация6", "123", "123", "1234", TypeOrganizationsModel[9], LegalTypesModel[1], Localitys[1]) },
-                { new OrganizationModel(7, "Организация7", "123", "123", "1234", TypeOrganizationsModel[0], LegalTypesModel[0], Localitys[0]) },
-                { new OrganizationModel(8, "Организация8", "123", "123", "1234", TypeOrganizationsModel[2], LegalTypesModel[1], Localitys[2]) },
-                { new OrganizationModel(9, "Организация9", "123", "123", "1234", TypeOrganizationsModel[6], LegalTypesModel[1], Localitys[1]) },
-                { new OrganizationModel(10, "Организация10", "123", "123", "1234", TypeOrganizationsModel[1], LegalTypesModel[0], Localitys[1]) },
-                { new OrganizationModel(11,"Организация11", "123", "123", "1234", TypeOrganizationsModel[6], LegalTypesModel[1], Localitys[0]) },
-                { new OrganizationModel(12, "Организация12", "123", "123", "1234", TypeOrganizationsModel[1], LegalTypesModel[0], Localitys[2]) }
-            };
-        }
-        private static void CreateTypeOwnerOrganizations()
-        {
-            LegalTypesModel = new List<LegalTypeModel>
-            {
-                { new LegalTypeModel(1, "Индивидуальный предприниматель") },
-                { new LegalTypeModel(2, "Юридическое лицо") }
             };
         }
 
@@ -235,5 +178,5 @@ namespace IS_5
         //        {new Plan(2,3,2023,ContentPlans[1])}
         //    };
         //}
-    }    
+    }
 }

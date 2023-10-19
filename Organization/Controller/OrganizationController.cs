@@ -7,12 +7,12 @@ using PetsServer.Organization.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PetsServer.Organization.Controllers
+namespace PetsServer.Organization.Controller
 {
     [ApiController]
     [Route("organizations")]
     [Authorize]
-    public class OrganizationController : Microsoft.AspNetCore.Mvc.Controller
+    public class OrganizationController : ControllerBase
     {
         // Сервис
         private OrganizationService _service;
