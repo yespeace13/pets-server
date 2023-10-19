@@ -99,7 +99,7 @@ namespace IS_5
                             //Что он может делать на форме
                             new Possibilities[] {Possibilities.Insert, Possibilities.Update, Possibilities.Delete}),
                         new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null),
-                        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.Locality, new Possibilities[] {Possibilities.Insert, Possibilities.Delete }, null),
+                        new Tuple<Restrictions, Possibilities[], int[]>(Restrictions.Locality, new Possibilities[] { Possibilities.Read, Possibilities.Update, Possibilities.Delete }, null),
                         new Tuple<Restrictions, Possibilities[]>(Restrictions.All, null))
                 },
                 {

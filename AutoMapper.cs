@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using IS_5.Organization.Model;
 using ModelLibrary.Model.Organization;
+using PetsServer.Organization.Model;
 
 namespace PetsServer
 {
