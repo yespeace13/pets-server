@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -146,6 +147,35 @@ namespace PetsServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "contract",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    number = table.Column<string>(type: "text", nullable: false),
+                    date_of_conclusion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    date_valid = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    executor_id = table.Column<int>(type: "integer", nullable: false),
+                    client_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_contract", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_contract_organization_client_id",
+                        column: x => x.client_id,
+                        principalTable: "organization",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_contract_organization_executor_id",
+                        column: x => x.executor_id,
+                        principalTable: "organization",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "user",
                 columns: table => new
                 {
@@ -178,6 +208,60 @@ namespace PetsServer.Migrations
                         principalTable: "role",
                         principalColumn: "id");
                 });
+
+            migrationBuilder.CreateTable(
+                name: "contract_content",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    price = table.Column<decimal>(type: "numeric", nullable: false),
+                    contract_id = table.Column<int>(type: "integer", nullable: false),
+                    locality_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_contract_content", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_contract_content_contract_contract_id",
+                        column: x => x.contract_id,
+                        principalTable: "contract",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_contract_content_locality_locality_id",
+                        column: x => x.locality_id,
+                        principalTable: "locality",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_contract_client_id",
+                table: "contract",
+                column: "client_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_contract_executor_id",
+                table: "contract",
+                column: "executor_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_contract_number_client_id_executor_id_date_valid",
+                table: "contract",
+                columns: new[] { "number", "client_id", "executor_id", "date_valid" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_contract_content_contract_id",
+                table: "contract_content",
+                column: "contract_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_contract_content_locality_id_contract_id",
+                table: "contract_content",
+                columns: new[] { "locality_id", "contract_id" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_entity_possibilities_role_id",
@@ -244,7 +328,6 @@ namespace PetsServer.Migrations
                 table: "user",
                 column: "role_id");
 
-
             migrationBuilder.Sql(File.ReadAllText("InitData.sql"));
         }
 
@@ -255,16 +338,22 @@ namespace PetsServer.Migrations
                 name: "animal");
 
             migrationBuilder.DropTable(
+                name: "contract_content");
+
+            migrationBuilder.DropTable(
                 name: "entity_possibilities");
 
             migrationBuilder.DropTable(
                 name: "user");
 
             migrationBuilder.DropTable(
-                name: "organization");
+                name: "contract");
 
             migrationBuilder.DropTable(
                 name: "role");
+
+            migrationBuilder.DropTable(
+                name: "organization");
 
             migrationBuilder.DropTable(
                 name: "legal_type");

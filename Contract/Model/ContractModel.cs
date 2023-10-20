@@ -32,6 +32,8 @@ public class ContractModel
     [ForeignKey(nameof(ClientId))]
     public OrganizationModel Client { get; set; }
 
+    public ICollection<ContractContentModel>? ContractContents { get; set; }
+
     public ContractModel() { }
     public ContractModel(
             int id, string number, DateTime dateOfConclusion, DateTime dateValidation,

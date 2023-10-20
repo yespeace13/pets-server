@@ -3,7 +3,7 @@
 public enum Restrictions
 {
     All,
-    Organizations,
+    Organization,
     Locality,
     None
 }

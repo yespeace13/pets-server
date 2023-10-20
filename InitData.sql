@@ -56,4 +56,8 @@ VALUES
 ('Organization', 'Read', 'All', 1),
 ('Organization', 'Insert', 'All', 1),
 ('Organization', 'Update', 'All', 1),
-('Organization', 'Delete', 'All', 1);
+('Organization', 'Delete', 'All', 1),
+('Contract', 'Read', 'All', 1),
+('Contract', 'Insert', 'All', 1),
+('Contract', 'Update', 'All', 1),
+('Contract', 'Delete', 'All', 1);

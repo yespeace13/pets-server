@@ -23,6 +23,8 @@ namespace PetsServer.Authentication
             return _context.Users
                 .Include(u => u.Role)
                 .ThenInclude(r => r.Possibilities)
+                .Include(u => u.Locality)
+                .Include(u => u.Organization)
                 .FirstOrDefault(u => u.Login == login);
         }
 

@@ -3,33 +3,35 @@ using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
 using PetsServer.Authorization.Model;
 using PetsServer.Organization.Service;
-using PetsServer.Organization.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Authentication;
+using PetsServer.Contract.Service;
+using ModelLibrary.Contract;
+using PetsServer.Contract.Model;
 
 namespace PetsServer.Organization.Controller
 {
     [ApiController]
-    [Route("organizations")]
+    [Route("contract")]
     [Authorize]
-    public class OrganizationController : ControllerBase
+    public class ContractController : ControllerBase
     {
         // Сервис
-        private OrganizationService _service;
+        private ContractService _service;
         // Для привилегий и доступа
         private AuthenticationUserService _authenticationService;
         // Маппер для данных
         private readonly IMapper _mapper;
 
-        public OrganizationController(IMapper mapper)
+        public ContractController(IMapper mapper)
         {
-            _service = new OrganizationService();
+            _service = new ContractService();
             _authenticationService = new AuthenticationUserService();
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetOrganizations")]
+        [HttpGet(Name = "GetContracts")]
         public IActionResult GetPage(
             int? page,
             int? pages,
@@ -46,12 +48,10 @@ namespace PetsServer.Organization.Controller
 
             var pageView = new PageSettings<OrganizationViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
 
-            //pageView.Items = _mapper.Map<List<OrganizationViewList>>(pageModel.Items);
-
             return Ok(pageView);
         }
 
-        [HttpGet("{id}", Name = "GetOrganization")]
+        [HttpGet("{id}", Name = "GetContract")]
         public IActionResult GetOne(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
@@ -59,39 +59,39 @@ namespace PetsServer.Organization.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var organization = _mapper.Map<OrganizationViewList>(_service.GetOne(id));
+            var organization = _mapper.Map<ContractViewOne>(_service.GetOne(id));
             return Ok(organization);
 
         }
 
-        [HttpPost(Name = "CreateOrganization")]
-        public IActionResult Create([FromBody] OrganizationEdit view)
+        [HttpPost(Name = "CreateContract")]
+        public IActionResult Create([FromBody] ContractEdit view)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var organization = _mapper.Map<OrganizationModel>(view);
+            var organization = _mapper.Map<ContractEdit, ContractModel>(view);
             _service.Create(organization);
             return Ok();
         }
 
-        [HttpPut("{id}", Name = "UpdateOrganization")]
-        public IActionResult Update(int id, OrganizationEdit view)
+        [HttpPut("{id}", Name = "UpdateContract")]
+        public IActionResult Update(int id, ContractEdit view)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var organization = _mapper.Map<OrganizationEdit, OrganizationModel>(view);
+            var organization = _mapper.Map<ContractEdit, ContractModel>(view);
             organization.Id = id;
             _service.Update(organization);
             return Ok();
         }
 
-        [HttpDelete("{id}", Name = "DeleteOrganization")]
+        [HttpDelete("{id}", Name = "DeleteContract")]
         public ActionResult Delete(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);

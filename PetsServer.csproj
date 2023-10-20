@@ -30,8 +30,6 @@
 
   <ItemGroup>
     <Folder Include="Animal\Service\" />
-    <Folder Include="Authorization\Repository\" />
-    <Folder Include="Contract\Model\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using ModelLibrary.Contract;
 using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Organization;
 using PetsServer.Authorization.Model;
+using PetsServer.Contract.Model;
 using PetsServer.Organization.Model;
 
 namespace PetsServer
@@ -13,6 +15,7 @@ namespace PetsServer
          */
         public AutoMapper()
         {
+            // Организация
             // Из модели во view
             CreateMap<OrganizationModel, OrganizationViewList>()
                 .ForMember(dest => dest.TypeOrganization, opt => opt.MapFrom(src => src.TypeOrganization.Name))
@@ -23,7 +26,23 @@ namespace PetsServer
             CreateMap<OrganizationEdit, OrganizationModel>();
 
             // Пользователя
+            // Из wiew для создания/изменения в модель
             CreateMap<UserEdit, UserModel>();
+
+            // Контракт
+            // Из модели во view
+            CreateMap<ContractModel, ContractViewList>()
+                .ForMember(dest => dest.Executor, opt => opt.MapFrom(src => src.Executor.NameOrganization))
+                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.NameOrganization));
+
+            CreateMap<ContractContentModel, ContractContentView>();
+
+            // Из модели во viewOne
+            CreateMap<ContractModel, ContractViewOne>()
+                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
+                .ForMember(dest => dest.Executor, opt => opt.MapFrom(src => src.Executor));
+
+
         }
     }
 }

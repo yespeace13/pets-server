@@ -5,6 +5,7 @@ using PetsServer.Authorization.Model;
 using PetsServer.Contract.Model;
 using PetsServer.Locality.Model;
 using PetsServer.Organization.Model;
+using System.Reflection.Metadata;
 
 namespace PetsServer.Infrastructure.Context
 {
@@ -31,6 +32,8 @@ namespace PetsServer.Infrastructure.Context
 
         public DbSet<ContractModel> Contracts { get; set; }
 
+        public DbSet<ContractContentModel> ContractContents { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=pets;User Id=postgres;Password=1234;Include Error Detail=True");
@@ -38,6 +41,14 @@ namespace PetsServer.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //modelBuilder.Entity<ContractModel>()
+            //    .HasMany(e => e.ContractContents)
+            //    .WithOne(e => e.Contract)
+            //    .HasForeignKey(e => e.ContractId)
+            //    .IsRequired(true);
+
+
             modelBuilder.UseSerialColumns();
             // Ограничения
             // Уникальность логина у пользователей
@@ -65,8 +76,15 @@ namespace PetsServer.Infrastructure.Context
                 .HasIndex(r => r.Name)
                 .IsUnique();
 
-            // TODO Уникальность контракта по номеру, дате заключения, исполнителю и заказчику
+            // Уникальность контракта по номеру, дате заключения, исполнителю и заказчику
+            modelBuilder.Entity<ContractModel>()
+                .HasIndex(c => new { c.Number, c.ClientId, c.ExecutorId, c.DateValid })
+                .IsUnique();
 
+            // Уникальность для контракта, что на один населенный пункт не 2 цены
+            modelBuilder.Entity<ContractContentModel>()
+                .HasIndex(c => new { c.LocalityId, c.ContractId })
+                .IsUnique();
 
             // Конвертор
             // Для роли
@@ -81,6 +99,8 @@ namespace PetsServer.Infrastructure.Context
             modelBuilder.Entity<EntityPossibilities>()
                 .Property(e => e.Restriction)
                 .HasConversion(new EnumToStringConverter<Restrictions>());
+
+
         }
     }
 }

@@ -183,6 +183,79 @@ namespace PetsServer.Migrations
                     b.ToTable("user");
                 });
 
+            modelBuilder.Entity("PetsServer.Contract.Model.ContractContentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("integer")
+                        .HasColumnName("contract_id");
+
+                    b.Property<int>("LocalityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("locality_id");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
+                        .HasColumnName("price");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("LocalityId", "ContractId")
+                        .IsUnique();
+
+                    b.ToTable("contract_content");
+                });
+
+            modelBuilder.Entity("PetsServer.Contract.Model.ContractModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("integer")
+                        .HasColumnName("client_id");
+
+                    b.Property<DateTime>("DateOfConclusion")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_of_conclusion");
+
+                    b.Property<DateTime>("DateValid")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_valid");
+
+                    b.Property<int>("ExecutorId")
+                        .HasColumnType("integer")
+                        .HasColumnName("executor_id");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("number");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ExecutorId");
+
+                    b.HasIndex("Number", "ClientId", "ExecutorId", "DateValid")
+                        .IsUnique();
+
+                    b.ToTable("contract");
+                });
+
             modelBuilder.Entity("PetsServer.Locality.Model.LocalityModel", b =>
                 {
                     b.Property<int>("Id")
@@ -336,6 +409,44 @@ namespace PetsServer.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("PetsServer.Contract.Model.ContractContentModel", b =>
+                {
+                    b.HasOne("PetsServer.Contract.Model.ContractModel", "Contract")
+                        .WithMany("ContractContents")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PetsServer.Locality.Model.LocalityModel", "Locality")
+                        .WithMany()
+                        .HasForeignKey("LocalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
+
+                    b.Navigation("Locality");
+                });
+
+            modelBuilder.Entity("PetsServer.Contract.Model.ContractModel", b =>
+                {
+                    b.HasOne("PetsServer.Organization.Model.OrganizationModel", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PetsServer.Organization.Model.OrganizationModel", "Executor")
+                        .WithMany()
+                        .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Executor");
+                });
+
             modelBuilder.Entity("PetsServer.Organization.Model.OrganizationModel", b =>
                 {
                     b.HasOne("PetsServer.Organization.Model.LegalTypeModel", "LegalType")
@@ -366,6 +477,11 @@ namespace PetsServer.Migrations
             modelBuilder.Entity("PetsServer.Authorization.Model.RoleModel", b =>
                 {
                     b.Navigation("Possibilities");
+                });
+
+            modelBuilder.Entity("PetsServer.Contract.Model.ContractModel", b =>
+                {
+                    b.Navigation("ContractContents");
                 });
 #pragma warning restore 612, 618
         }
