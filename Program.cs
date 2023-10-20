@@ -1,26 +1,29 @@
-using IS_5;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PetsServer.Authentication;
 using PetsServer.Authorization.Model;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace PetsServer
 {
     public class Program
     {
+        // https://localhost:7279/login?login=super&password=AQAAAAIAAYagAAAAEO%2FsYj4RkmFNwdqOe88%2B1EZEXC6s3BlUOC2kdjT4ZmPxHBMyWUWRF7SKQ8LzhZunIQ%3D%3D
+        // Для получения токена суперпользователя
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            var config = builder.Configuration;
             // Add services to the container.
             builder.Services.AddControllers();
 
-
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen(setup =>
             {
                 var jwtSecurityScheme = new OpenApiSecurityScheme
@@ -50,37 +53,40 @@ namespace PetsServer
             builder.Services.AddAutoMapper(typeof(AutoMapper));
 
             builder.Services.AddAuthorization();
+
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidIssuer = config["JwtSettings:Issuer"],
                         ValidateAudience = true,
-                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidAudience = config["JwtSettings:Audience"],
                         ValidateLifetime = true,
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"])),
                         ValidateIssuerSigningKey = true,
                     };
                 }
                 );
+
             var app = builder.Build();
 
-            
-            app.Map("/login/{username}", (string username) =>
+            app.Map("login", (string login, string password) =>
             {
-                UserModel? person = TestData.Users.FirstOrDefault(p => p.Login == username);
+                UserModel? person = new AuthenticationUserService().GetUser(login);
 
                 if (person is null) return Results.Unauthorized();
+                if (person.Password != password) return Results.Unauthorized();
 
                 var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Login) };
                 var jwt = new JwtSecurityToken(
-                        issuer: AuthOptions.ISSUER,
-                        audience: AuthOptions.AUDIENCE,
+                        issuer: config["JwtSettings:Issuer"],
+                        audience: config["JwtSettings:Audience"],
                         claims: claims,
-                        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
-                        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                expires: DateTime.UtcNow.Add(TimeSpan.FromHours(12)),
+                        signingCredentials: new SigningCredentials(
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"])), SecurityAlgorithms.HmacSha256));
                 var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
                 var response = new
                 {
@@ -96,6 +102,7 @@ namespace PetsServer
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
 
             app.UseHttpsRedirection();
 

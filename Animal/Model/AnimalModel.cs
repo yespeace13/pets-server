@@ -12,37 +12,37 @@ public class AnimalModel
     public int Id { get; set; }
 
 
-    [Column("category_animal")]
+    [Column("category")]
     public string Category { get; set; }
 
-    [Column("sex_animal")]
+    [Column("sex")]
     public bool? Sex { get; set; }
 
-    [Column("breed_animal")]
+    [Column("breed")]
     public string? Breed { get; set; }
 
-    [Column("size_animal")]
+    [Column("size")]
     public double? Size { get; set; }
 
-    [Column("wool_animal")]
+    [Column("wool")]
     public string? Wool { get; set; }
 
-    [Column("color_animal")]
+    [Column("color")]
     public string? Color { get; set; }
 
-    [Column("ears_animal")]
+    [Column("ears")]
     public string? Ears { get; set; }
 
-    [Column("tail_animal")]
+    [Column("tail")]
     public string? Tail { get; set; }
 
-    [Column("specialSigns_animal")]
+    [Column("special_signs")]
     public string? SpecialSigns { get; set; }
 
-    [Column("identificationLabel_animal")]
+    [Column("identification_label")]
     public string? IdentificationLabel { get; set; }
 
-    [Column("chipNumber_animal")]
+    [Column("chip_number")]
     public string? ChipNumber { get; set; }
 
     public AnimalModel() { }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetsServer.Animal.Model;
-using PetsServer.Context;
+using PetsServer.Infrastructure.Context;
 using PetsServer.Organization.Model;
 
 namespace PetsServer.Animal.Repository

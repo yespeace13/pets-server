@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using PetsServer.Context;
+using PetsServer.Infrastructure.Context;
 
 #nullable disable
 
 namespace PetsServer.Migrations
 {
     [DbContext(typeof(PetsContext))]
-    [Migration("20231016134344_initpets")]
+    [Migration("20231020165726_initpets")]
     partial class initpets
     {
         /// <inheritdoc />
@@ -36,52 +36,154 @@ namespace PetsServer.Migrations
 
                     b.Property<string>("Breed")
                         .HasColumnType("text")
-                        .HasColumnName("breed_animal");
+                        .HasColumnName("breed");
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("category_animal");
+                        .HasColumnName("category");
 
                     b.Property<string>("ChipNumber")
                         .HasColumnType("text")
-                        .HasColumnName("chipNumber_animal");
+                        .HasColumnName("chip_number");
 
                     b.Property<string>("Color")
                         .HasColumnType("text")
-                        .HasColumnName("color_animal");
+                        .HasColumnName("color");
 
                     b.Property<string>("Ears")
                         .HasColumnType("text")
-                        .HasColumnName("ears_animal");
+                        .HasColumnName("ears");
 
                     b.Property<string>("IdentificationLabel")
                         .HasColumnType("text")
-                        .HasColumnName("identificationLabel_animal");
+                        .HasColumnName("identification_label");
 
                     b.Property<bool?>("Sex")
                         .HasColumnType("boolean")
-                        .HasColumnName("sex_animal");
+                        .HasColumnName("sex");
 
                     b.Property<double?>("Size")
                         .HasColumnType("double precision")
-                        .HasColumnName("size_animal");
+                        .HasColumnName("size");
 
                     b.Property<string>("SpecialSigns")
                         .HasColumnType("text")
-                        .HasColumnName("specialSigns_animal");
+                        .HasColumnName("special_signs");
 
                     b.Property<string>("Tail")
                         .HasColumnType("text")
-                        .HasColumnName("tail_animal");
+                        .HasColumnName("tail");
 
                     b.Property<string>("Wool")
                         .HasColumnType("text")
-                        .HasColumnName("wool_animal");
+                        .HasColumnName("wool");
 
                     b.HasKey("Id");
 
                     b.ToTable("animal");
+                });
+
+            modelBuilder.Entity("PetsServer.Authorization.Model.EntityPossibilities", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Entity")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("entity");
+
+                    b.Property<string>("Possibility")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("possibility");
+
+                    b.Property<string>("Restriction")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("restriction");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("entity_possibilities");
+                });
+
+            modelBuilder.Entity("PetsServer.Authorization.Model.RoleModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("role");
+                });
+
+            modelBuilder.Entity("PetsServer.Authorization.Model.UserModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LocalityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("locality_id");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("login");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("organization_id");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocalityId");
+
+                    b.HasIndex("Login")
+                        .IsUnique();
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("user");
                 });
 
             modelBuilder.Entity("PetsServer.Locality.Model.LocalityModel", b =>
@@ -99,6 +201,9 @@ namespace PetsServer.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("locality");
                 });
@@ -119,6 +224,9 @@ namespace PetsServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("legal_type");
                 });
 
@@ -136,7 +244,7 @@ namespace PetsServer.Migrations
                         .HasColumnType("text")
                         .HasColumnName("address");
 
-                    b.Property<string>("Inn")
+                    b.Property<string>("INN")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("inn");
@@ -189,7 +297,46 @@ namespace PetsServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("type_organization");
+                });
+
+            modelBuilder.Entity("PetsServer.Authorization.Model.EntityPossibilities", b =>
+                {
+                    b.HasOne("PetsServer.Authorization.Model.RoleModel", "Role")
+                        .WithMany("Possibilities")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PetsServer.Authorization.Model.UserModel", b =>
+                {
+                    b.HasOne("PetsServer.Locality.Model.LocalityModel", "Locality")
+                        .WithMany()
+                        .HasForeignKey("LocalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PetsServer.Organization.Model.OrganizationModel", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PetsServer.Authorization.Model.RoleModel", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+
+                    b.Navigation("Locality");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("PetsServer.Organization.Model.OrganizationModel", b =>
@@ -217,6 +364,11 @@ namespace PetsServer.Migrations
                     b.Navigation("Locality");
 
                     b.Navigation("TypeOrganization");
+                });
+
+            modelBuilder.Entity("PetsServer.Authorization.Model.RoleModel", b =>
+                {
+                    b.Navigation("Possibilities");
                 });
 #pragma warning restore 612, 618
         }

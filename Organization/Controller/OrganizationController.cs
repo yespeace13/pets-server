@@ -6,6 +6,7 @@ using PetsServer.Organization.Service;
 using PetsServer.Organization.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetsServer.Authentication;
 
 namespace PetsServer.Organization.Controller
 {
@@ -17,16 +18,15 @@ namespace PetsServer.Organization.Controller
         // Сервис
         private OrganizationService _service;
         // Для привилегий и доступа
-        private AuthorizationService _authorizationService;
+        private AuthenticationUserService _authenticationService;
         // Маппер для данных
         private readonly IMapper _mapper;
 
         public OrganizationController(IMapper mapper)
         {
             _service = new OrganizationService();
-            _authorizationService = new AuthorizationService();
+            _authenticationService = new AuthenticationUserService();
             _mapper = mapper;
-
         }
 
         [HttpGet(Name = "GetOrganizations")]
@@ -37,75 +37,70 @@ namespace PetsServer.Organization.Controller
             string? sortField,
             int? sortType)
         {
-            var user = _authorizationService.GetUser(User.Identity.Name);
+            var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (user != null && user.Privilege.Organizations.Item2.Contains(Possibilities.Read))
-            {
-                var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user);
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
 
-                var pageView = new PageSettings<OrganizationViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
+            var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user);
 
-                pageView.Items = _mapper.Map<List<OrganizationViewList>>(pageModel.Items);
+            var pageView = new PageSettings<OrganizationViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
 
-                return Ok(pageView);
-            }
+            pageView.Items = _mapper.Map<List<OrganizationViewList>>(pageModel.Items);
 
-            return Problem(null, null, 403, "У вас нет привилегий");
+            return Ok(pageView);
         }
 
         [HttpGet("{id}", Name = "GetOrganization")]
         public IActionResult GetOne(int id)
         {
-            var user = _authorizationService.GetUser(User.Identity.Name);
+            var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (user != null && user.Privilege.Organizations.Item2.Contains(Possibilities.Read))
-            {
-                var organization = _mapper.Map<OrganizationViewList>(_service.GetOne(id));
-                return Ok(organization);
-            }
-            return Problem(null, null, 403, "У вас нет привилегий");
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
+
+            var organization = _mapper.Map<OrganizationViewList>(_service.GetOne(id));
+            return Ok(organization);
+
         }
 
         [HttpPost(Name = "CreateOrganization")]
         public IActionResult Create([FromBody] OrganizationEdit view)
         {
-            var user = _authorizationService.GetUser(User.Identity.Name);
+            var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (user != null && user.Privilege.Organizations.Item2.Contains(Possibilities.Insert))
-            {
-                var organization = _mapper.Map<OrganizationModel>(view);
-                _service.Create(organization);
-                return Ok();
-            }
-            return Problem(null, null, 403, "У вас нет привилегий");
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
+
+            var organization = _mapper.Map<OrganizationModel>(view);
+            _service.Create(organization);
+            return Ok();
         }
 
         [HttpPut("{id}", Name = "UpdateOrganization")]
         public IActionResult Update(int id, OrganizationEdit view)
         {
-            var user = _authorizationService.GetUser(User.Identity.Name);
+            var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (user != null && user.Privilege.Organizations.Item2.Contains(Possibilities.Update))
-            {
-                var organization = _mapper.Map<OrganizationEdit, OrganizationModel>(view);
-                organization.Id = id;
-                _service.Update(organization);
-                return Ok();
-            }
-            return Problem(null, null, 403, "У вас нет привилегий");
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
+
+            var organization = _mapper.Map<OrganizationEdit, OrganizationModel>(view);
+            organization.Id = id;
+            _service.Update(organization);
+            return Ok();
         }
 
         [HttpDelete("{id}", Name = "DeleteOrganization")]
         public ActionResult Delete(int id)
         {
-            var user = _authorizationService.GetUser(User.Identity.Name);
+            var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (user != null && user.Privilege.Organizations.Item2.Contains(Possibilities.Delete))
-            {
-                _service.Delete(id);
-                return Ok();
-            }
-            return Problem(null, null, 403, "У вас нет привилегий");
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
+
+            _service.Delete(id);
+            return Ok();
         }
     }
 }

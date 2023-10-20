@@ -8,27 +8,25 @@ namespace PetsServer.Contract.Model;
 public class ContractModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [Column("id")]
-    [Key]
+    [Column("id"), Key]
     public int Id { get; set; }
 
-
-    [Column("number_animal")]
+    [Column("number")]
     public string Number { get; set; }
 
-    [Column("dateOfConclusion_animal")]
+    [Column("date_of_conclusion")]
     public DateTime DateOfConclusion { get; set; }
 
-    [Column("dateValidation _animal")]
-    public DateTime DateValidation { get; set; }
+    [Column("date_valid")]
+    public DateTime DateValid { get; set; }
 
-    [Column(name: "executor_id")]
+    [Column("executor_id")]
     public int ExecutorId { get; set; }
 
     [ForeignKey(nameof(ExecutorId))]
     public OrganizationModel Executor { get; set; }
 
-    [Column(name: "client_id")]
+    [Column("client_id")]
     public int ClientId { get; set; }
 
     [ForeignKey(nameof(ClientId))]
@@ -42,7 +40,7 @@ public class ContractModel
         Id = id;
         Number = number;
         DateOfConclusion = dateOfConclusion;
-        DateValidation = dateValidation;
+        DateValid = dateValidation;
         ExecutorId = executors.Id;
         ClientId = clients.Id;
     }

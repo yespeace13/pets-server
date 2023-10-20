@@ -1,25 +1,51 @@
 ﻿using PetsServer.Locality.Model;
 using PetsServer.Organization.Model;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PetsServer.Authorization.Model
+namespace PetsServer.Authorization.Model;
+
+[Table("user")]
+public class UserModel
 {
-    public class UserModel
-    {
-        public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public LocalityModel Locality { get; set; }
-        public OrganizationModel Organization { get; set; }
-        public Role Privilege { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("id")]
+    [Key]
+    public int Id { get; set; }
 
-        public UserModel(int id, string log, string pass, LocalityModel locality, OrganizationModel organization, Role privilege) 
-        {
-            Id = id;
-            Login = log;
-            Password = pass;
-            Locality = locality;
-            Organization = organization;
-            Privilege = privilege;
-        }
+    [Column("login")]
+    public string Login { get; set; }
+
+    [Column("password")]
+    public string Password { get; set; }
+
+    [Column("locality_id")]
+    public int LocalityId { get; set; }
+
+    [ForeignKey(nameof(LocalityId))]
+    public LocalityModel Locality { get; set; }
+
+    [Column("organization_id")]
+    public int OrganizationId { get; set; }
+
+    [ForeignKey(nameof(OrganizationId))]
+    public OrganizationModel Organization { get; set; }
+
+    [Column("role_id")]
+    public int? RoleId { get; set; }
+
+    [ForeignKey(nameof(RoleId))]
+    public RoleModel? Role { get; set; }
+
+    public UserModel() { }
+
+    public UserModel(int id, string log, string pass, LocalityModel locality, OrganizationModel organization, RoleModel? role)
+    {
+        Id = id;
+        Login = log;
+        Password = pass;
+        Locality = locality;
+        Organization = organization;
+        Role = role;
     }
 }

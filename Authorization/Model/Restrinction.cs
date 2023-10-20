@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PetsServer.Authorization.Model;
 
-namespace PetsServer.Authorization.Model
+public enum Restrictions
 {
-    public enum Restrictions
-    {
-        All, 
-        Organizations,
-        Locality,
-        None
-    }
-
-    public enum Possibilities
-    {
-        Read,
-        Insert,
-        Update,
-        Delete
-    }
+    All,
+    Organizations,
+    Locality,
+    None
 }
+
+public enum Possibilities
+{
+    Read,
+    Insert,
+    Update,
+    Delete
+}
+
+public enum Entities
+{
+    Authorization, // Только для суперпользователя
+    Organization,
+    Contract, 
+    Schedule,
+    Act
+}
+

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Organization;
+using PetsServer.Authorization.Model;
 using PetsServer.Organization.Model;
 
 namespace PetsServer
@@ -19,6 +21,9 @@ namespace PetsServer
 
             // Из wiew для создания/изменения в модель
             CreateMap<OrganizationEdit, OrganizationModel>();
+
+            // Пользователя
+            CreateMap<UserEdit, UserModel>();
         }
     }
 }

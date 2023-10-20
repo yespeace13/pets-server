@@ -61,16 +61,16 @@ public class OrganizationService
         // берем организации по этим правилам
         var organizations = _organizationRepository.GetAll();
 
-        if (user.Privilege.Organizations.Item1 == Restrictions.Organizations)
-            organizations = organizations
-                .Where(org => org.Id == user.Organization.Id);
+        //if (user.Privilege.Organization.Restrictions == Restrictions.Organizations)
+        //    organizations = organizations
+        //        .Where(org => org.Id == user.Organization.Id);
 
-        else if (user.Privilege.Organizations.Item1 == Restrictions.Locality)
-            organizations = organizations
-                .Where(org => org.Locality.Id == user.Locality.Id);
+        //else if (user.Privilege.Organization.Restrictions == Restrictions.Locality)
+        //    organizations = organizations
+        //        .Where(org => org.Locality.Id == user.Locality.Id);
 
-        if (user.Privilege.Organizations.Item3 != null)
-            organizations = organizations.Where(o => user.Privilege.Organizations.Item3.Contains(o.TypeOrganization.Id));
+        //if (user.Privilege.Organization.TypeOrganizations != null)
+        //    organizations = organizations.Where(o => user.Privilege.Organization.TypeOrganizations.Contains(o.TypeOrganization.Id));
 
         // Фильтрация
         organizations = FilterOrganizations(organizations, filter);
