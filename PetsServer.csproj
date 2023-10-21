@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Act\Model\" />
+    <Folder Include="Act\Controller\" />
+    <Folder Include="Act\Repository\" />
+    <Folder Include="Act\Service\" />
     <Folder Include="Animal\Service\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
