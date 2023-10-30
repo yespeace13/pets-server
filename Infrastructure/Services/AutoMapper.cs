@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using ModelLibrary.Contract;
 using ModelLibrary.Model.Authentication;
+using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Organization;
 using PetsServer.Authorization.Model;
 using PetsServer.Contract.Model;
 using PetsServer.Organization.Model;
 
-namespace PetsServer
+namespace PetsServer.Infrastructure.Services
 {
     public class AutoMapper : Profile
     {
@@ -38,11 +38,7 @@ namespace PetsServer
             CreateMap<ContractContentModel, ContractContentView>();
 
             // Из модели во viewOne
-            CreateMap<ContractModel, ContractViewOne>()
-                .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
-                .ForMember(dest => dest.Executor, opt => opt.MapFrom(src => src.Executor));
-
-
+            CreateMap<ContractModel, ContractViewOne>();
         }
     }
 }

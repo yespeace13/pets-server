@@ -16,8 +16,12 @@ public class ContractRepository
     public ContractModel? GetOne(int id)
     {
         return _context.Contracts
-            .Include(c => c.Client)
-            .Include(c => c.Executor)
+            .Include(c => c.Client.TypeOrganization)
+            .Include(c => c.Client.LegalType)
+            .Include(c => c.Client.Locality)
+            .Include(c => c.Executor.TypeOrganization)
+            .Include(c => c.Executor.LegalType)
+            .Include(c => c.Executor.Locality)
             .FirstOrDefault(o => o.Id == id);
     }
 

@@ -46,7 +46,7 @@ namespace PetsServer.Organization.Controller
 
             var pageView = new PageSettings<OrganizationViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
 
-            //pageView.Items = _mapper.Map<List<OrganizationViewList>>(pageModel.Items);
+            pageView.Items = _mapper.Map<List<OrganizationViewList>>(pageModel.Items);
 
             return Ok(pageView);
         }

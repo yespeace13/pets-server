@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ModelLibrary.Model.Organization;
 using ModelLibrary.View;
 using PetsServer.Authorization.Model;
 using PetsServer.Organization.Service;
@@ -7,8 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Authentication;
 using PetsServer.Contract.Service;
-using ModelLibrary.Contract;
 using PetsServer.Contract.Model;
+using ModelLibrary.Model.Contract;
 
 namespace PetsServer.Organization.Controller
 {
@@ -46,8 +45,9 @@ namespace PetsServer.Organization.Controller
 
             var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
 
-            var pageView = new PageSettings<OrganizationViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
+            var pageView = new PageSettings<ContractViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
 
+            pageView.Items = _mapper.Map<IEnumerable<ContractViewList>>(pageModel.Items);
             return Ok(pageView);
         }
 
@@ -58,9 +58,9 @@ namespace PetsServer.Organization.Controller
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-
-            var organization = _mapper.Map<ContractViewOne>(_service.GetOne(id));
-            return Ok(organization);
+            var entity = _service.GetOne(id);
+            var view = _mapper.Map<ContractViewOne>(entity);
+            return Ok(view);
 
         }
 
@@ -72,8 +72,8 @@ namespace PetsServer.Organization.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var organization = _mapper.Map<ContractEdit, ContractModel>(view);
-            _service.Create(organization);
+            var entity = _mapper.Map<ContractEdit, ContractModel>(view);
+            _service.Create(entity);
             return Ok();
         }
 
@@ -85,9 +85,9 @@ namespace PetsServer.Organization.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var organization = _mapper.Map<ContractEdit, ContractModel>(view);
-            organization.Id = id;
-            _service.Update(organization);
+            var entity = _mapper.Map<ContractEdit, ContractModel>(view);
+            entity.Id = id;
+            _service.Update(entity);
             return Ok();
         }
 

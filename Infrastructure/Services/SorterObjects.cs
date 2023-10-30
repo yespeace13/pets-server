@@ -2,7 +2,7 @@
 using PetsServer.Contract.Model;
 using System.Reflection;
 
-namespace PetsServer
+namespace PetsServer.Infrastructure.Services
 {
     public class SorterObjects<T>
     {

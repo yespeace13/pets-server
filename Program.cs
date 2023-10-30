@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PetsServer.Authentication;
@@ -50,7 +51,7 @@ namespace PetsServer
             });
 
             // Автомаппер
-            builder.Services.AddAutoMapper(typeof(AutoMapper));
+            builder.Services.AddAutoMapper(typeof(Infrastructure.Services.AutoMapper));
 
             builder.Services.AddAuthorization();
 
@@ -77,7 +78,8 @@ namespace PetsServer
                 UserModel? person = new AuthenticationUserService().GetUser(login);
 
                 if (person is null) return Results.Unauthorized();
-                if (person.Password != password) return Results.Unauthorized();
+                var result = new PasswordHasher<UserModel>().VerifyHashedPassword(person, person.Password, password);
+                if (result != PasswordVerificationResult.Success) return Results.Unauthorized();
 
                 var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Login) };
                 var jwt = new JwtSecurityToken(

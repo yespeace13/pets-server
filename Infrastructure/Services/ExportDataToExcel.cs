@@ -1,7 +1,7 @@
 ﻿using OfficeOpenXml;
 using System.Reflection;
 
-namespace PetsServer
+namespace PetsServer.Infrastructure.Services
 {
     public static class ExportDataToExcel
     {

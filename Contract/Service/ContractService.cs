@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using ModelLibrary.Contract;
+using ModelLibrary.Model.Contract;
 using ModelLibrary.View;
 using PetsServer.Authorization.Model;
 using PetsServer.Contract.Model;
 using PetsServer.Contract.Repository;
+using PetsServer.Infrastructure.Services;
 
 namespace PetsServer.Contract.Service;
 

@@ -3,14 +3,14 @@ using PetsServer.Contract.Model;
 using PetsServer.Organization.Model;
 using System.Reflection;
 
-namespace PetsServer
+namespace PetsServer.Infrastructure.Services
 {
     public class FilterObjects<T>
     {
         public IEnumerable<T> Filter(IEnumerable<T> models, string filtersQuery)
         {
             var filters = new FilterSetting(typeof(T));
-            if (!String.IsNullOrEmpty(filtersQuery))
+            if (!string.IsNullOrEmpty(filtersQuery))
             {
                 var filtersKeyValue = filtersQuery.Split(";");
                 foreach (string filter in filtersKeyValue)
