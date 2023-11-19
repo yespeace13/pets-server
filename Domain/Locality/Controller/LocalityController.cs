@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PetsServer.Locality.Repository;
+using PetsServer.Domain.Locality.Repository;
 
 namespace PetsServer.Domain.Locality.Controller
 {

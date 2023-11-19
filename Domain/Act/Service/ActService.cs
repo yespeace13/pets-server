@@ -1,4 +1,3 @@
-using PetsServer.Contract.Model;
 using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Act.Repository;
 

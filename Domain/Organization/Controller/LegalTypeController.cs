@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Domain.Organization.Service;
-using PetsServer.Locality.Repository;
-using PetsServer.Organization.Model;
 
 namespace PetsServer.Domain.Organization.Controller
 {

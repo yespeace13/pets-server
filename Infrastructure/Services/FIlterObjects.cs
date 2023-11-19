@@ -1,7 +1,4 @@
 ﻿using ModelLibrary.View;
-using PetsServer.Contract.Model;
-using PetsServer.Organization.Model;
-using System.Reflection;
 
 namespace PetsServer.Infrastructure.Services
 {

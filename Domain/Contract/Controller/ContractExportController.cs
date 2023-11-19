@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Domain.Contract.Service;
-using PetsServer.Organization.Service;
 
 namespace PetsServer.Domain.Contract.Controller;
 

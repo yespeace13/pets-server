@@ -1,8 +1,4 @@
-﻿using PetsServer.Authorization.Model;
-using PetsServer.Locality.Repository;
-using PetsServer.Organization.Service;
-
-namespace IS_5
+﻿namespace IS_5
 {
     public static class TestData
     {
