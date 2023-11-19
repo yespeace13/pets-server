@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Contract;
+using ModelLibrary.Model.Etc;
 using ModelLibrary.Model.Organization;
-using PetsServer.Authorization.Model;
-using PetsServer.Contract.Model;
-using PetsServer.Organization.Model;
+using PetsServer.Auth.Authorization.Model;
+using PetsServer.Domain.Contract.Model;
+using PetsServer.Domain.Locality.Model;
+using PetsServer.Domain.Organization.Model;
 
 namespace PetsServer.Infrastructure.Services
 {
@@ -28,6 +30,8 @@ namespace PetsServer.Infrastructure.Services
             // Пользователя
             // Из wiew для создания/изменения в модель
             CreateMap<UserEdit, UserModel>();
+
+            CreateMap<LocalityModel, LocalityView>();
 
             // Контракт
             // Из модели во view

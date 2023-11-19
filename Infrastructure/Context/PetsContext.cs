@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PetsServer.Animal.Model;
-using PetsServer.Authorization.Model;
-using PetsServer.Contract.Model;
-using PetsServer.Locality.Model;
-using PetsServer.Organization.Model;
+using PetsServer.Auth.Authorization.Model;
+using PetsServer.Domain.Animal.Model;
+using PetsServer.Domain.Contract.Model;
+using PetsServer.Domain.Locality.Model;
+using PetsServer.Domain.Organization.Model;
 using System.Reflection.Metadata;
 
 namespace PetsServer.Infrastructure.Context

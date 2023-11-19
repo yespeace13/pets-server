@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\Animal\Service\**" />
+    <Content Remove="Domain\Animal\Service\**" />
+    <EmbeddedResource Remove="Domain\Animal\Service\**" />
+    <None Remove="Domain\Animal\Service\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="EPPlus" Version="6.2.10" />
@@ -28,11 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Act\Model\" />
-    <Folder Include="Act\Controller\" />
-    <Folder Include="Act\Repository\" />
-    <Folder Include="Act\Service\" />
-    <Folder Include="Animal\Service\" />
+    <Folder Include="Domain\Act\Controller\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
