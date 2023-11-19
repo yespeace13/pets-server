@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PetsServer.Migrations
 {
     /// <inheritdoc />
-    public partial class initpets : Migration
+    public partial class InitPets : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -153,8 +153,8 @@ namespace PetsServer.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     number = table.Column<string>(type: "text", nullable: false),
-                    date_of_conclusion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    date_valid = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    date_of_conclusion = table.Column<DateOnly>(type: "date", nullable: false),
+                    date_valid = table.Column<DateOnly>(type: "date", nullable: false),
                     executor_id = table.Column<int>(type: "integer", nullable: false),
                     client_id = table.Column<int>(type: "integer", nullable: false)
                 },

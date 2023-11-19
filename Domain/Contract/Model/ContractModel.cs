@@ -15,10 +15,10 @@ public class ContractModel
     public string Number { get; set; }
 
     [Column("date_of_conclusion")]
-    public DateTime DateOfConclusion { get; set; }
+    public DateOnly DateOfConclusion { get; set; }
 
     [Column("date_valid")]
-    public DateTime DateValid { get; set; }
+    public DateOnly DateValid { get; set; }
 
     [Column("executor_id")]
     public int ExecutorId { get; set; }
@@ -32,11 +32,11 @@ public class ContractModel
     [ForeignKey(nameof(ClientId))]
     public OrganizationModel Client { get; set; }
 
-    public ICollection<ContractContentModel>? ContractContents { get; set; }
+    public ICollection<ContractContentModel>? ContractContent { get; set; }
 
     public ContractModel() { }
     public ContractModel(
-            int id, string number, DateTime dateOfConclusion, DateTime dateValidation,
+            int id, string number, DateOnly dateOfConclusion, DateOnly dateValidation,
             OrganizationModel executors, OrganizationModel clients)
     {
         Id = id;

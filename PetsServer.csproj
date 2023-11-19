@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Domain\Act\Controller\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

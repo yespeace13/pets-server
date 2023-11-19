@@ -43,6 +43,10 @@ namespace PetsServer.Infrastructure.Services
 
             // Из модели во viewOne
             CreateMap<ContractModel, ContractViewOne>();
+
+            CreateMap<ContractEdit, ContractModel>();
+
+            CreateMap<ContractContentEdit, ContractContentModel>();
         }
     }
 }

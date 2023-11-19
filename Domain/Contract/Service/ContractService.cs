@@ -25,6 +25,7 @@ public class ContractService
         oldModel.DateValid = model.DateValid;
         oldModel.ClientId = model.ClientId;
         oldModel.ExecutorId = model.ExecutorId;
+        oldModel.ContractContent = model.ContractContent;
         _repository.Update(oldModel);
     }
 
@@ -59,7 +60,7 @@ public class ContractService
             contracts = contracts.Where(c => c.ExecutorId == user.Organization.Id);
 
         else if (userRestiction == Restrictions.Locality)
-            contracts = contracts.Where(c => c.ContractContents.Where(cc => cc.LocalityId == user.Locality.Id).Any());
+            contracts = contracts.Where(c => c.ContractContent.Where(cc => cc.LocalityId == user.Locality.Id).Any());
 
         IEnumerable<ContractViewList> contractsView = mapper.Map<List<ContractViewList>>(contracts);
         // Фильтрация

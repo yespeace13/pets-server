@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Infrastructure.Context;
+using System.Linq.Expressions;
 
 namespace PetsServer.Domain.Contract.Repository;
 
@@ -22,7 +23,7 @@ public class ContractRepository
             .Include(c => c.Executor.TypeOrganization)
             .Include(c => c.Executor.LegalType)
             .Include(c => c.Executor.Locality)
-            .Include(c => c.ContractContents)
+            .Include(c => c.ContractContent)
             .ThenInclude(c => c.Locality)
             .FirstOrDefault(o => o.Id == id);
     }
@@ -37,7 +38,7 @@ public class ContractRepository
 
     public void Create(ContractModel contracts)
     {
-        _context.Contracts.Add(contracts);
+        _context.Add(contracts);
         _context.SaveChanges();
     }
 

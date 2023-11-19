@@ -22,7 +22,109 @@ namespace PetsServer.Migrations
 
             NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
 
-            modelBuilder.Entity("PetsServer.Animal.Model.AnimalModel", b =>
+            modelBuilder.Entity("PetsServer.Auth.Authorization.Model.EntityPossibilities", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Entity")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("entity");
+
+                    b.Property<string>("Possibility")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("possibility");
+
+                    b.Property<string>("Restriction")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("restriction");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("entity_possibilities");
+                });
+
+            modelBuilder.Entity("PetsServer.Auth.Authorization.Model.RoleModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("role");
+                });
+
+            modelBuilder.Entity("PetsServer.Auth.Authorization.Model.UserModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LocalityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("locality_id");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("login");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("organization_id");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocalityId");
+
+                    b.HasIndex("Login")
+                        .IsUnique();
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("user");
+                });
+
+            modelBuilder.Entity("PetsServer.Domain.Animal.Model.AnimalModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,109 +183,7 @@ namespace PetsServer.Migrations
                     b.ToTable("animal");
                 });
 
-            modelBuilder.Entity("PetsServer.Authorization.Model.EntityPossibilities", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Entity")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("entity");
-
-                    b.Property<string>("Possibility")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("possibility");
-
-                    b.Property<string>("Restriction")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("restriction");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("entity_possibilities");
-                });
-
-            modelBuilder.Entity("PetsServer.Authorization.Model.RoleModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("role");
-                });
-
-            modelBuilder.Entity("PetsServer.Authorization.Model.UserModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("LocalityId")
-                        .HasColumnType("integer")
-                        .HasColumnName("locality_id");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("login");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("organization_id");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("password");
-
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocalityId");
-
-                    b.HasIndex("Login")
-                        .IsUnique();
-
-                    b.HasIndex("OrganizationId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("user");
-                });
-
-            modelBuilder.Entity("PetsServer.Contract.Model.ContractContentModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractContentModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -214,7 +214,7 @@ namespace PetsServer.Migrations
                     b.ToTable("contract_content");
                 });
 
-            modelBuilder.Entity("PetsServer.Contract.Model.ContractModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,12 +227,12 @@ namespace PetsServer.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("client_id");
 
-                    b.Property<DateTime>("DateOfConclusion")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("DateOfConclusion")
+                        .HasColumnType("date")
                         .HasColumnName("date_of_conclusion");
 
-                    b.Property<DateTime>("DateValid")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("DateValid")
+                        .HasColumnType("date")
                         .HasColumnName("date_valid");
 
                     b.Property<int>("ExecutorId")
@@ -256,7 +256,7 @@ namespace PetsServer.Migrations
                     b.ToTable("contract");
                 });
 
-            modelBuilder.Entity("PetsServer.Locality.Model.LocalityModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Locality.Model.LocalityModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -278,7 +278,7 @@ namespace PetsServer.Migrations
                     b.ToTable("locality");
                 });
 
-            modelBuilder.Entity("PetsServer.Organization.Model.LegalTypeModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Organization.Model.LegalTypeModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -300,7 +300,7 @@ namespace PetsServer.Migrations
                     b.ToTable("legal_type");
                 });
 
-            modelBuilder.Entity("PetsServer.Organization.Model.OrganizationModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Organization.Model.OrganizationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -351,7 +351,7 @@ namespace PetsServer.Migrations
                     b.ToTable("organization");
                 });
 
-            modelBuilder.Entity("PetsServer.Organization.Model.TypeOrganizationModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Organization.Model.TypeOrganizationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -373,9 +373,9 @@ namespace PetsServer.Migrations
                     b.ToTable("type_organization");
                 });
 
-            modelBuilder.Entity("PetsServer.Authorization.Model.EntityPossibilities", b =>
+            modelBuilder.Entity("PetsServer.Auth.Authorization.Model.EntityPossibilities", b =>
                 {
-                    b.HasOne("PetsServer.Authorization.Model.RoleModel", "Role")
+                    b.HasOne("PetsServer.Auth.Authorization.Model.RoleModel", "Role")
                         .WithMany("Possibilities")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -384,21 +384,21 @@ namespace PetsServer.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("PetsServer.Authorization.Model.UserModel", b =>
+            modelBuilder.Entity("PetsServer.Auth.Authorization.Model.UserModel", b =>
                 {
-                    b.HasOne("PetsServer.Locality.Model.LocalityModel", "Locality")
+                    b.HasOne("PetsServer.Domain.Locality.Model.LocalityModel", "Locality")
                         .WithMany()
                         .HasForeignKey("LocalityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetsServer.Organization.Model.OrganizationModel", "Organization")
+                    b.HasOne("PetsServer.Domain.Organization.Model.OrganizationModel", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetsServer.Authorization.Model.RoleModel", "Role")
+                    b.HasOne("PetsServer.Auth.Authorization.Model.RoleModel", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
 
@@ -409,15 +409,15 @@ namespace PetsServer.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("PetsServer.Contract.Model.ContractContentModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractContentModel", b =>
                 {
-                    b.HasOne("PetsServer.Contract.Model.ContractModel", "Contract")
-                        .WithMany("ContractContents")
+                    b.HasOne("PetsServer.Domain.Contract.Model.ContractModel", "Contract")
+                        .WithMany("ContractContent")
                         .HasForeignKey("ContractId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetsServer.Locality.Model.LocalityModel", "Locality")
+                    b.HasOne("PetsServer.Domain.Locality.Model.LocalityModel", "Locality")
                         .WithMany()
                         .HasForeignKey("LocalityId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -428,15 +428,15 @@ namespace PetsServer.Migrations
                     b.Navigation("Locality");
                 });
 
-            modelBuilder.Entity("PetsServer.Contract.Model.ContractModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractModel", b =>
                 {
-                    b.HasOne("PetsServer.Organization.Model.OrganizationModel", "Client")
+                    b.HasOne("PetsServer.Domain.Organization.Model.OrganizationModel", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetsServer.Organization.Model.OrganizationModel", "Executor")
+                    b.HasOne("PetsServer.Domain.Organization.Model.OrganizationModel", "Executor")
                         .WithMany()
                         .HasForeignKey("ExecutorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -447,21 +447,21 @@ namespace PetsServer.Migrations
                     b.Navigation("Executor");
                 });
 
-            modelBuilder.Entity("PetsServer.Organization.Model.OrganizationModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Organization.Model.OrganizationModel", b =>
                 {
-                    b.HasOne("PetsServer.Organization.Model.LegalTypeModel", "LegalType")
+                    b.HasOne("PetsServer.Domain.Organization.Model.LegalTypeModel", "LegalType")
                         .WithMany()
                         .HasForeignKey("LegalTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetsServer.Locality.Model.LocalityModel", "Locality")
+                    b.HasOne("PetsServer.Domain.Locality.Model.LocalityModel", "Locality")
                         .WithMany()
                         .HasForeignKey("LocalityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetsServer.Organization.Model.TypeOrganizationModel", "TypeOrganization")
+                    b.HasOne("PetsServer.Domain.Organization.Model.TypeOrganizationModel", "TypeOrganization")
                         .WithMany()
                         .HasForeignKey("TypeOrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -474,14 +474,14 @@ namespace PetsServer.Migrations
                     b.Navigation("TypeOrganization");
                 });
 
-            modelBuilder.Entity("PetsServer.Authorization.Model.RoleModel", b =>
+            modelBuilder.Entity("PetsServer.Auth.Authorization.Model.RoleModel", b =>
                 {
                     b.Navigation("Possibilities");
                 });
 
-            modelBuilder.Entity("PetsServer.Contract.Model.ContractModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractModel", b =>
                 {
-                    b.Navigation("ContractContents");
+                    b.Navigation("ContractContent");
                 });
 #pragma warning restore 612, 618
         }
