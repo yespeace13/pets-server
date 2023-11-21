@@ -12,8 +12,8 @@ using PetsServer.Infrastructure.Context;
 namespace PetsServer.Migrations
 {
     [DbContext(typeof(PetsContext))]
-    [Migration("20231119165540_InitPets")]
-    partial class InitPets
+    [Migration("20231121154034_initpets")]
+    partial class initpets
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,6 +127,36 @@ namespace PetsServer.Migrations
                     b.ToTable("user");
                 });
 
+            modelBuilder.Entity("PetsServer.Domain.Act.Model.ActModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateOfCapture")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_of_capture");
+
+                    b.Property<int>("ExecutorId")
+                        .HasColumnType("integer")
+                        .HasColumnName("executor_id");
+
+                    b.Property<int>("LocalityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("locality_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExecutorId");
+
+                    b.HasIndex("LocalityId");
+
+                    b.ToTable("act");
+                });
+
             modelBuilder.Entity("PetsServer.Domain.Animal.Model.AnimalModel", b =>
                 {
                     b.Property<int>("Id")
@@ -135,6 +165,10 @@ namespace PetsServer.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActId")
+                        .HasColumnType("integer")
+                        .HasColumnName("act_id");
 
                     b.Property<string>("Breed")
                         .HasColumnType("text")
@@ -182,6 +216,8 @@ namespace PetsServer.Migrations
                         .HasColumnName("wool");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActId");
 
                     b.ToTable("animal");
                 });
@@ -412,6 +448,36 @@ namespace PetsServer.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("PetsServer.Domain.Act.Model.ActModel", b =>
+                {
+                    b.HasOne("PetsServer.Domain.Organization.Model.OrganizationModel", "Executor")
+                        .WithMany()
+                        .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PetsServer.Domain.Locality.Model.LocalityModel", "Locality")
+                        .WithMany()
+                        .HasForeignKey("LocalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Executor");
+
+                    b.Navigation("Locality");
+                });
+
+            modelBuilder.Entity("PetsServer.Domain.Animal.Model.AnimalModel", b =>
+                {
+                    b.HasOne("PetsServer.Domain.Act.Model.ActModel", "Act")
+                        .WithMany("Animal")
+                        .HasForeignKey("ActId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Act");
+                });
+
             modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractContentModel", b =>
                 {
                     b.HasOne("PetsServer.Domain.Contract.Model.ContractModel", "Contract")
@@ -480,6 +546,11 @@ namespace PetsServer.Migrations
             modelBuilder.Entity("PetsServer.Auth.Authorization.Model.RoleModel", b =>
                 {
                     b.Navigation("Possibilities");
+                });
+
+            modelBuilder.Entity("PetsServer.Domain.Act.Model.ActModel", b =>
+                {
+                    b.Navigation("Animal");
                 });
 
             modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractModel", b =>

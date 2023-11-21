@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetsServer.Auth.Authorization.Model;
+using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
@@ -21,17 +22,12 @@ namespace PetsServer.Infrastructure.Context
         public DbSet<LocalityModel> Localities { get; set; }
 
         public DbSet<OrganizationModel> Organizations { get; set; }
-
+        public DbSet<ActModel> Acts { get; set; }
         public DbSet<AnimalModel> Animals { get; set; }
-
         public DbSet<EntityPossibilities> EntityRestrictions { get; set; }
-
         public DbSet<RoleModel> Roles { get; set; }
-
         public DbSet<UserModel> Users { get; set; }
-
         public DbSet<ContractModel> Contracts { get; set; }
-
         public DbSet<ContractContentModel> ContractContents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,14 +37,6 @@ namespace PetsServer.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            //modelBuilder.Entity<ContractModel>()
-            //    .HasMany(e => e.ContractContents)
-            //    .WithOne(e => e.Contract)
-            //    .HasForeignKey(e => e.ContractId)
-            //    .IsRequired(true);
-
-
             modelBuilder.UseSerialColumns();
             // Ограничения
             // Уникальность логина у пользователей
@@ -99,8 +87,6 @@ namespace PetsServer.Infrastructure.Context
             modelBuilder.Entity<EntityPossibilities>()
                 .Property(e => e.Restriction)
                 .HasConversion(new EnumToStringConverter<Restrictions>());
-
-
         }
     }
 }

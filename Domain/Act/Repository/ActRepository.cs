@@ -1,5 +1,9 @@
+﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using PetsServer.Domain.Act.Model;
+using PetsServer.Domain.Organization.Repository;
 using PetsServer.Infrastructure.Context;
+using System.Net;
 
 namespace PetsServer.Domain.Act.Repository;
 
@@ -7,26 +11,41 @@ public class ActRepository
 {
     private PetsContext _context;
 
-    public ActRepository()
+    public ActRepository() => _context = new PetsContext();
+
+    public ActModel? GetOne(int id)
     {
-        _context = new PetsContext();
+        var act = _context.Acts
+            .Include(a => a.Animal)
+            .Include(a => a.Locality)
+            .FirstOrDefault(a => a.Id == id);
+        act.Executor = new OrganizationRepository().GetOne(act.ExecutorId);
+        return act;
     }
 
-    public void Create(ActModel acts)
+    public IEnumerable<ActModel> GetAll()
     {
-        //_context..Add(acts);
-        //_context.SaveChanges();
+        return _context.Acts
+            .Include(c => c.Executor)
+            .Include(c => c.Locality)
+            .ToList();
     }
 
-    public void Update(ActModel acts)
+    public void Create(ActModel act)
     {
-        //_context.Contracts.Update(acts);
-        //_context.SaveChanges();
+        _context.Add(act);
+        _context.SaveChanges();
     }
 
-    public void Delete(ActModel acts)
+    public void Update(ActModel act)
     {
-        //_context.Contracts.Remove(acts);
-        //_context.SaveChanges();
+        _context.Update(act);
+        _context.SaveChanges();
+    }
+
+    public void Delete(ActModel act)
+    {
+        _context.Remove(act);
+        _context.SaveChanges();
     }
 }

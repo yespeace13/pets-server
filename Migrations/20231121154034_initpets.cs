@@ -7,34 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PetsServer.Migrations
 {
     /// <inheritdoc />
-    public partial class InitPets : Migration
+    public partial class initpets : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "animal",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    category = table.Column<string>(type: "text", nullable: false),
-                    sex = table.Column<bool>(type: "boolean", nullable: true),
-                    breed = table.Column<string>(type: "text", nullable: true),
-                    size = table.Column<double>(type: "double precision", nullable: true),
-                    wool = table.Column<string>(type: "text", nullable: true),
-                    color = table.Column<string>(type: "text", nullable: true),
-                    ears = table.Column<string>(type: "text", nullable: true),
-                    tail = table.Column<string>(type: "text", nullable: true),
-                    special_signs = table.Column<string>(type: "text", nullable: true),
-                    identification_label = table.Column<string>(type: "text", nullable: true),
-                    chip_number = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_animal", x => x.id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "legal_type",
                 columns: table => new
@@ -147,6 +124,33 @@ namespace PetsServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "act",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    executor_id = table.Column<int>(type: "integer", nullable: false),
+                    locality_id = table.Column<int>(type: "integer", nullable: false),
+                    date_of_capture = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_act", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_act_locality_locality_id",
+                        column: x => x.locality_id,
+                        principalTable: "locality",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_act_organization_executor_id",
+                        column: x => x.executor_id,
+                        principalTable: "organization",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "contract",
                 columns: table => new
                 {
@@ -210,6 +214,36 @@ namespace PetsServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "animal",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    category = table.Column<string>(type: "text", nullable: false),
+                    sex = table.Column<bool>(type: "boolean", nullable: true),
+                    breed = table.Column<string>(type: "text", nullable: true),
+                    size = table.Column<double>(type: "double precision", nullable: true),
+                    wool = table.Column<string>(type: "text", nullable: true),
+                    color = table.Column<string>(type: "text", nullable: true),
+                    ears = table.Column<string>(type: "text", nullable: true),
+                    tail = table.Column<string>(type: "text", nullable: true),
+                    special_signs = table.Column<string>(type: "text", nullable: true),
+                    identification_label = table.Column<string>(type: "text", nullable: true),
+                    chip_number = table.Column<string>(type: "text", nullable: true),
+                    act_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_animal", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_animal_act_act_id",
+                        column: x => x.act_id,
+                        principalTable: "act",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "contract_content",
                 columns: table => new
                 {
@@ -235,6 +269,21 @@ namespace PetsServer.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_act_executor_id",
+                table: "act",
+                column: "executor_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_act_locality_id",
+                table: "act",
+                column: "locality_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_animal_act_id",
+                table: "animal",
+                column: "act_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_contract_client_id",
@@ -345,6 +394,9 @@ namespace PetsServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "user");
+
+            migrationBuilder.DropTable(
+                name: "act");
 
             migrationBuilder.DropTable(
                 name: "contract");

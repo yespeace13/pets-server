@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using ModelLibrary.Model.Act;
+using ModelLibrary.Model.Animal;
 using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Etc;
 using ModelLibrary.Model.Organization;
 using PetsServer.Auth.Authorization.Model;
+using PetsServer.Domain.Act.Model;
+using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Organization.Model;
@@ -47,6 +51,29 @@ namespace PetsServer.Infrastructure.Services
             CreateMap<ContractEdit, ContractModel>();
 
             CreateMap<ContractContentEdit, ContractContentModel>();
+
+            // Акт
+            // Из модели во view
+            CreateMap<ActModel, ActViewList>()
+                .AfterMap((src, dest) => dest.Executor = src.Executor.NameOrganization)
+                .AfterMap((src, dest) => dest.Locality = src.Locality.Name);
+
+            // Из модели во viewOne
+            CreateMap<ActModel, ActViewOne>();
+
+            CreateMap<ActEdit, ActModel>();
+
+            // Animal
+            // Из модели во view
+            CreateMap<AnimalModel, AnimalViewList>()
+                .AfterMap((src, dest) =>
+                {
+                    if (!src.Sex.HasValue) dest.Sex = null;
+                    else if (src.Sex.Value) dest.Sex = "Самка";
+                    else if (!src.Sex.Value) dest.Sex = "Самец";
+                });
+
+            CreateMap<AnimalEdit, AnimalModel>();
         }
     }
 }

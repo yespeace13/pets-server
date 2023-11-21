@@ -1,6 +1,6 @@
 using PetsServer.Domain.Animal.Model;
+using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Organization.Model;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,28 +15,32 @@ public class ActModel
     [Key]
     public int Id { get; set; }
 
-    [Column("animal_id")]
-    public int AnimalId { get; set; }
+    [Column("executor_id")]
+    public int ExecutorId { get; set; }
 
-    [ForeignKey(nameof(AnimalId))]
-    public AnimalModel Animal { get; set; }
+    [ForeignKey(nameof(ExecutorId))]
+    public OrganizationModel Executor { get; set; }
+    [Column("locality_id")]
+    public int LocalityId { get; set; }
 
-    [Column("organization_id")]
-    public int OrganizationId { get; set; }
-
-    [ForeignKey(nameof(OrganizationId))]
-    public OrganizationModel Organization { get; set; }
+    [ForeignKey(nameof(LocalityId))]
+    public LocalityModel Locality { get; set; }
 
     [Column("date_of_capture")]
+    //TODO поменять
     public DateTime DateOfCapture { get; set; }
 
+    public List<AnimalModel> Animal { get; set; }
+
     public ActModel(
-        int id, AnimalModel animal, OrganizationModel organization, DateTime date)
+            int id, OrganizationModel executor, LocalityModel locality, DateTime date)
     {
         Id = id;
-        AnimalId = animal.Id;
-        OrganizationId = organization.Id;
+        ExecutorId = executor.Id;
+        LocalityId = locality.Id;
         DateOfCapture = date;
     }
+
+    public ActModel() { }
 
 }

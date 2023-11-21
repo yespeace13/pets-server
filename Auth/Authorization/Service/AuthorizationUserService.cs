@@ -15,7 +15,7 @@ public class AuthorizationUserService
 
     public static bool IsPossible(Possibilities possibility, Entities entity, UserModel user)
     {
-        if (user != null && user.Role.Possibilities.FirstOrDefault(r => r.Entity == entity).Possibility == possibility)
+        if (user != null && user.Role.Possibilities.FirstOrDefault(r => r.Entity == entity)?.Possibility == possibility)
             return true;
         return false;
     }

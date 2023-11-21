@@ -1,3 +1,4 @@
+using PetsServer.Domain.Act.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,7 +11,6 @@ public class AnimalModel
     [Column("id")]
     [Key]
     public int Id { get; set; }
-
 
     [Column("category")]
     public string Category { get; set; }
@@ -45,10 +45,15 @@ public class AnimalModel
     [Column("chip_number")]
     public string? ChipNumber { get; set; }
 
+    [Column("act_id")]
+    public int ActId { get; set; }
+    [ForeignKey(nameof(ActId))]
+    public ActModel Act { get; set; }
+
     public AnimalModel() { }
     public AnimalModel(
             int id, string category, bool sex, string breed, double size, string wool, string color,
-            string ears, string tail, string specialSigns, string identificationLabel, string chipNumber)
+            string ears, string tail, string specialSigns, string identificationLabel, string chipNumber, ActModel act)
     {
         Id = id;
         Category = category;
@@ -62,5 +67,6 @@ public class AnimalModel
         SpecialSigns = specialSigns;
         IdentificationLabel = identificationLabel;
         ChipNumber = chipNumber;
+        ActId = act.Id;
     }
 }
