@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using PetsServer.Domain.Act.Model;
+using PetsServer.Domain.Contract.Repository;
 using PetsServer.Domain.Organization.Repository;
 using PetsServer.Infrastructure.Context;
 using System.Net;
@@ -20,6 +21,7 @@ public class ActRepository
             .Include(a => a.Locality)
             .FirstOrDefault(a => a.Id == id);
         act.Executor = new OrganizationRepository().GetOne(act.ExecutorId);
+        act.Contract = new ContractRepository().GetOne(act.ContractId);
         return act;
     }
 
@@ -28,6 +30,7 @@ public class ActRepository
         return _context.Acts
             .Include(c => c.Executor)
             .Include(c => c.Locality)
+            .Include(c => c.Contract)
             .ToList();
     }
 

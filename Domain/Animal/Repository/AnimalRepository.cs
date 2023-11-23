@@ -8,54 +8,36 @@ namespace PetsServer.Domain.Animal.Repository
     */
     public class AnimalRepository
     {
-
+        private PetsContext _context = new PetsContext();
         public AnimalModel GetOne(int id)
         {
-            using var context = new PetsContext();
-            return context.Animals.Where(o => o.Id == id)
+            return _context.Animals.Where(o => o.Id == id)
                 .First();
         }
 
         public List<AnimalModel> GetAll()
         {
-            using var context = new PetsContext();
-            return context.Animals.ToList();
+            return _context.Animals.ToList();
         }
 
         public void Create(AnimalModel animal)
         {
-            using var context = new PetsContext();
-            context.Add(animal);
-            context.SaveChanges();
+            _context.Add(animal);
+            _context.SaveChanges();
         }
 
         public void Update(AnimalModel animal)
         {
-            using var context = new PetsContext();
-            var oldAnim = context.Animals.Where(o => o.Id == animal.Id)
-                .First();
-            oldAnim.Category = animal.Category;
-            oldAnim.Sex = animal.Sex;
-            oldAnim.Breed = animal.Breed;
-            oldAnim.Size = animal.Size;
-            oldAnim.Wool = animal.Wool;
-            oldAnim.Color = animal.Color;
-            oldAnim.Ears = animal.Ears;
-            oldAnim.Tail = animal.Tail;
-            oldAnim.SpecialSigns = animal.SpecialSigns;
-            oldAnim.IdentificationLabel = animal.IdentificationLabel;
-            oldAnim.ChipNumber = animal.ChipNumber;
-            context.Animals.Update(oldAnim);
-            context.SaveChanges();
+            var oldAnim = GetOne(animal.Id);
+            
+            _context.Animals.Update(oldAnim);
+            _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(AnimalModel animal)
         {
-            using var context = new PetsContext();
-            var animal = context.Animals.Where(o => o.Id == id)
-                .First();
-            context.Animals.Remove(animal);
-            context.SaveChanges();
+            _context.Animals.Remove(animal);
+            _context.SaveChanges();
         }
     }
 }

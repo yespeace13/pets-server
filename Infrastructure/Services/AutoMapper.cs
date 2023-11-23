@@ -56,7 +56,8 @@ namespace PetsServer.Infrastructure.Services
             // Из модели во view
             CreateMap<ActModel, ActViewList>()
                 .AfterMap((src, dest) => dest.Executor = src.Executor.NameOrganization)
-                .AfterMap((src, dest) => dest.Locality = src.Locality.Name);
+                .AfterMap((src, dest) => dest.Locality = src.Locality.Name)
+                .AfterMap((src, dest) => dest.Contract = src.Contract.Number);
 
             // Из модели во viewOne
             CreateMap<ActModel, ActViewOne>();

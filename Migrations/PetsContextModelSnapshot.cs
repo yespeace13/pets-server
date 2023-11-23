@@ -133,8 +133,12 @@ namespace PetsServer.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateOfCapture")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<int>("ContractId")
+                        .HasColumnType("integer")
+                        .HasColumnName("contract_id");
+
+                    b.Property<DateOnly>("DateOfCapture")
+                        .HasColumnType("date")
                         .HasColumnName("date_of_capture");
 
                     b.Property<int>("ExecutorId")
@@ -146,6 +150,8 @@ namespace PetsServer.Migrations
                         .HasColumnName("locality_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
 
                     b.HasIndex("ExecutorId");
 
@@ -447,6 +453,12 @@ namespace PetsServer.Migrations
 
             modelBuilder.Entity("PetsServer.Domain.Act.Model.ActModel", b =>
                 {
+                    b.HasOne("PetsServer.Domain.Contract.Model.ContractModel", "contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PetsServer.Domain.Organization.Model.OrganizationModel", "Executor")
                         .WithMany()
                         .HasForeignKey("ExecutorId")
@@ -462,6 +474,8 @@ namespace PetsServer.Migrations
                     b.Navigation("Executor");
 
                     b.Navigation("Locality");
+
+                    b.Navigation("contract");
                 });
 
             modelBuilder.Entity("PetsServer.Domain.Animal.Model.AnimalModel", b =>

@@ -51,10 +51,10 @@ VALUES
 (150, 2, 2);
 
 INSERT INTO "act"
-(executor_id, locality_id, date_of_capture)
+(executor_id, locality_id, date_of_capture, contract_id)
 VALUES
-(1, 1, '2021-02-01'),
-(2, 2, '2021-03-01');
+(1, 1, '2021-02-01', 1),
+(2, 2, '2021-03-01', 2);
 
 INSERT INTO "animal"
 (category, sex, breed, size, wool, color, ears, tail, special_signs, identification_label, chip_number, act_id)
