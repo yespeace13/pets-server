@@ -27,4 +27,8 @@
     <ProjectReference Include="..\model-library\ModelLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Report\Model\" />
+  </ItemGroup>
+
 </Project>
