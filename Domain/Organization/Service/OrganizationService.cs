@@ -44,7 +44,7 @@ public class OrganizationService
 
     public List<LegalTypeModel> GetLegalTypes() => _repository.GetLegalTypes();
 
-    public OrganizationModel? GetOne(int id) => _repository.GetOne(id);
+    public OrganizationModel? GetOne(int id) => _repository.Get(id);
 
     public PageSettings<OrganizationViewList> GetPage(int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)
     {
@@ -60,7 +60,7 @@ public class OrganizationService
             pageSettings.Limit = limitQuery.Value;
 
         // берем организации по этим правилам
-        var organizations = _repository.GetAll();
+        var organizations = _repository.Get();
 
         var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Organization && p.Possibility == Possibilities.Read).First().Restriction;
 
@@ -94,7 +94,7 @@ public class OrganizationService
 
     public byte[] ExportToExcel(string filters, IMapper mapper)
     {
-        IEnumerable<OrganizationViewList> organizations = mapper.Map<List<OrganizationViewList>>(_repository.GetAll());
+        IEnumerable<OrganizationViewList> organizations = mapper.Map<List<OrganizationViewList>>(_repository.Get());
         organizations = new FilterObjects<OrganizationViewList>().Filter(organizations, filters);
         return ExportDataToExcel.Export(
             "Организации", organizations.ToList());

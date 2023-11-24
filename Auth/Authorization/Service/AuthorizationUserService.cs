@@ -1,9 +1,6 @@
-﻿using IS_5;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Infrastructure.Context;
-using System.Data;
 
 namespace PetsServer.Auth.Authorization.Service;
 

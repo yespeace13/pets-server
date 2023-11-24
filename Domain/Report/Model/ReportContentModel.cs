@@ -1,8 +1,6 @@
-using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Report.Model;
 
