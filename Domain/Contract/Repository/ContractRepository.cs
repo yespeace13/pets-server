@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Infrastructure.Context;
-using System.Linq.Expressions;
 
 namespace PetsServer.Domain.Contract.Repository;
 
@@ -44,13 +43,13 @@ public class ContractRepository
 
     public void Update(ContractModel contracts)
     {
-        _context.Contracts.Update(contracts);
+        _context.Update(contracts);
         _context.SaveChanges();
     }
 
     public void Delete(ContractModel contracts)
     {
-        _context.Contracts.Remove(contracts);
+        _context.Remove(contracts);
         _context.SaveChanges();
     }
 }

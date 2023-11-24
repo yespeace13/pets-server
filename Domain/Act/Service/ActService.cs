@@ -22,7 +22,9 @@ public class ActService
     {
         var oldModel = GetOne(model.Id);
         oldModel.DateOfCapture = model.DateOfCapture;
-        oldModel.Executor.Id = model.ExecutorId;
+        oldModel.ExecutorId = model.ExecutorId;
+        oldModel.LocalityId = model.LocalityId;
+        oldModel.ContractId = model.ContractId;
         oldModel.Animal = model.Animal;
         _repository.Update(oldModel);
     }

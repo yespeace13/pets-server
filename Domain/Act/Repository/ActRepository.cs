@@ -19,9 +19,9 @@ public class ActRepository
         var act = _context.Acts
             .Include(a => a.Animal)
             .Include(a => a.Locality)
+            .Include(a => a.Executor)
+            .Include(a => a.Contract)
             .FirstOrDefault(a => a.Id == id);
-        act.Executor = new OrganizationRepository().GetOne(act.ExecutorId);
-        act.Contract = new ContractRepository().GetOne(act.ContractId);
         return act;
     }
 
