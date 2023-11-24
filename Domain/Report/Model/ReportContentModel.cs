@@ -1,6 +1,8 @@
+using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Report.Model;
 
@@ -23,13 +25,20 @@ public class ReportContentModel
     [Column("number_of_animals")]
     public int NumberOfAnimals { get; set; }
 
-public ReportContentModel() { }
+    [Column("report_id")]
+    public int ReportId { get; set; }
+
+    [ForeignKey(nameof(ReportId))]
+    public ReportModel Report { get; set; }
+
+    public ReportContentModel() { }
     public ReportContentModel(
-            int id, decimal totalCost, LocalityModel locality, int numberOfAnimals)
+            int id, decimal totalCost, LocalityModel locality, int numberOfAnimals, ReportModel report)
     {
         Id = id;
         TotalCost = totalCost;
         LocalityId = locality.Id;
         NumberOfAnimals = numberOfAnimals;
+        ReportId = report.Id;
     }
 }
