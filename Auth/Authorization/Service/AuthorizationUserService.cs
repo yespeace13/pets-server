@@ -43,13 +43,13 @@ public class AuthorizationUserService
     }
 
     // TODO роли пользователя
-    public Dictionary<string, Possibilities> GetUserPossibilities(int userId)
+    public List<EntityPossibilities>? GetUserPriviliges(int userId)
     {
-        //var userRole = _context.Users.FirstOrDefault(id => id.Id == userId)?.RoleId;
-        //var possipilities = _context.EntityRestrictions.Where(r => r.RoleId == userRole)
-        //    .Select(r => r.Possibility)
-        //    .ToList();
-        return null;
+        var userRole = _context.Users.Include(u => u.Role)
+            .ThenInclude(r => r.Possibilities)
+            .FirstOrDefault(id => id.Id == userId)?.Role;
+        var userPossibilities = userRole?.Possibilities.ToList();
+        return userPossibilities;
     }
 }
 

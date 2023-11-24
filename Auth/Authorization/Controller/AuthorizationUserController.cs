@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModelLibrary.Model.Authentication;
 using PetsServer.Auth.Authentication;
+using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 
 namespace PetsServer.Auth.Authorization.Controller
@@ -16,10 +19,13 @@ namespace PetsServer.Auth.Authorization.Controller
 
         private AuthorizationUserService _authorizationUserService;
 
-        public AuthorizationUserController()
+        private IMapper _mapper;
+
+        public AuthorizationUserController(IMapper mapper)
         {
             _authenticationService = new AuthenticationUserService();
             _authorizationUserService = new AuthorizationUserService();
+            _mapper = mapper;
         }
 
         [Authorize]
@@ -36,7 +42,7 @@ namespace PetsServer.Auth.Authorization.Controller
         }
 
         [Authorize]
-        [HttpPost("{userId}", Name = "DeleteUserRole")]
+        [HttpDelete("{userId}", Name = "DeleteUserRole")]
         public IActionResult DeleteUserRole(int userId)
         {
             var currentUser = _authenticationService.GetUser(User.Identity.Name);
@@ -48,10 +54,17 @@ namespace PetsServer.Auth.Authorization.Controller
             return Problem(null, null, 403, "У вас нет привилегий");
         }
 
-        [HttpGet("{userId}", Name = "GetUserPriviliges")]
-        public IActionResult GetUserPossipilities(int userId)
+        [HttpGet(Name = "GetUserPriviliges")]
+        public IActionResult GetUserPossipilities()
         {
-            return Ok(_authorizationUserService.GetUserPossibilities(userId));
+            var currentUser = _authenticationService.GetUser(User.Identity.Name);
+            if (currentUser != null)
+            {
+                var userPossibilities = _authorizationUserService.GetUserPriviliges(currentUser.Id);
+                var view = _mapper.Map<List<EntityPossibilities>, List<UserPossibilities>>(userPossibilities);
+                return Ok(view);
+            }
+            return Problem(null, null, 403, "У вас нет привилегий");
         }
     }
 }

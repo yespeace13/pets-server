@@ -75,6 +75,10 @@ namespace PetsServer.Infrastructure.Services
                 });
 
             CreateMap<AnimalEdit, AnimalModel>();
+
+
+            // Auth
+            CreateMap<EntityPossibilities, UserPossibilities>();
         }
     }
 }

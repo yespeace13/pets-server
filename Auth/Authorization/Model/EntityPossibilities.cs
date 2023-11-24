@@ -35,6 +35,5 @@ namespace PetsServer.Auth.Authorization.Model
             Restriction = restriction;
             RoleId = role.Id;
         }
-
     }
 }
