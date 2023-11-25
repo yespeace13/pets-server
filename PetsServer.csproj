@@ -29,6 +29,8 @@
 
   <ItemGroup>
     <Folder Include="Domain\Plan\Model\" />
+    <Folder Include="Domain\Plan\Service\" />
+    <Folder Include="Domain\Plan\Repository\" />
     <Folder Include="Domain\Report\Model\" />
   </ItemGroup>
 

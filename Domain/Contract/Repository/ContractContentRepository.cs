@@ -15,7 +15,7 @@ public class ContractContentRepository
 
     public ContractContentModel? GetOne(int id)
     {
-        return _context.ContractContents
+        return _context.ContractContent
             .Where(c => c.Id == id)
             .Include(cc => cc.Locality)
             .Include(cc => cc.Contract)
@@ -24,7 +24,7 @@ public class ContractContentRepository
 
     public IEnumerable<ContractContentModel> GetAll(int contractId)
     {
-        return _context.ContractContents
+        return _context.ContractContent
             .Where(c => c.ContractId == contractId)
             .Include(cc => cc.Locality)
             .Include(cc => cc.Contract)

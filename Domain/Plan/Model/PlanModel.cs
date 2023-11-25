@@ -23,8 +23,8 @@ public class PlanModel
 
     public List<PlanContentModel> PlanContent { get; set; }
 
-    public PlanModel() { }
-    public PlanModel(
+    public PlanContentModel() { }
+    public PlanContentModel(
             int id, int number, int month, int year)
     {
         Id = id;
