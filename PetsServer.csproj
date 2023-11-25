@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Domain\Plan\Model\" />
     <Folder Include="Domain\Report\Model\" />
   </ItemGroup>
 
