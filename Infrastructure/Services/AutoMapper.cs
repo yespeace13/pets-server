@@ -39,16 +39,16 @@ namespace PetsServer.Infrastructure.Services
 
             // Контракт
             // Из модели во view
-            CreateMap<PlanModel, ContractViewList>()
+            CreateMap<ContractModel, ContractViewList>()
                 .ForMember(dest => dest.Executor, opt => opt.MapFrom(src => src.Executor.NameOrganization))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.NameOrganization));
 
             CreateMap<ContractContentModel, ContractContentView>();
 
             // Из модели во viewOne
-            CreateMap<PlanModel, ContractViewOne>();
+            CreateMap<ContractModel, ContractViewOne>();
 
-            CreateMap<ContractEdit, PlanModel>();
+            CreateMap<ContractEdit, ContractModel>();
 
             CreateMap<ContractContentEdit, ContractContentModel>();
 
@@ -75,6 +75,7 @@ namespace PetsServer.Infrastructure.Services
                 });
 
             CreateMap<AnimalEdit, AnimalModel>();
+
         }
     }
 }

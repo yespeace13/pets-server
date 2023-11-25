@@ -18,7 +18,7 @@ public class ContractContentModel
     public int ContractId { get; set; }
 
     [ForeignKey(nameof(ContractId))]
-    public PlanModel Contract { get; set; }
+    public ContractModel Contract { get; set; }
 
     [Column("locality_id")]
     public int LocalityId { get; set; }
@@ -28,7 +28,7 @@ public class ContractContentModel
 
     public ContractContentModel() { }
     public ContractContentModel(
-            int id, decimal price, PlanModel contract, LocalityModel locality)
+            int id, decimal price, ContractModel contract, LocalityModel locality)
     {
         Id = id;
         Price = price;

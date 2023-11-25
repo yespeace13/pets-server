@@ -15,7 +15,7 @@ public class PlanContentRepository : BaseRepository<PlanContentModel>
 
     public override PlanContentModel? Get(int id)
     {
-        return _context.PlanContents
+        return _context.ContractContent
             .Where(c => c.Id == id)
             .Include(cc => cc.Locality)
             .Include(cc => cc.Act)
@@ -24,7 +24,7 @@ public class PlanContentRepository : BaseRepository<PlanContentModel>
 
     public override IQueryable<PlanContentModel> Get()
     {
-        return _context.PlanContents
+        return _context.ContractContent
             .Include(cc => cc.Locality)
             .Include(cc => cc.Act);
     }
