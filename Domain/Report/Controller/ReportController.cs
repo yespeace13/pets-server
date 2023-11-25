@@ -11,7 +11,7 @@ namespace PetsServer.Domain.Report.Controller
 {
     [Route("reports")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class ReportController : ControllerBase
     {
         private ReportService _service;
@@ -25,9 +25,9 @@ namespace PetsServer.Domain.Report.Controller
         }
 
         [HttpPost(Name = "CreateReport")]
-        public IActionResult Create([FromQuery]DateOnly from, [FromQuery] DateOnly to)
+        public IActionResult Create(string from, string to)
         {
-            _service.Create(from, to);
+            _service.Create(DateOnly.Parse(from), DateOnly.Parse(to));
             return Ok();
         }
 

@@ -43,6 +43,8 @@ namespace PetsServer.Domain.Report.Service
             _repository.Create(model);
         }
 
+
+
         public IEnumerable<ReportModel> Get()
         {
             return _repository.Get();

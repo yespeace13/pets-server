@@ -3,13 +3,11 @@ using ModelLibrary.View;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Contract;
-using ModelLibrary.Model.Etc;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Contract.Service;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
-using PetsServer.Domain.Act.Service;
 
 namespace PetsServer.Domain.Contract.Controller
 {
@@ -101,6 +99,27 @@ namespace PetsServer.Domain.Contract.Controller
 
             _service.Delete(id);
             return Ok();
+        }
+
+        [HttpGet(Name = "GetContracts")]
+        public IActionResult GetLocality(
+            int? page,
+            int? pages,
+            string? filter,
+            string? sortField,
+            int? sortType)
+        {
+            var user = _authenticationService.GetUser(User.Identity.Name);
+
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
+
+            var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
+
+            var pageView = new PageSettings<ContractViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
+
+            pageView.Items = _mapper.Map<IEnumerable<ContractViewList>>(pageModel.Items);
+            return Ok(pageView);
         }
     }
 }
