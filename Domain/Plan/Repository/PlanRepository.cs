@@ -14,7 +14,7 @@ public class PlanRepository : BaseRepository<PlanModel>
 
     public PlanModel? GetOne(int id)
     {
-        return _context.Plans
+        return _context.PlanModels
             .Include(p => p.PlanContent).ThenInclude(cc => cc.Locality)
             .Include(p => p.PlanContent).ThenInclude(cc => cc.Act)
             .FirstOrDefault(p => p.Id == id);
@@ -23,7 +23,7 @@ public class PlanRepository : BaseRepository<PlanModel>
 
     public override PlanModel? Get(int id)
     {
-        return _context.Plans
+        return _context.PlanModels
             .Where(c => c.Id == id)
             .Include(c => c.PlanContent)
             .FirstOrDefault();
@@ -31,6 +31,6 @@ public class PlanRepository : BaseRepository<PlanModel>
 
     public override IQueryable<PlanModel> Get()
     {
-        return _context.Plans;
+        return _context.PlanModels;
     } 
 }
