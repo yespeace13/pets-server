@@ -25,7 +25,7 @@ public class PlanModel
 
     public PlanModel() { }
     public PlanModel(
-            int id, string number, int month, int year)
+            int id, int number, int month, int year)
     {
         Id = id;
         Number = number;
