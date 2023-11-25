@@ -32,8 +32,8 @@ public class ContractService
 
     public void Delete(int id)
     {
-        var organization = GetOne(id);
-        _repository.Delete(organization);
+        var model = GetOne(id);
+        _repository.Delete(model);
     }
 
     public ContractModel? GetOne(int id) => _repository.GetOne(id);
@@ -52,7 +52,7 @@ public class ContractService
         if (limitQuery.HasValue && limitQuery.Value > 0)
             pageSettings.Limit = limitQuery.Value;
 
-        // берем организации по этим правилам
+        // берем по этим правилам
         var contracts = _repository.GetAll();
 
         var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Organization && p.Possibility == Possibilities.Read).First().Restriction;

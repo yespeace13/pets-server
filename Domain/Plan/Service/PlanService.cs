@@ -1,4 +1,5 @@
 using AutoMapper;
+using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Plan;
 using ModelLibrary.View;
 using PetsServer.Auth.Authorization.Model;
@@ -13,12 +14,12 @@ public class PlanService
 {
     private PlanRepository _repository = new PlanRepository();
 
-    public void Create(PlanContentModel model)
+    public void Create(PlanModel model)
     {
         _repository.Create(model);
     }
 
-    public void Update(PlanContentModel model)
+    public void Update(PlanModel model)
     {
         var oldModel = GetOne(model.Id);
         oldModel.Number = model.Number;
@@ -30,10 +31,11 @@ public class PlanService
 
     public void Delete(int id)
     {
-        
+        var model = GetOne(id);
+        _repository.Delete(model);
     }
 
-    public PlanContentModel? GetOne(int id) => _repository.GetOne(id);
+    public PlanModel? GetOne(int id) => _repository.GetOne(id);
 
     public PageSettings<PlanViewList> GetPage(
         int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)
@@ -49,8 +51,10 @@ public class PlanService
         if (limitQuery.HasValue && limitQuery.Value > 0)
             pageSettings.Limit = limitQuery.Value;
 
-        // берем организации по этим правилам
-        var plans = _repository.GetAll();
+        // берем по этим правилам
+        var plans = _repository.Get();
+
+        //TODO планы привилегии
 
         //var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Organization && p.Possibility == Possibilities.Read).First().Restriction;
 
@@ -58,7 +62,7 @@ public class PlanService
         //    plans = plans.Where(c => c.ExecutorId == user.Organization.Id);
 
         //else if (userRestiction == Restrictions.Locality)
-        //    plans = plans.Where(c => c.PlanContent.Where(cc => cc.LocalityId == user.Locality.Id).Any());
+        //    plans = plans.Where(c => c.ContractContent.Where(cc => cc.LocalityId == user.Locality.Id).Any());
 
         IEnumerable<PlanViewList> plansView = mapper.Map<List<PlanViewList>>(plans);
         // Фильтрация
@@ -80,7 +84,7 @@ public class PlanService
 
     public byte[] ExportToExcel(string filters, IMapper mapper)
     {
-        IEnumerable<PlanViewList> plans = mapper.Map<List<PlanViewList>>(_repository.GetAll());
+        IEnumerable<PlanViewList> plans = mapper.Map<List<PlanViewList>>(_repository.Get());
         plans = new FilterObjects<PlanViewList>().Filter(plans, filters);
         return ExportDataToExcel.Export(
             "План-графики", plans.ToList());

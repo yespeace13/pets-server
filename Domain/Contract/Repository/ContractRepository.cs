@@ -29,7 +29,7 @@ public class ContractRepository
 
     public IEnumerable<ContractModel> GetAll()
     {
-        return _context.Plan
+        return _context.Contracts
             .Include(c => c.Client)
             .Include(c => c.Executor)
             .ToList();
