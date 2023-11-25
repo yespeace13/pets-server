@@ -22,6 +22,7 @@ public enum Entities
     Organization,
     Contract,
     Schedule,
-    Act
+    Act,
+    Report
 }
 

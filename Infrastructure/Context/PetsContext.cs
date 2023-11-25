@@ -6,7 +6,7 @@ using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Organization.Model;
-using System.Reflection.Metadata;
+using PetsServer.Domain.Report.Model;
 
 namespace PetsServer.Infrastructure.Context
 {
@@ -29,6 +29,8 @@ namespace PetsServer.Infrastructure.Context
         public DbSet<UserModel> Users { get; set; }
         public DbSet<ContractModel> Contracts { get; set; }
         public DbSet<ContractContentModel> ContractContents { get; set; }
+        public DbSet<ReportModel> Reports { get; set; }
+        public DbSet<ReportContentModel> ReportContents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

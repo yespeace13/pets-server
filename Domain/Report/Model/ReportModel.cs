@@ -20,7 +20,7 @@ public class ReportModel
     [Column("date_end")]
     public DateOnly DateEnd { get; set; }
 
-    public List<ReportContentModel>? ReportContent { get; set; }
+    public ICollection<ReportContentModel>? ReportContent { get; set; }
 
     public ReportModel() { }
     public ReportModel(

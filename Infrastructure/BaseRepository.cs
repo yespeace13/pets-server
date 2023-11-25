@@ -1,13 +1,13 @@
 ﻿using PetsServer.Infrastructure.Context;
 
-namespace PetsServer
+namespace PetsServer.Infrastructure
 {
     public abstract class BaseRepository<T>
     {
         protected PetsContext _context;
 
         public BaseRepository() => _context = new PetsContext();
-        
+
         public abstract T? Get(int id);
         public abstract IQueryable<T> Get();
 

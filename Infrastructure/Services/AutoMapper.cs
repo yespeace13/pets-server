@@ -5,12 +5,14 @@ using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Etc;
 using ModelLibrary.Model.Organization;
+using ModelLibrary.Model.Report;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Organization.Model;
+using PetsServer.Domain.Report.Model;
 
 namespace PetsServer.Infrastructure.Services
 {
@@ -79,6 +81,14 @@ namespace PetsServer.Infrastructure.Services
 
             // Auth
             CreateMap<EntityPossibilities, UserPossibilities>();
+
+            // Report
+            CreateMap<ReportModel, ReportViewList>();
+
+            CreateMap<ReportContentModel, ReportContentView>()
+                .ForMember(dest => dest.Locality, opt => opt.MapFrom(src => src.Locality.Name));
+
+            CreateMap<ReportModel, ReportViewOne>();
         }
     }
 }
