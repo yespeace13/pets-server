@@ -8,6 +8,8 @@ using PetsServer.Domain.Contract.Service;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using OfficeOpenXml.Table.PivotTable;
 
 namespace PetsServer.Domain.Contract.Controller
 {
@@ -101,20 +103,14 @@ namespace PetsServer.Domain.Contract.Controller
             return Ok();
         }
 
-        [HttpGet(Name = "GetContracts")]
-        public IActionResult GetLocality(
-            int? page,
-            int? pages,
-            string? filter,
-            string? sortField,
-            int? sortType)
+        [HttpGet("{contractId}", Name = "GetContractLocalitys")]
+        public IActionResult GetLocality(int contractId)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-
-            var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
+            var pageModel = _service.GetPage(1, 1000, null, null, null, user, _mapper);
 
             var pageView = new PageSettings<ContractViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
 
