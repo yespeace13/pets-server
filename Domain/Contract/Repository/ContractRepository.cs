@@ -13,9 +13,9 @@ public class ContractRepository
         _context = new PetsContext();
     }
 
-    public ContractModel? GetOne(int id)
+    public PlanModel? GetOne(int id)
     {
-        return _context.Contracts
+        return _context.Plan
             .Include(c => c.Client.TypeOrganization)
             .Include(c => c.Client.LegalType)
             .Include(c => c.Client.Locality)
@@ -27,27 +27,27 @@ public class ContractRepository
             .FirstOrDefault(o => o.Id == id);
     }
 
-    public IEnumerable<ContractModel> GetAll()
+    public IEnumerable<PlanModel> GetAll()
     {
-        return _context.Contracts
+        return _context.Plan
             .Include(c => c.Client)
             .Include(c => c.Executor)
             .ToList();
     }
 
-    public void Create(ContractModel contracts)
+    public void Create(PlanModel contracts)
     {
         _context.Add(contracts);
         _context.SaveChanges();
     }
 
-    public void Update(ContractModel contracts)
+    public void Update(PlanModel contracts)
     {
         _context.Update(contracts);
         _context.SaveChanges();
     }
 
-    public void Delete(ContractModel contracts)
+    public void Delete(PlanModel contracts)
     {
         _context.Remove(contracts);
         _context.SaveChanges();

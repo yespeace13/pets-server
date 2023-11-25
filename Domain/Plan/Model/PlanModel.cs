@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PetsServer.Domain.Plan.Model;
 
 [Table("plan")]
-public class PlanModel
+public class PlanContentModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id"), Key]
@@ -23,8 +23,8 @@ public class PlanModel
 
     public List<PlanContentModel> PlanContent { get; set; }
 
-    public PlanModel() { }
-    public PlanModel(
+    public PlanContentModel() { }
+    public PlanContentModel(
             int id, int number, int month, int year)
     {
         Id = id;

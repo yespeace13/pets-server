@@ -5,14 +5,12 @@ using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Etc;
 using ModelLibrary.Model.Organization;
-using ModelLibrary.Model.Report;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Organization.Model;
-using PetsServer.Domain.Report.Model;
 
 namespace PetsServer.Infrastructure.Services
 {
@@ -41,16 +39,16 @@ namespace PetsServer.Infrastructure.Services
 
             // Контракт
             // Из модели во view
-            CreateMap<ContractModel, ContractViewList>()
+            CreateMap<PlanModel, ContractViewList>()
                 .ForMember(dest => dest.Executor, opt => opt.MapFrom(src => src.Executor.NameOrganization))
                 .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.NameOrganization));
 
             CreateMap<ContractContentModel, ContractContentView>();
 
             // Из модели во viewOne
-            CreateMap<ContractModel, ContractViewOne>();
+            CreateMap<PlanModel, ContractViewOne>();
 
-            CreateMap<ContractEdit, ContractModel>();
+            CreateMap<ContractEdit, PlanModel>();
 
             CreateMap<ContractContentEdit, ContractContentModel>();
 
@@ -77,18 +75,6 @@ namespace PetsServer.Infrastructure.Services
                 });
 
             CreateMap<AnimalEdit, AnimalModel>();
-
-
-            // Auth
-            CreateMap<EntityPossibilities, UserPossibilities>();
-
-            // Report
-            CreateMap<ReportModel, ReportViewList>();
-
-            CreateMap<ReportContentModel, ReportContentView>()
-                .ForMember(dest => dest.Locality, opt => opt.MapFrom(src => src.Locality.Name));
-
-            CreateMap<ReportModel, ReportViewOne>();
         }
     }
 }

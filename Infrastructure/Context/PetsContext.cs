@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetsServer.Auth.Authorization.Model;
-using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Organization.Model;
-using PetsServer.Domain.Report.Model;
+using PetsServer.Domain.Plan.Model;
+using System.Reflection.Metadata;
 
 namespace PetsServer.Infrastructure.Context
 {
@@ -22,24 +22,38 @@ namespace PetsServer.Infrastructure.Context
         public DbSet<LocalityModel> Localities { get; set; }
 
         public DbSet<OrganizationModel> Organizations { get; set; }
-        public DbSet<ActModel> Acts { get; set; }
+
         public DbSet<AnimalModel> Animals { get; set; }
+
         public DbSet<EntityPossibilities> EntityRestrictions { get; set; }
+
         public DbSet<RoleModel> Roles { get; set; }
+
         public DbSet<UserModel> Users { get; set; }
+
         public DbSet<ContractModel> Contracts { get; set; }
+
         public DbSet<ContractContentModel> ContractContents { get; set; }
-        public DbSet<ReportModel> Reports { get; set; }
-        public DbSet<ReportContentModel> ReportContents { get; set; }
+
+        public DbSet<PlanModel> Plans { get; set; }
+
+        public DbSet<PlanContentModel> PlanContents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=pets;User Id=postgres;Password=1234;Include Error Detail=True");
-            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //modelBuilder.Entity<ContractModel>()
+            //    .HasMany(e => e.ContractContents)
+            //    .WithOne(e => e.Contract)
+            //    .HasForeignKey(e => e.ContractId)
+            //    .IsRequired(true);
+
+
             modelBuilder.UseSerialColumns();
             // Ограничения
             // Уникальность логина у пользователей
@@ -90,6 +104,8 @@ namespace PetsServer.Infrastructure.Context
             modelBuilder.Entity<EntityPossibilities>()
                 .Property(e => e.Restriction)
                 .HasConversion(new EnumToStringConverter<Restrictions>());
+
+
         }
     }
 }

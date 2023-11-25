@@ -72,7 +72,7 @@ namespace PetsServer.Domain.Contract.Controller
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            var entity = _mapper.Map<ContractEdit, ContractModel>(view);
+            var entity = _mapper.Map<ContractEdit, PlanModel>(view);
             _service.Create(entity);
             return Ok();
         }
@@ -85,7 +85,7 @@ namespace PetsServer.Domain.Contract.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var entity = _mapper.Map<ContractEdit, ContractModel>(view);
+            var entity = _mapper.Map<ContractEdit, PlanModel>(view);
             entity.Id = id;
             _service.Update(entity);
             return Ok();

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PetsServer.Domain.Contract.Model;
 
 [Table("contract")]
-public class ContractModel
+public class PlanModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id"), Key]
@@ -34,8 +34,8 @@ public class ContractModel
 
     public ICollection<ContractContentModel>? ContractContent { get; set; }
 
-    public ContractModel() { }
-    public ContractModel(
+    public PlanModel() { }
+    public PlanModel(
             int id, string number, DateOnly dateOfConclusion, DateOnly dateValidation,
             OrganizationModel executors, OrganizationModel clients)
     {

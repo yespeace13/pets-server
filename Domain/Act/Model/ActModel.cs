@@ -33,11 +33,11 @@ public class ActModel
     [Column("contract_id")]
     public int ContractId { get; set; }
     [ForeignKey(nameof(ContractId))]
-    public ContractModel Contract { get; set; }
+    public PlanModel Contract { get; set; }
     public List<AnimalModel> Animal { get; set; }
 
     public ActModel(
-            int id, OrganizationModel executor, LocalityModel locality, DateOnly date, ContractModel contract)
+            int id, OrganizationModel executor, LocalityModel locality, DateOnly date, PlanModel contract)
     {
         Id = id;
         ExecutorId = executor.Id;

@@ -13,12 +13,12 @@ public class ContractService
 {
     private ContractRepository _repository = new ContractRepository();
 
-    public void Create(ContractModel model)
+    public void Create(PlanModel model)
     {
         _repository.Create(model);
     }
 
-    public void Update(ContractModel model)
+    public void Update(PlanModel model)
     {
         var oldModel = GetOne(model.Id);
         oldModel.Number = model.Number;
@@ -36,7 +36,7 @@ public class ContractService
         _repository.Delete(organization);
     }
 
-    public ContractModel? GetOne(int id) => _repository.GetOne(id);
+    public PlanModel? GetOne(int id) => _repository.GetOne(id);
 
     public PageSettings<ContractViewList> GetPage(
         int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)
