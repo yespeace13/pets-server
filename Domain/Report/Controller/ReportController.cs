@@ -11,7 +11,7 @@ namespace PetsServer.Domain.Report.Controller
 {
     [Route("reports")]
     [ApiController]
-   // [Authorize]
+    // [Authorize]
     public class ReportController : ControllerBase
     {
         private ReportService _service;
@@ -46,7 +46,6 @@ namespace PetsServer.Domain.Report.Controller
             var view = _mapper.Map<IEnumerable<ReportViewList>>(entity);
             return Ok(view);
         }
-
 
         [HttpGet("{id}", Name = "GetReport")]
         public IActionResult Get(int id)

@@ -69,7 +69,7 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<ContractEdit, ContractModel>(view);
             _service.Create(entity);
@@ -81,7 +81,7 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Update, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             var entity = _mapper.Map<ContractEdit, ContractModel>(view);
@@ -95,24 +95,11 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
             return Ok();
-        }
-
-        [HttpGet("{contractId}", Name = "GetContractLocalitys")]
-        public IActionResult GetLocalities(int contractId)
-        {
-            var user = _authenticationService.GetUser(User.Identity.Name);
-
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
-                return Problem(null, null, 403, "У вас нет привилегий");
-            var localities = _service.GetOne(contractId).ContractContent.Select(cc => cc.Locality);
-
-            var mapped = _mapper.Map<IEnumerable<LocalityView>>(localities);
-            return Ok(mapped);
         }
     }
 }

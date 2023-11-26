@@ -2,7 +2,6 @@ using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Locality.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Plan.Model;
 
@@ -26,7 +25,7 @@ public class PlanContentModel
     public int? ActId { get; set; }
 
     [ForeignKey(nameof(ActId))]
-    public ActModel Act { get; set; }
+    public ActModel? Act { get; set; }
 
     [Column("adress")]
     public string Adress { get; set; }
@@ -34,9 +33,15 @@ public class PlanContentModel
     [Column("check")]
     public bool Check { get; set; }
 
+    [Column("plan_id")]
+    public int PlanId { get; set; }
+
+    [ForeignKey(nameof(PlanId))]
+    public PlanModel Plan { get; set; }
+
     public PlanContentModel() { }
     public PlanContentModel(
-            int id, int day, LocalityModel locality, ActModel act, string adress, bool check)
+            int id, int day, LocalityModel locality, ActModel act, string adress, bool check, PlanModel plan)
     {
         Id = id;
         Day = day;
@@ -44,5 +49,6 @@ public class PlanContentModel
         ActId = act.Id;
         Adress = adress;
         Check = check;
+        PlanId = plan.Id;
     }
 }

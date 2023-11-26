@@ -1,5 +1,10 @@
-﻿using PetsServer.Domain.Report.Model;
+﻿using AutoMapper;
+using ModelLibrary.Model.Organization;
+using ModelLibrary.Model.Report;
+using OfficeOpenXml;
+using PetsServer.Domain.Report.Model;
 using PetsServer.Domain.Report.Repository;
+using PetsServer.Infrastructure.Services;
 
 namespace PetsServer.Domain.Report.Service
 {
@@ -43,7 +48,43 @@ namespace PetsServer.Domain.Report.Service
             _repository.Create(model);
         }
 
+        public byte[] GenerateExcel(int id)
+        {
+            var model = Get(id);
 
+            var package = new ExcelPackage();
+            var sheet = package.Workbook.Worksheets.Add("Отчет");
+
+            sheet.Cells[1, 1].Value = "Номер отчета:";
+            sheet.Cells[1, 2].Value = model.Number;
+
+            sheet.Cells[2, 1].Value = "Начало периода:";
+            sheet.Cells[2, 2].Value = model.DateStart;
+            sheet.Cells[2, 3].Value = "Конец периода:";
+            sheet.Cells[2, 4].Value = model.DateEnd;
+
+
+            sheet.Cells[3, 1].Value = "Идентификатор";
+            sheet.Cells[3, 2].Value = "Населенный пункт";
+            sheet.Cells[3, 3].Value = "Количество животных";
+            sheet.Cells[3, 4].Value = "Общая стоимость руб.";
+
+            var content = model.ReportContent.ToList();
+            for (int i = 0; i < content.Count; i++)
+            {
+                sheet.Cells[i + 4, 1].Value = i + 1;
+                sheet.Cells[i + 4, 2].Value = content[i].Locality.Name;
+                sheet.Cells[i + 4, 3].Value = content[i].NumberOfAnimals;
+                sheet.Cells[i + 4, 4].Value = content[i].TotalCost;
+            }
+            sheet.Cells[content.Count + 4, 2].Value = "Итого:";
+            sheet.Cells[content.Count + 4, 3].Value = content.Sum(c => c.NumberOfAnimals);
+            sheet.Cells[content.Count + 4, 4].Value = content.Sum(c => c.TotalCost);
+
+            sheet.Cells[1, 1, content.Count + 4, 4].AutoFitColumns();
+
+            return package.GetAsByteArray();
+        }
 
         public IEnumerable<ReportModel> Get()
         {
@@ -53,6 +94,14 @@ namespace PetsServer.Domain.Report.Service
         public ReportModel? Get(int id)
         {
             return _repository.Get(id);
+        }
+
+        public byte[] ExportToExcel(string filters, IMapper mapper)
+        {
+            IEnumerable<ReportViewList> views = mapper.Map<List<ReportViewList>>(_repository.Get());
+            views = new FilterObjects<ReportViewList>().Filter(views, filters);
+            return ExportDataToExcel.Export(
+                "Отчеты", views.ToList());
         }
     }
 }

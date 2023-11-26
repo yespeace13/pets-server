@@ -51,18 +51,10 @@ public class ContractService
         if (limitQuery.HasValue && limitQuery.Value > 0)
             pageSettings.Limit = limitQuery.Value;
 
-        // берем по этим правилам
-        var contracts = _repository.GetAll();
+        var contracts = Get(user);
 
-        var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Organization && p.Possibility == Possibilities.Read).First().Restriction;
-
-        if (userRestiction == Restrictions.Organization)
-            contracts = contracts.Where(c => c.ExecutorId == user.Organization.Id);
-
-        else if (userRestiction == Restrictions.Locality)
-            contracts = contracts.Where(c => c.ContractContent.Where(cc => cc.LocalityId == user.Locality.Id).Any());
-
-        IEnumerable<ContractViewList> contractsView = mapper.Map<List<ContractViewList>>(contracts);
+        // маппим для фильтрации и сортировки
+        IEnumerable<ContractViewList> contractsView = mapper.Map<IEnumerable<ContractViewList>>(contracts);
         // Фильтрация
         contractsView = new FilterObjects<ContractViewList>().Filter(contractsView, filter);
 
@@ -78,6 +70,23 @@ public class ContractService
             .Take(pageSettings.Limit);
 
         return pageSettings;
+    }
+
+    // TODO другие сервисы надо будет так же сделать
+    public IQueryable<ContractModel> Get(UserModel user)
+    {
+        var contracts = _repository.Get();
+
+        var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Contract && p.Possibility == Possibilities.Read)
+            .First().Restriction;
+
+        if (userRestiction == Restrictions.Organization)
+            contracts = contracts.Where(c => c.ExecutorId == user.Organization.Id);
+
+        else if (userRestiction == Restrictions.Locality)
+            contracts = contracts.Where(c => c.ContractContent.Where(cc => cc.LocalityId == user.Locality.Id).Any());
+
+        return contracts;
     }
 
     public byte[] ExportToExcel(string filters, IMapper mapper)

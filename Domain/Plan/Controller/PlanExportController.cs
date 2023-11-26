@@ -1,30 +1,29 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using PetsServer.Domain.Act.Service;
-using PetsServer.Domain.Contract.Service;
+using PetsServer.Domain.Plan.Service;
 
-namespace PetsServer.Domain.Contract.Controller;
+namespace PetsServer.Domain.Plan.Controller;
 
-[Route("сontractexport")]
+[Route("plans-excel")]
 [ApiController]
-public class ContractExportController : ControllerBase
+public class PlanExportController : ControllerBase
 {
 
     // Маппер для данных
     private readonly IMapper _mapper;
 
-    private ContractService _service;
+    private PlanService _service;
 
-    public ContractExportController(IMapper mapper)
+    public PlanExportController(IMapper mapper)
     {
-        _service = new ContractService();
+        _service = new PlanService();
         _mapper = mapper;
     }
 
     [HttpGet]
     public IActionResult Get(string? filters)
     {
-        var fileName = $"Contracts.xlsx";
+        var fileName = $"Plans.xlsx";
         var mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         var file = _service.ExportToExcel(filters, _mapper);
         return File(file, mimeType, fileName);

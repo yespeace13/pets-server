@@ -22,8 +22,6 @@ namespace PetsServer.Infrastructure.Services
             sheet.Cells[1, 1, objects.Count + 1, properties.Count + 2].AutoFitColumns();
 
             return package.GetAsByteArray();
-
-
         }
     }
 }

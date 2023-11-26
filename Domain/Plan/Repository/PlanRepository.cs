@@ -15,8 +15,10 @@ public class PlanRepository : BaseRepository<PlanModel>
     public PlanModel? GetOne(int id)
     {
         return _context.PlanModels
-            .Include(p => p.PlanContent).ThenInclude(cc => cc.Locality)
-            .Include(p => p.PlanContent).ThenInclude(cc => cc.Act)
+            .Include(p => p.PlanContent)
+            .ThenInclude(cc => cc.Locality)
+            .Include(p => p.PlanContent)
+            .ThenInclude(cc => cc.Act)
             .FirstOrDefault(p => p.Id == id);
 
     }

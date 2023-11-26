@@ -1,9 +1,7 @@
 using AutoMapper;
-using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Plan;
 using ModelLibrary.View;
 using PetsServer.Auth.Authorization.Model;
-using PetsServer.Domain.Act.Repository;
 using PetsServer.Domain.Plan.Model;
 using PetsServer.Domain.Plan.Repository;
 using PetsServer.Infrastructure.Services;
@@ -22,7 +20,6 @@ public class PlanService
     public void Update(PlanModel model)
     {
         var oldModel = GetOne(model.Id);
-        oldModel.Number = model.Number;
         oldModel.Month = model.Month;
         oldModel.Year = model.Year;
         oldModel.PlanContent = model.PlanContent;
@@ -54,15 +51,13 @@ public class PlanService
         // берем по этим правилам
         var plans = _repository.Get();
 
-        //TODO планы привилегии
-
-        //var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Organization && p.Possibility == Possibilities.Read).First().Restriction;
+        var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Schedule && p.Possibility == Possibilities.Read).First().Restriction;
 
         //if (userRestiction == Restrictions.Organization)
-        //    plans = plans.Where(c => c.ExecutorId == user.Organization.Id);
+        //    plans = plans.Where(c => c. == user.Organization.Id);
 
-        //else if (userRestiction == Restrictions.Locality)
-        //    plans = plans.Where(c => c.ContractContent.Where(cc => cc.LocalityId == user.Locality.Id).Any());
+        if (userRestiction == Restrictions.Locality)
+            plans = plans.Where(p => p.PlanContent.Where(pp => pp.LocalityId == user.Locality.Id).Any());
 
         IEnumerable<PlanViewList> plansView = mapper.Map<List<PlanViewList>>(plans);
         // Фильтрация

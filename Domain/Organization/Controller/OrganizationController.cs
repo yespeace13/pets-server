@@ -70,7 +70,7 @@ namespace PetsServer.Domain.Organization.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             var organization = _mapper.Map<OrganizationModel>(view);
@@ -83,7 +83,7 @@ namespace PetsServer.Domain.Organization.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Update, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             var organization = _mapper.Map<OrganizationEdit, OrganizationModel>(view);
@@ -97,7 +97,7 @@ namespace PetsServer.Domain.Organization.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);

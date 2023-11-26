@@ -5,32 +5,32 @@ using Microsoft.AspNetCore.Mvc;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
-using PetsServer.Domain.Act.Service;
-using ModelLibrary.Model.Act;
-using PetsServer.Domain.Act.Model;
+using PetsServer.Domain.Plan.Service;
+using ModelLibrary.Model.Plan;
+using PetsServer.Domain.Plan.Model;
 
-namespace PetsServer.Domain.Act.Controller
+namespace PetsServer.Domain.Plan.Controller
 {
     [ApiController]
-    [Route("acts")]
+    [Route("plans")]
     [Authorize]
-    public class ActController : ControllerBase
+    public class PlanController : ControllerBase
     {
         // Сервис
-        private ActService _service;
+        private PlanService _service;
         // Для привилегий и доступа
         private AuthenticationUserService _authenticationService;
         // Маппер для данных
         private readonly IMapper _mapper;
 
-        public ActController(IMapper mapper)
+        public PlanController(IMapper mapper)
         {
-            _service = new ActService();
+            _service = new PlanService();
             _authenticationService = new AuthenticationUserService();
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetActs")]
+        [HttpGet(Name = "GetPlans")]
         public IActionResult GetPage(
             int? page,
             int? pages,
@@ -40,62 +40,61 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Schedule, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
 
-            var pageView = new PageSettings<ActViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
+            var pageView = new PageSettings<PlanViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
 
-            //pageView.Items = _mapper.Map<IEnumerable<ActModel>, IEnumerable<ActViewList>>(pageModel.Items);
-            pageView.Items = pageModel.Items;
+            pageView.Items = _mapper.Map<IEnumerable<PlanViewList>>(pageModel.Items);
             return Ok(pageView);
         }
 
-        [HttpGet("{id}", Name = "GetAct")]
+        [HttpGet("{id}", Name = "GetPlan")]
         public IActionResult GetOne(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Schedule, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _service.GetOne(id);
-            var view = _mapper.Map<ActModel, ActViewOne>(entity);
+            var view = _mapper.Map<PlanViewOne>(entity);
             return Ok(view);
         }
 
-        [HttpPost(Name = "CreateAct")]
-        public IActionResult Create([FromBody] ActEdit view)
+        [HttpPost(Name = "CreatePlan")]
+        public IActionResult Create([FromBody] PlanEdit view)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Schedule, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            var entity = _mapper.Map<ActEdit, ActModel>(view);
+            var entity = _mapper.Map<PlanEdit, PlanModel>(view);
             _service.Create(entity);
             return Ok();
         }
 
-        [HttpPut("{id}", Name = "UpdateAct")]
-        public IActionResult Update(int id, ActEdit view)
+        [HttpPut("{id}", Name = "UpdatePlan")]
+        public IActionResult Update(int id, PlanEdit view)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Update, Entities.Schedule, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var entity = _mapper.Map<ActEdit, ActModel>(view);
+            var entity = _mapper.Map<PlanEdit, PlanModel>(view);
             entity.Id = id;
             _service.Update(entity);
             return Ok();
         }
 
-        [HttpDelete("{id}", Name = "DeleteAct")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{id}", Name = "DeletePlan")]
+        public ActionResult Delete(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Schedule, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);

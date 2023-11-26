@@ -35,6 +35,19 @@ public class ContractRepository
             .ToList();
     }
 
+    public IQueryable<ContractModel> Get()
+    {
+        return _context.Contracts
+            .Include(c => c.Client.TypeOrganization)
+            .Include(c => c.Client.LegalType)
+            .Include(c => c.Client.Locality)
+            .Include(c => c.Executor.TypeOrganization)
+            .Include(c => c.Executor.LegalType)
+            .Include(c => c.Executor.Locality)
+            .Include(c => c.ContractContent)
+            .ThenInclude(c => c.Locality);
+    }
+
     public void Create(ContractModel contracts)
     {
         _context.Add(contracts);

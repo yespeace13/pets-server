@@ -2,23 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Domain.Locality.Repository;
 
-namespace PetsServer.Domain.Locality.Controller
-{
-    [ApiController]
-    [Route("localities")]
-    [Authorize]
-    public class LocalityController : ControllerBase
-    {
-        [HttpGet(Name = "GetLocalities")]
-        public IActionResult GetAll()
-        {
-            return Ok(new LocalityRepository().GetLocalitys());
-        }
+namespace PetsServer.Domain.Locality.Controller;
 
-        [HttpGet("{id}", Name = "GetLocality")]
-        public IActionResult GetOne(int id)
-        {
-            return Ok(GetOne(id));
-        }
+[ApiController]
+[Route("localities")]
+[Authorize]
+public class LocalityController : ControllerBase
+{
+    [HttpGet(Name = "GetLocalities")]
+    public IActionResult GetAll()
+    {
+        return Ok(new LocalityRepository().GetLocalitys());
+    }
+
+    [HttpGet("{id}", Name = "GetLocality")]
+    public IActionResult GetOne(int id)
+    {
+        return Ok(GetOne(id));
     }
 }

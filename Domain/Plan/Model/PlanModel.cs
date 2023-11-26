@@ -1,5 +1,3 @@
-using ModelLibrary.Model.Plan;
-using PetsServer.Domain.Organization.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,9 +10,6 @@ public class PlanModel
     [Column("id"), Key]
     public int Id { get; set; }
 
-    [Column("number")]
-    public int Number { get; set; }
-
     [Column("month")]
     public int Month { get; set; }
 
@@ -23,12 +18,11 @@ public class PlanModel
 
     public List<PlanContentModel> PlanContent { get; set; }
 
-    public PlanContentModel() { }
-    public PlanContentModel(
-            int id, int number, int month, int year)
+    public PlanModel() { }
+    public PlanModel(
+            int id, int month, int year)
     {
         Id = id;
-        Number = number;
         Month = month;
         Year = year;
     }

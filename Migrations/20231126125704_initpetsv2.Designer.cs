@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetsServer.Infrastructure.Context;
@@ -11,9 +12,11 @@ using PetsServer.Infrastructure.Context;
 namespace PetsServer.Migrations
 {
     [DbContext(typeof(PetsContext))]
-    partial class PetsContextModelSnapshot : ModelSnapshot
+    [Migration("20231126125704_initpetsv2")]
+    partial class initpetsv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -425,6 +428,7 @@ namespace PetsServer.Migrations
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ActId")
+                        .IsRequired()
                         .HasColumnType("integer")
                         .HasColumnName("act_id");
 
@@ -685,7 +689,9 @@ namespace PetsServer.Migrations
                 {
                     b.HasOne("PetsServer.Domain.Act.Model.ActModel", "Act")
                         .WithMany()
-                        .HasForeignKey("ActId");
+                        .HasForeignKey("ActId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PetsServer.Domain.Locality.Model.LocalityModel", "Locality")
                         .WithMany()

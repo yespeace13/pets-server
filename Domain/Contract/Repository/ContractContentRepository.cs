@@ -22,30 +22,18 @@ public class ContractContentRepository
             .FirstOrDefault();
     }
 
-    public IEnumerable<ContractContentModel> GetAll(int contractId)
+    public IEnumerable<ContractContentModel> GetAll()
     {
         return _context.ContractContents
-            .Where(c => c.ContractId == contractId)
             .Include(cc => cc.Locality)
             .Include(cc => cc.Contract)
             .ToList();
     }
-
-    public void Create(ContractContentModel entity)
+    internal IQueryable<ContractContentModel> GetContractAll(int contractId)
     {
-        _context.Add(entity);
-        _context.SaveChanges();
-    }
-
-    public void Update(ContractContentModel entity)
-    {
-        _context.Update(entity);
-        _context.SaveChanges();
-    }
-
-    public void Delete(ContractContentModel entity)
-    {
-        _context.Remove(entity);
-        _context.SaveChanges();
+        return _context.ContractContents
+             .Where(cc => cc.ContractId == contractId)
+             .Include(cc => cc.Locality)
+             .Include(cc => cc.Contract);
     }
 }
