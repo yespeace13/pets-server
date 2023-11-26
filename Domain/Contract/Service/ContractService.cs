@@ -2,7 +2,6 @@
 using ModelLibrary.Model.Contract;
 using ModelLibrary.View;
 using PetsServer.Auth.Authorization.Model;
-using PetsServer.Domain.Act.Repository;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Contract.Repository;
 using PetsServer.Infrastructure.Services;
