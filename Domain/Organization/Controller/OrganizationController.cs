@@ -43,11 +43,10 @@ namespace PetsServer.Domain.Organization.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Organization, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
+            var pageView = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
 
-            var pageView = new PageSettings<OrganizationViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
-
-            pageView.Items = _mapper.Map<List<OrganizationViewList>>(pageModel.Items);
+            //var pageView = new PageSettings<OrganizationViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
+            //pageView.Items = _mapper.Map<List<OrganizationViewList>>(pageModel.Items);
 
             return Ok(pageView);
         }

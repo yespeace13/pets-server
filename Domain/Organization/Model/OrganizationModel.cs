@@ -25,6 +25,10 @@ namespace PetsServer.Domain.Organization.Model
 
         [Column("address")]
         public string Address { get; set; }
+        [Column("phone")]
+        public string Phone { get; set; }
+        [Column("email")]
+        public string Email { get; set; }
 
         [Column(name: "type_organization_id")]
         public int TypeOrganizationId { get; set; }

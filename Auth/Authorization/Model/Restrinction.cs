@@ -23,6 +23,7 @@ public enum Entities
     Contract,
     Schedule,
     Act,
-    Report
+    Report,
+    Log
 }
 

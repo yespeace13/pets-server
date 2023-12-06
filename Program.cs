@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -5,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
+using PetsServer.Domain.Contract.Model;
+using PetsServer.Domain.Contract.Validator;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -52,6 +55,9 @@ namespace PetsServer
 
             // Автомаппер
             builder.Services.AddAutoMapper(typeof(Infrastructure.Services.AutoMapper));
+
+            // Валидатор
+            builder.Services.AddValidatorsFromAssemblyContaining<ContractValidator>();
 
             builder.Services.AddAuthorization();
 

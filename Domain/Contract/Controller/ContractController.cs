@@ -8,7 +8,9 @@ using PetsServer.Domain.Contract.Service;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
-using ModelLibrary.Model.Etc;
+using FluentValidation;
+using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace PetsServer.Domain.Contract.Controller
 {
@@ -24,11 +26,14 @@ namespace PetsServer.Domain.Contract.Controller
         // Маппер для данных
         private readonly IMapper _mapper;
 
-        public ContractController(IMapper mapper)
+        private readonly IValidator<ContractModel> _validator;
+
+        public ContractController(IMapper mapper, IValidator<ContractModel> validator)
         {
             _service = new ContractService();
             _authenticationService = new AuthenticationUserService();
             _mapper = mapper;
+            _validator = validator;
         }
 
         [HttpGet(Name = "GetContracts")]
@@ -60,6 +65,9 @@ namespace PetsServer.Domain.Contract.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _service.GetOne(id);
+
+            if (entity == null) return BadRequest("Контракт не найден");
+
             var view = _mapper.Map<ContractViewOne>(entity);
             return Ok(view);
         }
@@ -72,9 +80,17 @@ namespace PetsServer.Domain.Contract.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<ContractEdit, ContractModel>(view);
+
+            var validationResult = _validator.Validate(entity);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
+            }
             _service.Create(entity);
             return Ok();
+
         }
+
 
         [HttpPut("{id}", Name = "UpdateContract")]
         public IActionResult Update(int id, ContractEdit view)
@@ -86,6 +102,12 @@ namespace PetsServer.Domain.Contract.Controller
 
             var entity = _mapper.Map<ContractEdit, ContractModel>(view);
             entity.Id = id;
+
+            var validationResult = _validator.Validate(entity);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
+            }
             _service.Update(entity);
             return Ok();
         }

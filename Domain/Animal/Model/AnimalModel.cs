@@ -50,6 +50,8 @@ public class AnimalModel
     [ForeignKey(nameof(ActId))]
     public ActModel Act { get; set; }
 
+    public List<AnimalPhoto>? Photos { get; set; }
+
     public AnimalModel() { }
     public AnimalModel(
             int id, string category, bool sex, string breed, double size, string wool, string color,

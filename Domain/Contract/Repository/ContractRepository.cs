@@ -31,8 +31,7 @@ public class ContractRepository
     {
         return _context.Contracts
             .Include(c => c.Client)
-            .Include(c => c.Executor)
-            .ToList();
+            .Include(c => c.Executor);
     }
 
     public IQueryable<ContractModel> Get()

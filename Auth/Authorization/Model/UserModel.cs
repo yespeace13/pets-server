@@ -37,15 +37,21 @@ public class UserModel
     [ForeignKey(nameof(RoleId))]
     public RoleModel? Role { get; set; }
 
-    public UserModel() { }
+    [Column("last_name")]
+    public string LastName { get; set; }
 
-    public UserModel(int id, string log, string pass, LocalityModel locality, OrganizationModel organization, RoleModel? role)
-    {
-        Id = id;
-        Login = log;
-        Password = pass;
-        Locality = locality;
-        Organization = organization;
-        Role = role;
-    }
+    [Column("firts_name")]
+    public string FirstName { get; set; }
+    [Column("middle_name")]
+    public string? MiddleName { get; set; }
+    [Column("email")]
+    public string? Email { get; set; }
+    [Column("department")]
+    public string? Department { get; set; }
+    [Column("position")]
+    public string? Position { get; set; }
+    [Column("Phone")]
+    public string Phone { get; set; }
+
+    public UserModel() { }
 }
