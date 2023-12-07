@@ -1,6 +1,6 @@
 ﻿using PetsServer.Domain.Locality.Model;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PetsServer.Domain.Organization.Model
 {
     [Table("organization")]
