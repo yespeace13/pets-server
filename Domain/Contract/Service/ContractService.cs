@@ -54,11 +54,12 @@ public class ContractService
 
         var contracts = Get(user);
 
+
+        // Фильтрация
+        //contractsView = new FilterObjects<ContractViewList>().Filter(contractsView, filter);
+        contracts = Filter(contracts, filter);
         // маппим для фильтрации и сортировки
         IEnumerable<ContractViewList> contractsView = mapper.Map<IEnumerable<ContractViewList>>(contracts);
-        // Фильтрация
-        contractsView = new FilterObjects<ContractViewList>().Filter(contractsView, filter);
-
         // Сортировка
         contractsView = new SorterObjects<ContractViewList>().SortField(contractsView, sortField, sortType);
 
@@ -96,6 +97,45 @@ public class ContractService
         organizations = new FilterObjects<ContractViewList>().Filter(organizations, filters);
         return ExportDataToExcel.Export(
             "Организации", organizations.ToList());
+    }
+
+
+    /// <summary>
+    /// Фильтрация для контракта
+    /// </summary>
+    /// <param name="models">Контракты</param>
+    /// <param name="filtersQuery">Фильтр</param>
+    /// <returns></returns>
+    private IQueryable<ContractModel> Filter(IQueryable<ContractModel> models, string filtersQuery)
+    {
+        if (string.IsNullOrEmpty(filtersQuery)) return models;
+
+        var filters = new FilterSetting(typeof(ContractViewList));
+
+        // TODO потом отдельна куда-нибудь вывести
+        var filtersKeyValue = filtersQuery.Split(";");
+        foreach (string filter in filtersKeyValue)
+        {
+            var ketValue = filter.Split(":");
+            filters[ketValue[0]] = Uri.UnescapeDataString(ketValue[1]);
+        }
+
+        if (filters.CountEmptyFileds == 0)
+            return models;
+
+        foreach (var filter in filters.Columns)
+        {
+            switch (filter)
+            {
+                case "Number":
+                    models = models.Where(m => m.Number.Contains(filters[filter]));
+                    break;
+                //тут для всех полей contractviewlist
+                default:
+                    break;
+            }
+        }
+        return models;
     }
 }
 
