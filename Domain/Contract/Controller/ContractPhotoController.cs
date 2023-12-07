@@ -22,7 +22,7 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var photos = _service.Get(contractId);
             return Ok(photos);
@@ -33,7 +33,7 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             _service.AddPhoto(contractId, file);
             return Ok();
@@ -44,7 +44,7 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Act, user))
+            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             _service.DeletePhoto(id);
             return Ok();
