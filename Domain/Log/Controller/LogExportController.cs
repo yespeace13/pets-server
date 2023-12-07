@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PetsServer.Domain.Log.Model;
 using PetsServer.Domain.Log.Service;
-using PetsServer.Domain.Organization.Service;
 
 namespace PetsServer.Domain.Log.Controller;
 

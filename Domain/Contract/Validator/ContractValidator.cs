@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Contract.Repository;
-using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Contract.Validator;
 

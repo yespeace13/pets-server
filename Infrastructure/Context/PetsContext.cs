@@ -5,6 +5,7 @@ using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
+using PetsServer.Domain.Log.Model;
 using PetsServer.Domain.Organization.Model;
 using PetsServer.Domain.Plan.Model;
 using PetsServer.Domain.Report.Model;
@@ -37,6 +38,8 @@ namespace PetsServer.Infrastructure.Context
         public DbSet<AnimalPhoto> AnimalPhotos { get; set; }
         public DbSet<ActPhoto> ActPhotos { get; set; }
         public DbSet<ContractPhoto> ContractPhotos { get; set; }
+        
+        public DbSet<LogModel> Logs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

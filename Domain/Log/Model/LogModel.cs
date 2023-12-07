@@ -1,11 +1,10 @@
 ﻿using PetsServer.Auth.Authorization.Model;
-using PetsServer.Domain.Locality.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetsServer.Domain.Log.Model
 {
-    [Table("organization")]
+    [Table("log")]
     public class LogModel
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,12 +22,12 @@ namespace PetsServer.Domain.Log.Model
         public DateTime ActionDate { get; set; }
 
         [Column("entity")]
-        public Entities Entity { get; set; }
+        public string Entity { get; set; }
 
         [Column("id_object")]
-        public int IdObject { get; set; }
+        public int? ObjectId { get; set; }
         [Column("id_file")]
-        public int IdFile { get; set; }
+        public int? FileId { get; set; }
 
     }
 }

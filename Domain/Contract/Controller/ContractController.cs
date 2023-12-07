@@ -9,8 +9,7 @@ using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 using FluentValidation;
-using System.ComponentModel.DataAnnotations;
-using System;
+using PetsServer.Domain.Log.Service;
 
 namespace PetsServer.Domain.Contract.Controller
 {
@@ -25,8 +24,10 @@ namespace PetsServer.Domain.Contract.Controller
         private AuthenticationUserService _authenticationService;
         // Маппер для данных
         private readonly IMapper _mapper;
-
+        // Валидатор
         private readonly IValidator<ContractModel> _validator;
+        // Логгер
+        private LogService log = new LogService(typeof(ContractModel));
 
         public ContractController(IMapper mapper, IValidator<ContractModel> validator)
         {
@@ -87,6 +88,7 @@ namespace PetsServer.Domain.Contract.Controller
                 return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
             }
             var id = _service.Create(entity);
+            log.LogData(user, id);
             return Ok(id);
 
         }
