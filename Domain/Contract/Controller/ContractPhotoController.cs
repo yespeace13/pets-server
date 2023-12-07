@@ -3,43 +3,43 @@ using Microsoft.AspNetCore.Mvc;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
-using PetsServer.Domain.Animal.Service;
+using PetsServer.Domain.Contract.Service;
 
-namespace PetsServer.Domain.Animal.Controller
+namespace PetsServer.Domain.Contract.Controller
 {
     [ApiController]
-    [Route("animal-photo")]
+    [Route("contract-photo")]
     [Authorize]
-    public class AnimalPhotoController : ControllerBase
+    public class ContractPhotoController : ControllerBase
     {
         // Сервис
-        private AnimalPhotoService _service = new AnimalPhotoService();
+        private ContractPhotoService _service = new ContractPhotoService();
         // Для привилегий и доступа
         private AuthenticationUserService _authenticationService = new AuthenticationUserService();
 
-        [HttpGet("{animalId}", Name = "GetAnimalPhotos")]
-        public IActionResult Get(int animalId)
+        [HttpGet("{contractId}", Name = "GetContractPhotos")]
+        public IActionResult Get(int contractId)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            var photos = _service.Get(animalId);
+            var photos = _service.Get(contractId);
             return Ok(photos);
         }
 
-        [HttpPost("{animalId}", Name = "AddPhoto")]
-        public IActionResult AddPhoto(int animalId, IFormFile file)
+        [HttpPost("{contractId}", Name = "AddContractPhoto")]
+        public IActionResult AddPhoto(int contractId, IFormFile file)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            _service.AddPhoto(animalId, file);
+            _service.AddPhoto(contractId, file);
             return Ok();
         }
 
-        [HttpDelete("{id}", Name = "DeletePhoto")]
+        [HttpDelete("{id}", Name = "DeleteContractPhoto")]
         public ActionResult DeletePhoto(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);

@@ -3,21 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
-using PetsServer.Domain.Animal.Service;
+using PetsServer.Domain.Act.Service;
 
-namespace PetsServer.Domain.Animal.Controller
+namespace PetsServer.Domain.Act.Controller
 {
     [ApiController]
-    [Route("animal-photo")]
+    [Route("act-photo")]
     [Authorize]
-    public class AnimalPhotoController : ControllerBase
+    public class ActPhotoController : ControllerBase
     {
         // Сервис
-        private AnimalPhotoService _service = new AnimalPhotoService();
+        private ActPhotoService _service = new ActPhotoService();
         // Для привилегий и доступа
         private AuthenticationUserService _authenticationService = new AuthenticationUserService();
 
-        [HttpGet("{animalId}", Name = "GetAnimalPhotos")]
+        [HttpGet("{animalId}", Name = "GetActPhotos")]
         public IActionResult Get(int animalId)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
@@ -28,18 +28,18 @@ namespace PetsServer.Domain.Animal.Controller
             return Ok(photos);
         }
 
-        [HttpPost("{animalId}", Name = "AddPhoto")]
-        public IActionResult AddPhoto(int animalId, IFormFile file)
+        [HttpPost("{actId}", Name = "AddActPhoto")]
+        public IActionResult AddPhoto(int actId, IFormFile file)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            _service.AddPhoto(animalId, file);
+            _service.AddPhoto(actId, file);
             return Ok();
         }
 
-        [HttpDelete("{id}", Name = "DeletePhoto")]
+        [HttpDelete("{id}", Name = "DeleteActPhoto")]
         public ActionResult DeletePhoto(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);

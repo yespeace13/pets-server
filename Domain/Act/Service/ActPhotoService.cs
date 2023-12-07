@@ -1,10 +1,10 @@
 ﻿using ModelLibrary.Model.Etc;
-using PetsServer.Domain.Animal.Model;
+using PetsServer.Domain.Act.Model;
 using PetsServer.Infrastructure.Context;
 
-namespace PetsServer.Domain.Animal.Service;
+namespace PetsServer.Domain.Act.Service;
 
-public class AnimalPhotoService
+public class ActPhotoService
 {
     private PetsContext _context = new PetsContext();
 
@@ -14,7 +14,7 @@ public class AnimalPhotoService
         var path = Path.Combine("Files", fileName);
         using var stream = new FileStream(path, FileMode.Create);
         file.CopyTo(stream);
-        _context.Add(new AnimalPhoto
+        _context.ActPhotos.Add(new ActPhoto
         {
             ParentId = animalId,
             Path = path
@@ -24,17 +24,17 @@ public class AnimalPhotoService
 
     public void DeletePhoto(int id)
     {
-        var photo = _context.AnimalPhotos.FirstOrDefault(p => p.Id == id);
+        var photo = _context.ActPhotos.FirstOrDefault(p => p.Id == id);
         if (photo == null) return;
         File.Delete(photo.Path);
 
-        _context.AnimalPhotos.Remove(photo);
+        _context.ActPhotos.Remove(photo);
         _context.SaveChanges();
     }
 
     public List<FileBaseView> Get(int animalId)
     {
-        var photos = _context.AnimalPhotos.Where(p => p.ParentId == animalId);
+        var photos = _context.ActPhotos.Where(p => p.ParentId == animalId);
         return photos.Select(p => new FileBaseView
         {
             Id = p.Id,

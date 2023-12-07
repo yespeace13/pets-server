@@ -86,8 +86,8 @@ namespace PetsServer.Domain.Contract.Controller
             {
                 return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
             }
-            _service.Create(entity);
-            return Ok();
+            var id = _service.Create(entity);
+            return Ok(id);
 
         }
 

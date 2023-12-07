@@ -34,7 +34,6 @@
     <Folder Include="Domain\Plan\Service\" />
     <Folder Include="Domain\Plan\Repository\" />
     <Folder Include="Domain\Report\Model\" />
-    <Folder Include="Files\" />
   </ItemGroup>
 
 </Project>

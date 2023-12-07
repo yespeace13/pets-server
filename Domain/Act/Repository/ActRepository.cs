@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PetsServer.Domain.Act.Model;
-using PetsServer.Domain.Contract.Repository;
-using PetsServer.Domain.Organization.Repository;
 using PetsServer.Infrastructure.Context;
-using System.Net;
 
 namespace PetsServer.Domain.Act.Repository;
 
@@ -34,10 +30,11 @@ public class ActRepository
             .ToList();
     }
 
-    public void Create(ActModel act)
+    public int Create(ActModel act)
     {
         _context.Add(act);
         _context.SaveChanges();
+        return act.Id;
     }
 
     public void Update(ActModel act)

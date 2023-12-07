@@ -35,6 +35,8 @@ public class ContractModel : IValidatableObject
 
     public ICollection<ContractContentModel>? ContractContent { get; set; }
 
+    public ICollection<ContractPhoto>? FIles { get; set; }
+
     public ContractModel() { }
     public ContractModel(
             int id, string number, DateOnly dateOfConclusion, DateOnly dateValidation,

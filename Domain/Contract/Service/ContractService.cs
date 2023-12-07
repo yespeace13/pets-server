@@ -12,14 +12,15 @@ public class ContractService
 {
     private ContractRepository _repository = new ContractRepository();
 
-    public void Create(ContractModel model)
+    public int Create(ContractModel model)
     {
-        _repository.Create(model);
+        return _repository.Create(model);
     }
 
     public void Update(ContractModel model)
     {
         var oldModel = GetOne(model.Id);
+        if (oldModel == null) return;
         oldModel.Number = model.Number;
         oldModel.DateOfConclusion = model.DateOfConclusion;
         oldModel.DateValid = model.DateValid;

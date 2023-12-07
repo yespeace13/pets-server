@@ -35,6 +35,8 @@ namespace PetsServer.Infrastructure.Context
         public DbSet<ReportModel> Reports { get; set; }
         public DbSet<ReportContentModel> ReportContents { get; set; }
         public DbSet<AnimalPhoto> AnimalPhotos { get; set; }
+        public DbSet<ActPhoto> ActPhotos { get; set; }
+        public DbSet<ContractPhoto> ContractPhotos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

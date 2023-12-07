@@ -72,8 +72,8 @@ namespace PetsServer.Domain.Act.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<ActEdit, ActModel>(view);
-            _service.Create(entity);
-            return Ok();
+            var id = _service.Create(entity);
+            return Ok(id);
         }
 
         [HttpPut("{id}", Name = "UpdateAct")]

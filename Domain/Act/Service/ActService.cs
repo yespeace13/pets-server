@@ -13,9 +13,9 @@ public class ActService
 {
     private ActRepository _repository = new ActRepository();
 
-    public void Create(ActModel model)
+    public int Create(ActModel model)
     {
-        _repository.Create(model);
+        return _repository.Create(model);
     }
 
     public void Update(ActModel model)

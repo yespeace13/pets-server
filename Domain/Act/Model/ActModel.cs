@@ -36,6 +36,8 @@ public class ActModel
     public ContractModel Contract { get; set; }
     public List<AnimalModel> Animal { get; set; }
 
+    public List<ActPhoto> Photos { get; set; }
+
     public ActModel(
             int id, OrganizationModel executor, LocalityModel locality, DateOnly date, ContractModel contract)
     {

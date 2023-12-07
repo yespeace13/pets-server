@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetsServer.Infrastructure.Context;
@@ -11,9 +12,11 @@ using PetsServer.Infrastructure.Context;
 namespace PetsServer.Migrations
 {
     [DbContext(typeof(PetsContext))]
-    partial class PetsContextModelSnapshot : ModelSnapshot
+    [Migration("20231207094101_initpetsV4")]
+    partial class initpetsV4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,31 +380,6 @@ namespace PetsServer.Migrations
                         .IsUnique();
 
                     b.ToTable("contract");
-                });
-
-            modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractPhoto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ParentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("parent_id");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("path");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("contract_file");
                 });
 
             modelBuilder.Entity("PetsServer.Domain.Locality.Model.LocalityModel", b =>
@@ -792,17 +770,6 @@ namespace PetsServer.Migrations
                     b.Navigation("Executor");
                 });
 
-            modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractPhoto", b =>
-                {
-                    b.HasOne("PetsServer.Domain.Contract.Model.ContractModel", "Entity")
-                        .WithMany("FIles")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Entity");
-                });
-
             modelBuilder.Entity("PetsServer.Domain.Organization.Model.OrganizationModel", b =>
                 {
                     b.HasOne("PetsServer.Domain.Organization.Model.LegalTypeModel", "LegalType")
@@ -894,8 +861,6 @@ namespace PetsServer.Migrations
             modelBuilder.Entity("PetsServer.Domain.Contract.Model.ContractModel", b =>
                 {
                     b.Navigation("ContractContent");
-
-                    b.Navigation("FIles");
                 });
 
             modelBuilder.Entity("PetsServer.Domain.Plan.Model.PlanModel", b =>

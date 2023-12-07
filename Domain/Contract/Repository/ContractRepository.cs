@@ -47,21 +47,22 @@ public class ContractRepository
             .ThenInclude(c => c.Locality);
     }
 
-    public void Create(ContractModel contracts)
+    public int Create(ContractModel contract)
     {
-        _context.Add(contracts);
+        _context.Add(contract);
+        _context.SaveChanges();
+        return contract.Id;
+    }
+
+    public void Update(ContractModel contract)
+    {
+        _context.Update(contract);
         _context.SaveChanges();
     }
 
-    public void Update(ContractModel contracts)
+    public void Delete(ContractModel contract)
     {
-        _context.Update(contracts);
-        _context.SaveChanges();
-    }
-
-    public void Delete(ContractModel contracts)
-    {
-        _context.Remove(contracts);
+        _context.Remove(contract);
         _context.SaveChanges();
     }
 }

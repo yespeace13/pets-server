@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Contract.Repository;
+using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Contract.Validator;
 
@@ -17,9 +18,18 @@ public class ContractValidator : AbstractValidator<ContractModel>
             .WithMessage("Исполнитель и заказчик не могут быть одинаковыми.");
         RuleFor(c => IsUnique(c)).Equal(true)
             .WithMessage("Контракт уже существует.");
+        RuleFor(c => IsUniqueContentLocality(c)).Equal(true)
+            .WithMessage("В содержимом повторяются населенные пункты.");
         RuleFor(c => IsUniqueContent(c)).Equal(true)
             .WithMessage("Содержимое контракта уже существует.");
 
+    }
+
+    private bool IsUniqueContentLocality(ContractModel contract)
+    {
+        var contractContent = contract.ContractContent;
+        if (contractContent == null) return true;
+        return !contractContent.GroupBy(cc => cc.LocalityId).Any(g => g.Count() > 1);
     }
 
     private bool IsUniqueContent(ContractModel contract)
@@ -31,7 +41,8 @@ public class ContractValidator : AbstractValidator<ContractModel>
             return !_contentRepository.GetAll().Any(
                 c => c.LocalityId == content.LocalityId
                     && c.ContractId == contract.Id
-                    && (content.Id == 0 || c.Id != content.Id));
+                    && (content.Id == 0 || c.Id != content.Id)
+                    );
         }
         return true;
     }
