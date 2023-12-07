@@ -1,4 +1,3 @@
-using PetsServer.Domain.Contract.Validator;
 using PetsServer.Domain.Organization.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PetsServer.Domain.Contract.Model;
 
 [Table("contract")]
-public class ContractModel : IValidatableObject
+public class ContractModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id"), Key]
@@ -48,15 +47,5 @@ public class ContractModel : IValidatableObject
         DateValid = dateValidation;
         ExecutorId = executors.Id;
         ClientId = clients.Id;
-    }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (ExecutorId == ClientId)
-        {
-            yield return new ValidationResult(
-                "Заказчик и исполнитель не могут быть одинаковыми",
-                new[] { nameof(ExecutorId), nameof(ClientId) });
-        }
     }
 }
