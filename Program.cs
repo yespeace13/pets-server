@@ -6,122 +6,97 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
-using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Contract.Validator;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace PetsServer
+namespace PetsServer;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        // https://localhost:7279/login?login=super&password=AQAAAAIAAYagAAAAEO%2FsYj4RkmFNwdqOe88%2B1EZEXC6s3BlUOC2kdjT4ZmPxHBMyWUWRF7SKQ8LzhZunIQ%3D%3D
-        // Для получения токена суперпользователя
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+        var config = builder.Configuration;
+        // Add services to the container.
+        builder.Services.AddControllers();
+
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+
+        builder.Services.AddSwaggerGen(setup =>
         {
-            var builder = WebApplication.CreateBuilder(args);
-            var config = builder.Configuration;
-            // Add services to the container.
-            builder.Services.AddControllers();
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddSwaggerGen(setup =>
+            var jwtSecurityScheme = new OpenApiSecurityScheme
             {
-                var jwtSecurityScheme = new OpenApiSecurityScheme
+                BearerFormat = "JWT",
+                Name = "Аунтентификация",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                Description = "Токен",
+                Reference = new OpenApiReference
                 {
-                    BearerFormat = "JWT",
-                    Name = "Аунтентификация",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = JwtBearerDefaults.AuthenticationScheme,
-                    Description = "Токен",
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-                setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-                setup.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        jwtSecurityScheme, Array.Empty<string>()
-                    }
-                });
-            });
-
-            // Автомаппер
-            builder.Services.AddAutoMapper(typeof(Infrastructure.Services.AutoMapper));
-
-            // Валидатор
-            builder.Services.AddValidatorsFromAssemblyContaining<ContractValidator>();
-
-            builder.Services.AddAuthorization();
-
-            builder.Services.AddAuthentication("Bearer")
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = config["JwtSettings:Issuer"],
-                        ValidateAudience = true,
-                        ValidAudience = config["JwtSettings:Audience"],
-                        ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"])),
-                        ValidateIssuerSigningKey = true,
-                    };
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
                 }
-                );
-
-            var app = builder.Build();
-
-            app.Map("login", (string login, string password) =>
+            };
+            setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+            setup.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
-                UserModel? person = new AuthenticationUserService().GetUser(login);
-
-                if (person is null) return Results.Unauthorized();
-                var result = new PasswordHasher<UserModel>().VerifyHashedPassword(person, person.Password, password);
-                if (result != PasswordVerificationResult.Success) return Results.Unauthorized();
-
-                var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Login) };
-                var jwt = new JwtSecurityToken(
-                        issuer: config["JwtSettings:Issuer"],
-                        audience: config["JwtSettings:Audience"],
-                        claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromHours(12)),
-                        signingCredentials: new SigningCredentials(
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"])), SecurityAlgorithms.HmacSha256));
-                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-                var response = new
                 {
-                    access_token = encodedJwt,
-                    username = person.Login
-                };
-                return Results.Json(response);
+                    jwtSecurityScheme, Array.Empty<string>()
+                }
             });
+        });
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+        // Автомаппер
+        builder.Services.AddAutoMapper(typeof(Infrastructure.Services.AutoMapper));
+
+        // Валидатор
+        builder.Services.AddValidatorsFromAssemblyContaining<ContractValidator>();
+
+        builder.Services.AddAuthorization();
+
+        builder.Services.AddAuthentication("Bearer")
+            .AddJwtBearer(options =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = config["JwtSettings:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = config["JwtSettings:Audience"],
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"])),
+                    ValidateIssuerSigningKey = true,
+                };
             }
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            );
 
-            app.UseHttpsRedirection();
+        var app = builder.Build();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.Map("/", [Authorize] () => "Не авторизован!");
-
-            app.MapControllers();
-
-            app.Run();
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        if (!Directory.Exists("Files")) Directory.CreateDirectory("Files");
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.Map("/", [Authorize] () => "Не авторизован!");
+
+        app.MapControllers();
+
+        
+
+        app.Run();
     }
 }
