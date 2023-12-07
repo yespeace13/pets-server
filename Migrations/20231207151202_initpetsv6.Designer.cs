@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetsServer.Infrastructure.Context;
@@ -11,9 +12,11 @@ using PetsServer.Infrastructure.Context;
 namespace PetsServer.Migrations
 {
     [DbContext(typeof(PetsContext))]
-    partial class PetsContextModelSnapshot : ModelSnapshot
+    [Migration("20231207151202_initpetsv6")]
+    partial class initpetsv6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -426,43 +429,6 @@ namespace PetsServer.Migrations
                     b.ToTable("locality");
                 });
 
-            modelBuilder.Entity("PetsServer.Domain.Log.Model.LogModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ActionDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("action_date");
-
-                    b.Property<string>("Entity")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("entity");
-
-                    b.Property<int?>("IdFile")
-                        .HasColumnType("integer")
-                        .HasColumnName("id_file");
-
-                    b.Property<int?>("IdObject")
-                        .HasColumnType("integer")
-                        .HasColumnName("id_object");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("log");
-                });
-
             modelBuilder.Entity("PetsServer.Domain.Organization.Model.LegalTypeModel", b =>
                 {
                     b.Property<int>("Id")
@@ -838,17 +804,6 @@ namespace PetsServer.Migrations
                         .IsRequired();
 
                     b.Navigation("Entity");
-                });
-
-            modelBuilder.Entity("PetsServer.Domain.Log.Model.LogModel", b =>
-                {
-                    b.HasOne("PetsServer.Auth.Authorization.Model.UserModel", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PetsServer.Domain.Organization.Model.OrganizationModel", b =>

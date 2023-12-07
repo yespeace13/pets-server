@@ -43,7 +43,7 @@ public class UserModel
     [Column("firts_name")]
     public string FirstName { get; set; }
     [Column("middle_name")]
-    public string? MiddleName { get; set; }
+    public string? Patronymic { get; set; }
     [Column("email")]
     public string? Email { get; set; }
     [Column("department")]

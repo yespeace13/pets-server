@@ -8,6 +8,7 @@ using PetsServer.Domain.Organization.Service;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
+using PetsServer.Domain.Log.Service;
 
 namespace PetsServer.Domain.Organization.Controller
 {

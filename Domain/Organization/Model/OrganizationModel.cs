@@ -1,9 +1,6 @@
 ﻿using PetsServer.Domain.Locality.Model;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Metadata;
-
+using System.ComponentModel.DataAnnotations.Schema
 namespace PetsServer.Domain.Organization.Model
 {
     [Table("organization")]
@@ -49,7 +46,7 @@ namespace PetsServer.Domain.Organization.Model
         public LocalityModel Locality { get; set; }
 
         public OrganizationModel() { }
-        public OrganizationModel(int id, string name, string inn, string kpp, string address,
+        public OrganizationModel(int id, string name, string inn, string kpp, string address, string phone, string email,
             TypeOrganizationModel typeOrganizations, LegalTypeModel legalType, LocalityModel locality)
         {
             Id = id;
@@ -57,6 +54,8 @@ namespace PetsServer.Domain.Organization.Model
             INN = inn;
             KPP = kpp;
             Address = address;
+            Phone = phone;
+            Email = email;
             TypeOrganizationId = typeOrganizations.Id;
             LegalTypeId = legalType.Id;
             LocalityId = locality.Id;

@@ -5,6 +5,7 @@ using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Etc;
 using ModelLibrary.Model.Organization;
+using ModelLibrary.Model.Papka;
 using ModelLibrary.Model.Plan;
 using ModelLibrary.Model.Report;
 using PetsServer.Auth.Authorization.Model;
@@ -12,6 +13,7 @@ using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
+using PetsServer.Domain.Log.Model;
 using PetsServer.Domain.Organization.Model;
 using PetsServer.Domain.Plan.Model;
 using PetsServer.Domain.Report.Model;
@@ -101,6 +103,20 @@ namespace PetsServer.Infrastructure.Services
             CreateMap<PlanEdit, PlanModel>();
 
             CreateMap<PlanContentEdit, PlanContentModel>();
+
+            CreateMap<LogModel, LogViewList>()
+                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.Patronymic))
+                .ForMember(dest => dest.UserFirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                .ForMember(dest => dest.UserPatronymic, opt => opt.MapFrom(src => src.User.Patronymic))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.Phone))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.NameOrganization, opt => opt.MapFrom(src => src.User.Organization.NameOrganization))
+                .ForMember(dest => dest.StructuralUnit, opt => opt.MapFrom(src => src.User.Department))
+                .ForMember(dest => dest.Post, opt => opt.MapFrom(src => src.User.Position))
+                .ForMember(dest => dest.WorkPhoneNumber, opt => opt.MapFrom(src => src.User.Organization.Phone))
+                .ForMember(dest => dest.WorkEmail, opt => opt.MapFrom(src => src.User.Organization.Email))
+                .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.User.Login))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Entity));
         }
     }
 }

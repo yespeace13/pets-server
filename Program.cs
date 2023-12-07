@@ -110,7 +110,7 @@ namespace PetsServer
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
             app.UseHttpsRedirection();
 
