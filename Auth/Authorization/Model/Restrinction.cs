@@ -24,6 +24,9 @@ public enum Entities
     Schedule,
     Act,
     Report,
+    ActPhoto,
+    AnimalPhoto,
+    ContractPhoto,
     Log
 }
 
