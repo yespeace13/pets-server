@@ -3,6 +3,7 @@ using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Plan.Model;
 using PetsServer.Infrastructure;
 using PetsServer.Infrastructure.Context;
+using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Plan.Repository;
 
@@ -34,5 +35,12 @@ public class PlanRepository : BaseRepository<PlanModel>
     public override IQueryable<PlanModel> Get()
     {
         return _context.PlanModels;
-    } 
+    }
+
+    public int Create(PlanModel plan)
+    {
+        _context.Add(plan);
+        _context.SaveChanges();
+        return plan.Id;
+    }
 }

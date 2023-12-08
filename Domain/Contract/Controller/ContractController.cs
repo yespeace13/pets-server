@@ -27,7 +27,7 @@ namespace PetsServer.Domain.Contract.Controller
         // Валидатор
         private readonly IValidator<ContractModel> _validator;
         // Логгер
-        private LogService log = new LogService(typeof(ContractModel));
+        private LogService d_log = new LogService(typeof(ContractModel));
 
         public ContractController(IMapper mapper, IValidator<ContractModel> validator)
         {
@@ -88,7 +88,7 @@ namespace PetsServer.Domain.Contract.Controller
                 return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
             }
             var id = _service.Create(entity);
-            log.LogData(user, id);
+            d_log.LogData(user, id);
             return Ok(id);
 
         }
@@ -111,6 +111,7 @@ namespace PetsServer.Domain.Contract.Controller
                 return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
             }
             _service.Update(entity);
+            d_log.LogData(user, id);
             return Ok();
         }
 
@@ -123,6 +124,7 @@ namespace PetsServer.Domain.Contract.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
+            d_log.LogData(user, id);
             return Ok();
         }
     }

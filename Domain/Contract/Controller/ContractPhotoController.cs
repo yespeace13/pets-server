@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
+using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Contract.Service;
+using PetsServer.Domain.Log.Service;
 
 namespace PetsServer.Domain.Contract.Controller
 {
@@ -16,6 +18,7 @@ namespace PetsServer.Domain.Contract.Controller
         private ContractPhotoService _service = new ContractPhotoService();
         // Для привилегий и доступа
         private AuthenticationUserService _authenticationService = new AuthenticationUserService();
+        private LogService d_log = new LogService(typeof(ContractModel));
 
         [HttpGet("{contractId}", Name = "GetContractPhotos")]
         public IActionResult Get(int contractId)

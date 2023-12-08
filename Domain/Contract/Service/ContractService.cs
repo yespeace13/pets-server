@@ -148,6 +148,12 @@ public class ContractService
                 //    }
                 //    break;
                 // не работает, так как окно фильтра не применяется к дате окончания
+                case "Executor":
+                    models = models.Where(m => m.Executor.NameOrganization.Contains(filters[filter]));
+                    break;
+                case "Client":
+                    models = models.Where(m => m.Client.NameOrganization.Contains(filters[filter]));
+                    break;
                 default:
                     break;
             }

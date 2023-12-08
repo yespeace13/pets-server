@@ -8,6 +8,7 @@ using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Plan.Service;
 using ModelLibrary.Model.Plan;
 using PetsServer.Domain.Plan.Model;
+using PetsServer.Domain.Log.Service;
 
 namespace PetsServer.Domain.Plan.Controller
 {
@@ -22,6 +23,7 @@ namespace PetsServer.Domain.Plan.Controller
         private AuthenticationUserService _authenticationService;
         // Маппер для данных
         private readonly IMapper _mapper;
+        private LogService d_log = new LogService(typeof(PlanModel));
 
         public PlanController(IMapper mapper)
         {
@@ -71,7 +73,8 @@ namespace PetsServer.Domain.Plan.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Schedule, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<PlanEdit, PlanModel>(view);
-            _service.Create(entity);
+            var id = _service.Create(entity);
+            d_log.LogData(user, id);
             return Ok();
         }
 
@@ -86,6 +89,7 @@ namespace PetsServer.Domain.Plan.Controller
             var entity = _mapper.Map<PlanEdit, PlanModel>(view);
             entity.Id = id;
             _service.Update(entity);
+            d_log.LogData(user, id);
             return Ok();
         }
 
@@ -98,6 +102,7 @@ namespace PetsServer.Domain.Plan.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
+            d_log.LogData(user, id);
             return Ok();
         }
     }

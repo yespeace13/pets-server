@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetsServer.Domain.Organization.Model;
 using PetsServer.Infrastructure;
+using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Organization.Repository;
 
@@ -13,6 +14,13 @@ public class OrganizationRepository : BaseRepository<OrganizationModel>
     public List<TypeOrganizationModel> GetTypesOrganization() => _context.TypeOrganizations.ToList();
 
     public List<LegalTypeModel> GetLegalTypes() => _context.LegalTypes.ToList();
+
+    public int Create(OrganizationModel organization)
+    {
+        _context.Add(organization);
+        _context.SaveChanges();
+        return organization.Id;
+    }
 
     public override OrganizationModel? Get(int id)
     {

@@ -12,9 +12,9 @@ public class PlanService
 {
     private PlanRepository _repository = new PlanRepository();
 
-    public void Create(PlanModel model)
+    public int Create(PlanModel model)
     {
-        _repository.Create(model);
+        return _repository.Create(model);
     }
 
     public void Update(PlanModel model)

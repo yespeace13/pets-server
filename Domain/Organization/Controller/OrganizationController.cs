@@ -9,6 +9,7 @@ using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Log.Service;
+using PetsServer.Domain.Contract.Model;
 
 namespace PetsServer.Domain.Organization.Controller
 {
@@ -23,6 +24,7 @@ namespace PetsServer.Domain.Organization.Controller
         private AuthenticationUserService _authenticationService;
         // Маппер для данных
         private readonly IMapper _mapper;
+        private LogService d_log = new LogService(typeof(OrganizationModel));
 
         public OrganizationController(IMapper mapper)
         {
@@ -74,7 +76,8 @@ namespace PetsServer.Domain.Organization.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             var organization = _mapper.Map<OrganizationModel>(view);
-            _service.Create(organization);
+            var id = _service.Create(organization);
+            d_log.LogData(user, id);
             return Ok();
         }
 
@@ -89,6 +92,7 @@ namespace PetsServer.Domain.Organization.Controller
             var organization = _mapper.Map<OrganizationEdit, OrganizationModel>(view);
             organization.Id = id;
             _service.Update(organization);
+            d_log.LogData(user, id);
             return Ok();
         }
 
@@ -101,6 +105,7 @@ namespace PetsServer.Domain.Organization.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
+            d_log.LogData(user, id);
             return Ok();
         }
     }
