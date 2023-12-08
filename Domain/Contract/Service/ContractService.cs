@@ -143,6 +143,12 @@ public class ContractService
                     if (DateOnly.TryParse(periodDate[0], out var startDate2) && DateOnly.TryParse(periodDate[1], out var endDate2))
                         models = models.Where(m => m.DateValid >= startDate2 && m.DateValid <= endDate2);
                     break;
+                case "Executor":
+                    models = models.Where(m => m.Executor.NameOrganization.Contains(filters[filter]));
+                    break;
+                case "Client":
+                    models = models.Where(m => m.Client.NameOrganization.Contains(filters[filter]));
+                    break;
                 default:
                     break;
             }

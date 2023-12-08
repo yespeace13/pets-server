@@ -8,6 +8,7 @@ using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Act.Service;
 using ModelLibrary.Model.Act;
 using PetsServer.Domain.Act.Model;
+using PetsServer.Domain.Log.Service;
 
 namespace PetsServer.Domain.Act.Controller
 {
@@ -22,6 +23,7 @@ namespace PetsServer.Domain.Act.Controller
         private AuthenticationUserService _authenticationService;
         // Маппер для данных
         private readonly IMapper _mapper;
+        private LogService d_log = new LogService(typeof(ActModel));
 
         public ActController(IMapper mapper)
         {
@@ -73,7 +75,9 @@ namespace PetsServer.Domain.Act.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<ActEdit, ActModel>(view);
             var id = _service.Create(entity);
+            d_log.LogData(user, id);
             return Ok(id);
+
         }
 
         [HttpPut("{id}", Name = "UpdateAct")]
@@ -87,6 +91,7 @@ namespace PetsServer.Domain.Act.Controller
             var entity = _mapper.Map<ActEdit, ActModel>(view);
             entity.Id = id;
             _service.Update(entity);
+            d_log.LogData(user, id);
             return Ok();
         }
 
@@ -99,6 +104,7 @@ namespace PetsServer.Domain.Act.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
+            d_log.LogData(user, id);
             return Ok();
         }
     }

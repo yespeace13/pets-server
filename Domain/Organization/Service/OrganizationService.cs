@@ -12,9 +12,9 @@ public class OrganizationService
 {
     private OrganizationRepository _repository = new OrganizationRepository();
 
-    public void Create(OrganizationModel organization)
+    public int Create(OrganizationModel organization)
     {
-        _repository.Create(organization);
+        return _repository.Create(organization);
     }
 
     public void Update(OrganizationModel organization)

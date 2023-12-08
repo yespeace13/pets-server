@@ -8,6 +8,8 @@ using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Animal.Service;
 using ModelLibrary.Model.Animal;
 using PetsServer.Domain.Animal.Model;
+using PetsServer.Domain.Contract.Model;
+using PetsServer.Domain.Log.Service;
 
 namespace PetsServer.Domain.Animal.Controller
 {
