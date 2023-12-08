@@ -134,20 +134,15 @@ public class ContractService
                     models = models.Where(m => m.Number.Contains(filters[filter]));
                     break;
                 case "DateOfConclusion":
-                    var periodDate1 = filters[filter].Split(' ');
-                    if (DateOnly.TryParse(periodDate1[0], out var startDate1) && DateOnly.TryParse(periodDate1[1], out var endDate1))
-                    {
+                    var periodDate = filters[filter].Split(' ');
+                    if (DateOnly.TryParse(periodDate[0], out var startDate1) && DateOnly.TryParse(periodDate[1], out var endDate1))
                         models = models.Where(m => m.DateOfConclusion >= startDate1 && m.DateOfConclusion <= endDate1);
-                    }
                     break;
                 case "DateValid":
-                    var periodDate2 = filters[filter].Split(' ');
-                    if (DateOnly.TryParse(periodDate2[0], out var startDate2) && DateOnly.TryParse(periodDate2[1], out var endDate2))
-                    {
+                    periodDate = filters[filter].Split(' ');
+                    if (DateOnly.TryParse(periodDate[0], out var startDate2) && DateOnly.TryParse(periodDate[1], out var endDate2))
                         models = models.Where(m => m.DateValid >= startDate2 && m.DateValid <= endDate2);
-                    }
                     break;
-                // не работает, так как окно фильтра не применяется к дате окончания
                 case "Executor":
                     models = models.Where(m => m.Executor.NameOrganization.Contains(filters[filter]));
                     break;

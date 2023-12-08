@@ -27,7 +27,14 @@ namespace PetsServer.Domain.Report.Controller
         [HttpPost(Name = "CreateReport")]
         public IActionResult Create(string from, string to)
         {
-            _service.Create(DateOnly.Parse(from), DateOnly.Parse(to));
+            var user = _authenticationService.GetUser(User.Identity.Name);
+
+            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Report, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
+
+            if (DateOnly.TryParse(from, out var fromDate) || DateOnly.TryParse(to, out var toDate))
+                return BadRequest();
+            _service.Create(fromDate, toDate);
             return Ok();
         }
 
@@ -42,9 +49,8 @@ namespace PetsServer.Domain.Report.Controller
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Report, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            var entity = _service.Get();
-            var view = _mapper.Map<IEnumerable<ReportViewList>>(entity);
-            return Ok(view);
+            var views = _service.Get(page, pages, filter, sortField, sortType, user, _mapper);
+            return Ok(views);
         }
 
         [HttpGet("{id}", Name = "GetReport")]

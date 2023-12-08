@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ModelLibrary.Model.Organization;
 using ModelLibrary.Model.Report;
+using ModelLibrary.View;
 using OfficeOpenXml;
+using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Report.Model;
 using PetsServer.Domain.Report.Repository;
 using PetsServer.Infrastructure.Services;
@@ -86,9 +88,38 @@ namespace PetsServer.Domain.Report.Service
             return package.GetAsByteArray();
         }
 
-        public IEnumerable<ReportModel> Get()
+        public PageSettings<ReportViewList> Get(int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)
         {
-            return _repository.Get();
+            // создаем страницу с настройками
+            var pageSettings = new PageSettings<ReportViewList>();
+
+            // проверяем, что передано значение для номера страницы
+            if (pageQuery.HasValue && pageQuery > 0)
+                pageSettings.Page = pageQuery.Value;
+
+            // проверяем, что есть значение для объема страницы
+            if (limitQuery.HasValue && limitQuery.Value > 0)
+                pageSettings.Limit = limitQuery.Value;
+
+            var models = _repository.Get();
+
+            //// Фильтрация
+            //organizationsView = new FilterObjects<OrganizationViewList>().Filter(organizationsView, filter);
+
+            var views = mapper.Map<IEnumerable<ReportViewList>>(models);
+
+            // Сортировка
+            views = new SorterObjects<ReportViewList>().SortField(views, sortField, sortType);
+
+            // Количество страниц всего
+            pageSettings.Pages = (int)Math.Ceiling((double)views.Count() / pageSettings.Limit);
+
+            // Добавляем элементы в страницу с необходимым количеством
+            pageSettings.Items = views
+                .Skip(pageSettings.Limit * (pageSettings.Page - 1))
+                .Take(pageSettings.Limit);
+
+            return pageSettings;
         }
 
         public ReportModel? Get(int id)
