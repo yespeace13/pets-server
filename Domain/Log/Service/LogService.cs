@@ -76,6 +76,8 @@ public class LogService
     /// <param name="idEntity">Идентификатор записи(не обязательно)</param>
     /// <param name="idFile">Идентификатор файла(не обязательно)</param>
     /// <exception cref="ArgumentNullException"></exception>
+    /// проверка имени 
+
     public void LogData(UserModel user, int? idEntity = null, int? idFile = null)
     {
         if (_entity == null) throw new ArgumentNullException("Не для того");
