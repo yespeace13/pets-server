@@ -140,13 +140,13 @@ public class ContractService
                         models = models.Where(m => m.DateOfConclusion >= startDate1 && m.DateOfConclusion <= endDate1);
                     }
                     break;
-                //case "DateValid":
-                //    var periodDate2 = filters[filter].Split(' ');
-                //    if (DateOnly.TryParse(periodDate2[0], out var startDate2) && DateOnly.TryParse(periodDate2[1], out var endDate2))
-                //    {
-                //        models = models.Where(m => m.DateValid >= startDate2 && m.DateValid <= endDate2);
-                //    }
-                //    break;
+                case "DateValid":
+                    var periodDate2 = filters[filter].Split(' ');
+                    if (DateOnly.TryParse(periodDate2[0], out var startDate2) && DateOnly.TryParse(periodDate2[1], out var endDate2))
+                    {
+                        models = models.Where(m => m.DateValid >= startDate2 && m.DateValid <= endDate2);
+                    }
+                    break;
                 // не работает, так как окно фильтра не применяется к дате окончания
                 default:
                     break;
