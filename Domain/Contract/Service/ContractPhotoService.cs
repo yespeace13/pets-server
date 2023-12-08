@@ -9,18 +9,20 @@ public class ContractPhotoService
 {
     private PetsContext _context = new PetsContext();
 
-    public void AddPhoto(int animalId, IFormFile file)
+    public int AddPhoto(int animalId, IFormFile file)
     {
         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         var path = Path.Combine("Files", fileName);
         using var stream = new FileStream(path, FileMode.Create);
         file.CopyTo(stream);
-        _context.Add(new ContractPhoto
+        var entity = new ContractPhoto
         {
             ParentId = animalId,
             Path = path
-        });
+        };
+        _context.Add(entity);
         _context.SaveChanges();
+        return entity.Id;
     }
 
     public void DeletePhoto(int id)
