@@ -8,18 +8,26 @@ public class ActPhotoService
 {
     private PetsContext _context = new PetsContext();
 
-    public void AddPhoto(int animalId, IFormFile file)
+    public int AddPhoto(int animalId, IFormFile file)
     {
         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         var path = Path.Combine("Files", fileName);
         using var stream = new FileStream(path, FileMode.Create);
         file.CopyTo(stream);
-        _context.ActPhotos.Add(new ActPhoto
+        var entity = new ActPhoto
         {
             ParentId = animalId,
             Path = path
-        });
+        };
+        _context.Add(entity);
         _context.SaveChanges();
+        return entity.Id;
+    }
+
+    public int GetActIdByPhotoId(int photoId)
+    {
+        var photo = _context.ActPhotos.FirstOrDefault(p => p.Id == photoId);
+        return photo?.ParentId ?? -1;
     }
 
     public void DeletePhoto(int id)
