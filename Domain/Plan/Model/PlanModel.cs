@@ -1,3 +1,5 @@
+using PetsServer.Domain.Status.Model;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +17,12 @@ public class PlanModel
 
     [Column("year")]
     public int Year { get; set; }
+
+    [Column("status_id")]
+    public int StatusId { get; set; }
+
+    [ForeignKey(nameof(StatusId))]
+    public StatusModel Status { get; set; }
 
     public List<PlanContentModel> PlanContent { get; set; }
 
