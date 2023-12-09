@@ -5,6 +5,8 @@ using ModelLibrary.Model.Report;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
+using PetsServer.Domain.Contract.Model;
+using PetsServer.Domain.Log.Service;
 using PetsServer.Domain.Report.Service;
 
 namespace PetsServer.Domain.Report.Controller
@@ -17,6 +19,7 @@ namespace PetsServer.Domain.Report.Controller
         private ReportService _service;
         private AuthenticationUserService _authenticationService;
         private IMapper _mapper;
+        private LogService d_log = new LogService(typeof(ContractModel));
         public ReportController(IMapper mapper)
         {
             _service = new ReportService();
@@ -63,6 +66,19 @@ namespace PetsServer.Domain.Report.Controller
             var entity = _service.Get(id);
             var view = _mapper.Map<ReportViewOne>(entity);
             return Ok(view);
+        }
+
+        [HttpDelete("{id}", Name = "DeleteReport")]
+        public ActionResult Delete(int id)
+        {
+            var user = _authenticationService.GetUser(User.Identity.Name);
+
+            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Report, user))
+                return Problem(null, null, 403, "У вас нет привилегий");
+
+            _service.Delete(id);
+            d_log.LogData(user, id);
+            return Ok();
         }
     }
 }

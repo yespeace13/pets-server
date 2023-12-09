@@ -2,6 +2,7 @@
 using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Report.Model;
 using PetsServer.Infrastructure.Context;
+using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Report.Repository
 {
@@ -26,6 +27,11 @@ namespace PetsServer.Domain.Report.Repository
             _context.Reports.Add(report);
             _context.SaveChanges();
 
+        }
+        public void Delete(ReportModel report)
+        {
+            _context.Remove(report);
+            _context.SaveChanges();
         }
 
         public IQueryable<ActModel> GetActs()

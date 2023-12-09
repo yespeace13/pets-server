@@ -4,6 +4,8 @@ using ModelLibrary.Model.Report;
 using ModelLibrary.View;
 using OfficeOpenXml;
 using PetsServer.Auth.Authorization.Model;
+using PetsServer.Domain.Contract.Model;
+using PetsServer.Domain.Log.Service;
 using PetsServer.Domain.Report.Model;
 using PetsServer.Domain.Report.Repository;
 using PetsServer.Infrastructure.Services;
@@ -49,6 +51,14 @@ namespace PetsServer.Domain.Report.Service
             model.ReportContent = localitys.Values.ToList();
             _repository.Create(model);
         }
+
+        public void Delete(int id)
+        {
+            var model = GetOne(id);
+            _repository.Delete(model);
+        }
+
+        public ReportModel? GetOne(int id) => _repository.Get(id);
 
         public byte[] GenerateExcel(int id)
         {
