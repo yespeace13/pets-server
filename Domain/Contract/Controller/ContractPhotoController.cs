@@ -50,9 +50,13 @@ namespace PetsServer.Domain.Contract.Controller
 
             if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
+
+            var contractId = _service.GetContractIdByPhotoId(id);
             _service.DeletePhoto(id);
-            // TODO передать id контракта
-            _log.LogData(user, null, id);
+            _log.LogData(user, contractId, id);
+            //_service.DeletePhoto(id);
+            //// TODO передать id контракта
+            //_log.LogData(user, null, id);
             return Ok();
         }
     }

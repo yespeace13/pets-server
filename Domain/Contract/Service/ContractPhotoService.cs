@@ -24,6 +24,11 @@ public class ContractPhotoService
         _context.SaveChanges();
         return entity.Id;
     }
+    public int GetContractIdByPhotoId(int photoId)
+    {
+        var photo = _context.ContractPhotos.FirstOrDefault(p => p.Id == photoId);
+        return photo?.ParentId ?? -1;
+    }
 
     public void DeletePhoto(int id)
     {
