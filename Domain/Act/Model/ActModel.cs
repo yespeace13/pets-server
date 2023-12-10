@@ -28,7 +28,6 @@ public class ActModel
     public LocalityModel Locality { get; set; }
 
     [Column("date_of_capture")]
-    //TODO поменять
     public DateOnly DateOfCapture { get; set; }
     [Column("contract_id")]
     public int ContractId { get; set; }

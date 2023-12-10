@@ -94,11 +94,13 @@ namespace PetsServer.Infrastructure.Services
             CreateMap<ReportModel, ReportViewOne>();
 
             // Plan
-            CreateMap<PlanModel, PlanViewList>();
+            CreateMap<PlanModel, PlanViewList>()
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.StatusName));
 
             CreateMap<PlanContentModel, PlanContentView>();
 
-            CreateMap<PlanModel, PlanViewOne>();
+            CreateMap<PlanModel, PlanViewOne>()
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.StatusName));
 
             CreateMap<PlanEdit, PlanModel>();
 

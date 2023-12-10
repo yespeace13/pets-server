@@ -92,3 +92,102 @@ VALUES
 
 
 -- TODO сделать роли и пользователей хотя бы пару штук!!!
+
+
+
+
+INSERT INTO "status"
+(status_name)
+VALUES
+('Не действует'),
+('В исполнении'),
+('Исполнен'),
+('Истёк без отлова');
+
+
+
+
+
+
+--create trigger update_plan_status_trigger before
+--insert
+--    or
+--update
+--    on
+--    public.plan for each row execute function update_plan_status();
+
+
+--CREATE OR REPLACE FUNCTION public.update_plan_status()
+-- RETURNS trigger
+-- LANGUAGE plpgsql
+--AS $function$
+--BEGIN
+--    -- Проверяем, если срок исполнения плана графика ещё не настал, то статус меняем на "Не действует"
+--    IF NEW."year" > EXTRACT(YEAR FROM CURRENT_DATE) OR (NEW."year" = EXTRACT(YEAR FROM CURRENT_DATE) AND NEW."month" > EXTRACT(MONTH FROM CURRENT_DATE)) THEN
+--        NEW.status_id = 1;
+--    -- Проверяем, если наступил срок действия плана графика, то статус меняем на "В исполнении"
+--    ELSIF NEW."year" = EXTRACT(YEAR FROM CURRENT_DATE) AND NEW."month" = EXTRACT(MONTH FROM CURRENT_DATE) THEN
+--        NEW.status_id = 2;
+--    -- Проверяем, если срок действия плана-графика истёк и по нему есть акты отлова, то статус меняем на "Исполнен"
+--    ELSIF NEW."year" < EXTRACT(YEAR FROM CURRENT_DATE) OR (NEW."year" = EXTRACT(YEAR FROM CURRENT_DATE) AND NEW."month" < EXTRACT(MONTH FROM CURRENT_DATE)) THEN
+--        IF EXISTS (
+--        	SELECT * FROM plan p 
+--        	join plan_content pc on p.id = pc.plan_id 
+--        	where pc.act_id notnull and pc.plan_id = new."id") THEN
+--            NEW.status_id = 3;
+--        ELSE
+--            -- Если по плану-графику нет актов отлова, то статус меняем на "Истёк без отлова"
+--            NEW.status_id = 4;
+--        END IF;
+--    END IF;
+    
+--    RETURN NEW;
+--END;
+--$function$;
+
+
+--create trigger update_plan_content_status_trigger after
+--insert
+--    or
+--update
+--    on
+--    public.plan_content for each row execute function update_plan_content_status();
+
+
+--CREATE OR REPLACE FUNCTION public.update_plan_content_status()
+-- RETURNS trigger
+-- LANGUAGE plpgsql
+--AS $function$
+--declare 
+--	plan_year int4;
+--	plan_month int4;
+--begin	
+--	select p."month", p."year" into plan_year, plan_month from public.plan p where p.id = new."plan_id";
+--    -- Проверяем, если срок исполнения плана графика ещё не настал, то статус меняем на "Не действует"
+--    IF plan_year > EXTRACT(YEAR FROM CURRENT_DATE) OR (plan_year = EXTRACT(YEAR FROM CURRENT_DATE) AND NEW.plan_month > EXTRACT(MONTH FROM CURRENT_DATE)) THEN
+--        UPDATE public.plan
+--		SET status_id=1
+--		WHERE id=new."plan_id";
+--    -- Проверяем, если наступил срок действия плана графика, то статус меняем на "В исполнении"
+--    ELSIF plan_year = EXTRACT(YEAR FROM CURRENT_DATE) AND plan_month = EXTRACT(MONTH FROM CURRENT_DATE) THEN
+--        UPDATE public.plan
+--		SET status_id=2
+--		WHERE id=new."plan_id";
+--    -- Проверяем, если срок действия плана-графика истёк и по нему есть акты отлова, то статус меняем на "Исполнен"
+--    ELSIF plan_year < EXTRACT(YEAR FROM CURRENT_DATE) OR (plan_year = EXTRACT(YEAR FROM CURRENT_DATE) AND NEW."month" < EXTRACT(MONTH FROM CURRENT_DATE)) THEN
+--        IF EXISTS (SELECT * FROM plan p join plan_content pc on p.id = pc.plan_id where pc.act_id notnull and pc.plan_id = new."plan_id") THEN
+--            UPDATE public.plan
+--		SET status_id=3
+--		WHERE id=new."plan_id";
+--        ELSE
+--            -- Если по плану-графику нет актов отлова, то статус меняем на "Истёк без отлова"
+--            UPDATE public.plan
+--			SET status_id=4
+--			WHERE id=new."plan_id";
+--        END IF;
+--    END IF;
+    
+--    RETURN NEW;
+--END;
+--$function$
+--;

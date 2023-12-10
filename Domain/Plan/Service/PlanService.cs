@@ -32,7 +32,7 @@ public class PlanService
         _repository.Delete(model);
     }
 
-    public PlanModel? GetOne(int id) => _repository.GetOne(id);
+    public PlanModel? GetOne(int id) => _repository.Get(id);
 
     public PageSettings<PlanViewList> GetPage(
         int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)

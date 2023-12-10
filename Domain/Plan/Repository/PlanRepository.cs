@@ -1,9 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Plan.Model;
 using PetsServer.Infrastructure;
-using PetsServer.Infrastructure.Context;
-using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Plan.Repository;
 
@@ -13,28 +10,22 @@ public class PlanRepository : BaseRepository<PlanModel>
     {
     }
 
-    public PlanModel? GetOne(int id)
-    {
-        return _context.PlanModels
-            .Include(p => p.PlanContent)
-            .ThenInclude(cc => cc.Locality)
-            .Include(p => p.PlanContent)
-            .ThenInclude(cc => cc.Act)
-            .FirstOrDefault(p => p.Id == id);
-
-    }
-
     public override PlanModel? Get(int id)
     {
         return _context.PlanModels
             .Where(c => c.Id == id)
             .Include(c => c.PlanContent)
+            .ThenInclude(pc => pc.Locality)
+            .Include(c => c.PlanContent)
+            .ThenInclude(pc => pc.Act)
+            .Include(p => p.Status)
             .FirstOrDefault();
     }
 
     public override IQueryable<PlanModel> Get()
     {
-        return _context.PlanModels;
+        return _context.PlanModels
+            .Include(p => p.Status);
     }
 
     public int Create(PlanModel plan)
