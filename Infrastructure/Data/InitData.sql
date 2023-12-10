@@ -164,7 +164,7 @@ VALUES
 --begin	
 --	select p."month", p."year" into plan_year, plan_month from public.plan p where p.id = new."plan_id";
 --    -- Проверяем, если срок исполнения плана графика ещё не настал, то статус меняем на "Не действует"
---    IF plan_year > EXTRACT(YEAR FROM CURRENT_DATE) OR (plan_year = EXTRACT(YEAR FROM CURRENT_DATE) AND NEW.plan_month > EXTRACT(MONTH FROM CURRENT_DATE)) THEN
+--    IF plan_year > EXTRACT(YEAR FROM CURRENT_DATE) OR (plan_year = EXTRACT(YEAR FROM CURRENT_DATE) AND plan_month > EXTRACT(MONTH FROM CURRENT_DATE)) THEN
 --        UPDATE public.plan
 --		SET status_id=1
 --		WHERE id=new."plan_id";
@@ -174,7 +174,7 @@ VALUES
 --		SET status_id=2
 --		WHERE id=new."plan_id";
 --    -- Проверяем, если срок действия плана-графика истёк и по нему есть акты отлова, то статус меняем на "Исполнен"
---    ELSIF plan_year < EXTRACT(YEAR FROM CURRENT_DATE) OR (plan_year = EXTRACT(YEAR FROM CURRENT_DATE) AND NEW."month" < EXTRACT(MONTH FROM CURRENT_DATE)) THEN
+--    ELSIF plan_year < EXTRACT(YEAR FROM CURRENT_DATE) OR (plan_year = EXTRACT(YEAR FROM CURRENT_DATE) AND plan_month < EXTRACT(MONTH FROM CURRENT_DATE)) THEN
 --        IF EXISTS (SELECT * FROM plan p join plan_content pc on p.id = pc.plan_id where pc.act_id notnull and pc.plan_id = new."plan_id") THEN
 --            UPDATE public.plan
 --		SET status_id=3

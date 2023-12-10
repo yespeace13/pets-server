@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using ModelLibrary.Model.Organization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Log.Service;
-using PetsServer.Domain.Log.Model;
-using ModelLibrary.Model.Papka;
 using ModelLibrary.View;
+using ModelLibrary.Model.LogInformation;
 
 namespace PetsServer.Domain.Log.Controller
 {
