@@ -5,29 +5,23 @@ using PetsServer.Domain.Log.Service;
 
 namespace PetsServer.Domain.Log.Controller;
 
-[Route("logexport")]
+[Route("logs-export")]
 [ApiController]
-public class LogExportController : ControllerBase
+public class LogExportController(IMapper mapper) : ControllerBase
 {
 
     // Маппер для данных
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper = mapper;
 
-    private LogService _service;
+    private readonly LogService _service = new();
 
-    public LogExportController(IMapper mapper)
+    [HttpGet]
+    public IActionResult Get(string? filters)
     {
-        _service = new LogService();
-        _mapper = mapper;
+        var fileName = $"Журнал.xlsx";
+        var mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        var file = _service.ExportToExcel(filters, _mapper);
+        return File(file, mimeType, fileName);
     }
-
-    //[HttpGet]
-    //public IActionResult Get(string? filters)
-    //{
-    //    var fileName = $"Журнал.xlsx";
-    //    var mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    //    var file = _service.ExportToExcel(filters, _mapper);
-    //    return File(file, mimeType, fileName);
-    //}
 }
 

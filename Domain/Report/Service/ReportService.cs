@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using ModelLibrary.Model.Organization;
 using ModelLibrary.Model.Report;
 using ModelLibrary.View;
 using OfficeOpenXml;
 using PetsServer.Auth.Authorization.Model;
-using PetsServer.Domain.Contract.Model;
-using PetsServer.Domain.Log.Service;
 using PetsServer.Domain.Report.Model;
 using PetsServer.Domain.Report.Repository;
 using PetsServer.Infrastructure.Services;
@@ -14,7 +11,7 @@ namespace PetsServer.Domain.Report.Service
 {
     public class ReportService
     {
-        private ReportRepository _repository;
+        private readonly ReportRepository _repository;
         public ReportService()
         {
             _repository = new ReportRepository();
@@ -27,6 +24,8 @@ namespace PetsServer.Domain.Report.Service
             model.DateEnd = to;
             // на время
             model.Number = new Random().Next(1000);
+            model.DateStatus = DateTime.Now;
+            model.StatusId = 1;
 
             var acts = _repository.GetActs()
                 .Where(a => a.DateOfCapture > from && a.DateOfCapture < to);

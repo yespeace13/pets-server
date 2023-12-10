@@ -10,7 +10,7 @@ namespace PetsServer.Domain.Plan.Service;
 
 public class PlanService
 {
-    private PlanRepository _repository = new PlanRepository();
+    private readonly PlanRepository _repository = new();
 
     public int Create(PlanModel model)
     {
@@ -29,7 +29,8 @@ public class PlanService
     public void Delete(int id)
     {
         var model = GetOne(id);
-        _repository.Delete(model);
+        if(model != null)
+            _repository.Delete(model);
     }
 
     public PlanModel? GetOne(int id) => _repository.Get(id);

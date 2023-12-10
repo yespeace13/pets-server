@@ -6,7 +6,7 @@ namespace PetsServer.Domain.Act.Service;
 
 public class ActPhotoService
 {
-    private PetsContext _context = new PetsContext();
+    private readonly PetsContext _context = new();
 
     public int AddPhoto(int animalId, IFormFile file)
     {

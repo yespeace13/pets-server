@@ -15,22 +15,15 @@ namespace PetsServer.Domain.Plan.Controller
     [ApiController]
     [Route("plans")]
     [Authorize]
-    public class PlanController : ControllerBase
+    public class PlanController(IMapper mapper) : ControllerBase
     {
         // Сервис
-        private PlanService _service;
+        private readonly PlanService _service = new();
         // Для привилегий и доступа
-        private AuthenticationUserService _authenticationService;
+        private readonly AuthenticationUserService _authenticationService = new();
         // Маппер для данных
-        private readonly IMapper _mapper;
-        private LogService d_log = new LogService(typeof(PlanModel));
-
-        public PlanController(IMapper mapper)
-        {
-            _service = new PlanService();
-            _authenticationService = new AuthenticationUserService();
-            _mapper = mapper;
-        }
+        private readonly IMapper _mapper = mapper;
+        private readonly LogService _log = new(typeof(PlanModel));
 
         [HttpGet(Name = "GetPlans")]
         public IActionResult GetPage(
@@ -74,7 +67,7 @@ namespace PetsServer.Domain.Plan.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<PlanEdit, PlanModel>(view);
             var id = _service.Create(entity);
-            d_log.LogData(user, id);
+            _log.LogData(user, id);
             return Ok();
         }
 
@@ -89,7 +82,7 @@ namespace PetsServer.Domain.Plan.Controller
             var entity = _mapper.Map<PlanEdit, PlanModel>(view);
             entity.Id = id;
             _service.Update(entity);
-            d_log.LogData(user, id);
+            _log.LogData(user, id);
             return Ok();
         }
 
@@ -102,7 +95,7 @@ namespace PetsServer.Domain.Plan.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            d_log.LogData(user, id);
+            _log.LogData(user, id);
             return Ok();
         }
     }

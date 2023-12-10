@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ModelLibrary.Model.Papka;
+using ModelLibrary.Model.LogInformation;
 using ModelLibrary.View;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Log.Model;
@@ -10,11 +10,11 @@ namespace PetsServer.Domain.Log.Service;
 
 public class LogService
 {
-    private Type? _entity;
+    private readonly Type? _entity;
     public LogService(Type entity) => _entity = entity;
     public LogService() { }
 
-    private LogRepository _repository = new LogRepository();
+    private readonly LogRepository _repository = new();
 
     public void Delete(int id)
     {
@@ -60,13 +60,13 @@ public class LogService
         return pageSettings;
     }
 
-    //public byte[] ExportToExcel(string filters, IMapper mapper)
-    //{
-    //    IEnumerable<LogModel> models = mapper.Map<List<OrganizationViewList>>(_repository.Get());
-    //    models = new FilterObjects<OrganizationViewList>().Filter(models, filters);
-    //    return ExportDataToExcel.Export(
-    //        "Организации", models.ToList());
-    //}
+    public byte[] ExportToExcel(string filters, IMapper mapper)
+    {
+        IEnumerable<LogViewList> views = mapper.Map<List<LogViewList>>(_repository.Get());
+        views = new FilterObjects<LogViewList>().Filter(views, filters);
+        return ExportDataToExcel.Export(
+            "Журнал", views.ToList());
+    }
 
     /// <summary>
     /// Метод для логирования записи, которую изменили

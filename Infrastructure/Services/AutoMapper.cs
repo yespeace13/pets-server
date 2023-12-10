@@ -5,7 +5,7 @@ using ModelLibrary.Model.Authentication;
 using ModelLibrary.Model.Contract;
 using ModelLibrary.Model.Etc;
 using ModelLibrary.Model.Organization;
-using ModelLibrary.Model.Papka;
+using ModelLibrary.Model.LogInformation;
 using ModelLibrary.Model.Plan;
 using ModelLibrary.Model.Report;
 using PetsServer.Auth.Authorization.Model;

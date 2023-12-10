@@ -5,9 +5,7 @@ using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Act.Model;
 using PetsServer.Domain.Act.Service;
-using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Log.Service;
-using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Act.Controller
 {
@@ -17,10 +15,10 @@ namespace PetsServer.Domain.Act.Controller
     public class ActPhotoController : ControllerBase
     {
         // Сервис
-        private ActPhotoService _service = new ActPhotoService();
+        private readonly ActPhotoService _service = new();
         // Для привилегий и доступа
-        private AuthenticationUserService _authenticationService = new AuthenticationUserService();
-        private LogService _log = new LogService(typeof(ActModel));
+        private readonly AuthenticationUserService _authenticationService = new();
+        private readonly LogService _log = new(typeof(ActPhoto));
 
         [HttpGet("{animalId}", Name = "GetActPhotos")]
         public IActionResult Get(int animalId)

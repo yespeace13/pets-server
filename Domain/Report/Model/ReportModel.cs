@@ -1,4 +1,5 @@
 using PetsServer.Domain.Organization.Model;
+using PetsServer.Domain.Status.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +20,13 @@ public class ReportModel
 
     [Column("date_end")]
     public DateOnly DateEnd { get; set; }
+    [Column("status_id")]
+    public int StatusId { get; set; }
+
+    [ForeignKey(nameof(StatusId))]
+    public StatusModel Status { get; set; }
+    [Column("date_status")]
+    public DateTime DateStatus { get; set; }
 
     public ICollection<ReportContentModel>? ReportContent { get; set; }
 

@@ -28,7 +28,7 @@ public class PlanRepository : BaseRepository<PlanModel>
             .Include(p => p.Status);
     }
 
-    public int Create(PlanModel plan)
+    public new int Create(PlanModel plan)
     {
         _context.Add(plan);
         _context.SaveChanges();
