@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetsServer.Domain.Status.Model;
 
-[Table("Status")]
+[Table("status")]
 
 public class StatusModel
 {
