@@ -7,7 +7,7 @@ using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Log.Service;
 using PetsServer.Domain.Log.Model;
-using ModelLibrary.Model.Papka;
+using ModelLibrary.Model.LogInformation;
 using ModelLibrary.View;
 
 namespace PetsServer.Domain.Log.Controller
