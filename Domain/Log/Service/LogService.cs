@@ -96,6 +96,7 @@ public class LogService : ILog
         _repository.Create(log);
     }
 
+<<<<<<< HEAD
     //private IQueryable<LogModel> Filter(IQueryable<LogModel> models, string filtersQuery)
     //{
     //    if (string.IsNullOrEmpty(filtersQuery)) return models;
@@ -175,6 +176,8 @@ public class LogService : ILog
     //    return models;
     //}
 
+=======
+>>>>>>> f8942e9 (new log)
     public void Log(UserModel user, Entities entity, Possibilities action, int? idEntity = null, int? idFile = null)
     {
         throw new NotImplementedException();
