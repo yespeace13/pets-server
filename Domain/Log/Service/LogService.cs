@@ -8,7 +8,7 @@ using PetsServer.Infrastructure.Services;
 
 namespace PetsServer.Domain.Log.Service;
 
-public class LogService
+public class LogService : ILog
 {
     private readonly Type? _entity;
     public LogService(Type entity) => _entity = entity;
@@ -78,7 +78,7 @@ public class LogService
     /// <exception cref="ArgumentNullException"></exception>
     /// проверка имени 2
 
-    public void LogData(UserModel user, int? idEntity = null, int? idFile = null)
+    public void Log(UserModel user, int? idEntity = null, int? idFile = null)
     {
         if (_entity == null) throw new ArgumentNullException("Не для того");
         if(idEntity == null && idFile == null) throw new ArgumentNullException("Не ввели идентификатор");
@@ -174,5 +174,10 @@ public class LogService
     //    }
     //    return models;
     //}
+
+    public void Log(UserModel user, Entities entity, Possibilities action, int? idEntity = null, int? idFile = null)
+    {
+        throw new NotImplementedException();
+    }
 }
 

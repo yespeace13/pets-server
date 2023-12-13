@@ -77,7 +77,7 @@ namespace PetsServer.Domain.Report.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            d_log.LogData(user, id);
+            d_log.Log(user, id);
             return Ok();
         }
     }

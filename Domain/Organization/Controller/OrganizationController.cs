@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ModelLibrary.Model.Organization;
-using ModelLibrary.View;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Domain.Organization.Model;
@@ -9,29 +8,22 @@ using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Log.Service;
-using PetsServer.Domain.Contract.Model;
 
 namespace PetsServer.Domain.Organization.Controller
 {
     [ApiController]
     [Route("organizations")]
     [Authorize]
-    public class OrganizationController : ControllerBase
+    public class OrganizationController(IMapper mapper, ILog logger) : ControllerBase
     {
         // Сервис
-        private OrganizationService _service;
+        private readonly OrganizationService _service = new();
         // Для привилегий и доступа
-        private AuthenticationUserService _authenticationService;
+        private readonly AuthenticationUserService _authenticationService = new();
         // Маппер для данных
-        private readonly IMapper _mapper;
-        private LogService d_log = new LogService(typeof(OrganizationModel));
-
-        public OrganizationController(IMapper mapper)
-        {
-            _service = new OrganizationService();
-            _authenticationService = new AuthenticationUserService();
-            _mapper = mapper;
-        }
+        private readonly IMapper _mapper = mapper;
+        private LogService _log = new(typeof(OrganizationModel));
+        private readonly ILog _logger = logger;
 
         [HttpGet(Name = "GetOrganizations")]
         public IActionResult GetPage(
@@ -77,7 +69,7 @@ namespace PetsServer.Domain.Organization.Controller
 
             var organization = _mapper.Map<OrganizationModel>(view);
             var id = _service.Create(organization);
-            d_log.LogData(user, id);
+            _log.Log(user, id);
             return Ok();
         }
 
@@ -92,7 +84,7 @@ namespace PetsServer.Domain.Organization.Controller
             var organization = _mapper.Map<OrganizationEdit, OrganizationModel>(view);
             organization.Id = id;
             _service.Update(organization);
-            d_log.LogData(user, id);
+            _log.Log(user, id);
             return Ok();
         }
 
@@ -105,7 +97,7 @@ namespace PetsServer.Domain.Organization.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            d_log.LogData(user, id);
+            _log.Log(user, id);
             return Ok();
         }
     }

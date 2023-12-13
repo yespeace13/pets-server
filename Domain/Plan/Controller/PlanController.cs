@@ -67,7 +67,7 @@ namespace PetsServer.Domain.Plan.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<PlanEdit, PlanModel>(view);
             var id = _service.Create(entity);
-            _log.LogData(user, id);
+            _log.Log(user, id);
             return Ok();
         }
 
@@ -82,7 +82,7 @@ namespace PetsServer.Domain.Plan.Controller
             var entity = _mapper.Map<PlanEdit, PlanModel>(view);
             entity.Id = id;
             _service.Update(entity);
-            _log.LogData(user, id);
+            _log.Log(user, id);
             return Ok();
         }
 
@@ -95,7 +95,7 @@ namespace PetsServer.Domain.Plan.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            _log.LogData(user, id);
+            _log.Log(user, id);
             return Ok();
         }
     }
