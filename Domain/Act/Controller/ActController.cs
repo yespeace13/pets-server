@@ -75,7 +75,7 @@ namespace PetsServer.Domain.Act.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<ActEdit, ActModel>(view);
             var id = _service.Create(entity);
-            d_log.LogData(user, id);
+            d_log.Log(user, id);
             return Ok(id);
 
         }
@@ -91,7 +91,7 @@ namespace PetsServer.Domain.Act.Controller
             var entity = _mapper.Map<ActEdit, ActModel>(view);
             entity.Id = id;
             _service.Update(entity);
-            d_log.LogData(user, id);
+            d_log.Log(user, id);
             return Ok();
         }
 
@@ -104,7 +104,7 @@ namespace PetsServer.Domain.Act.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            d_log.LogData(user, id);
+            d_log.Log(user, id);
             return Ok();
         }
     }

@@ -39,7 +39,7 @@ namespace PetsServer.Domain.Act.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var photoId = _service.AddPhoto(actId, file);
-            _log.LogData(user, actId, photoId);
+            _log.Log(user, actId, photoId);
             return Ok();
         }
 
@@ -52,7 +52,7 @@ namespace PetsServer.Domain.Act.Controller
                 return Problem(null, null, 403, "У вас нет привилегий");
             var actId = _service.GetActIdByPhotoId(id);
             _service.DeletePhoto(id);
-            _log.LogData(user, actId, id);
+            _log.Log(user, actId, id);
             return Ok();
         }
     }

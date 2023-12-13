@@ -39,7 +39,7 @@ namespace PetsServer.Domain.Contract.Controller
             if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var photoId = _service.AddPhoto(contractId, file);
-            _log.LogData(user, contractId, photoId);
+            _log.Log(user, contractId, photoId);
             return Ok();
         }
 
@@ -53,7 +53,7 @@ namespace PetsServer.Domain.Contract.Controller
 
             var contractId = _service.GetContractIdByPhotoId(id);
             _service.DeletePhoto(id);
-            _log.LogData(user, contractId, id);
+            _log.Log(user, contractId, id);
             //_service.DeletePhoto(id);
             //// TODO передать id контракта
             //_log.LogData(user, null, id);
