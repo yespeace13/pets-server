@@ -13,5 +13,5 @@ public class RoleModel
     [Column("name")]
     public string Name { get; }
 
-    public IQueryable<EntityPossibilities> Possibilities { get; set; }
+    public ICollection<EntityPossibilities> Possibilities { get; set; }
 }
