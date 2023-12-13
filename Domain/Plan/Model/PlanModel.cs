@@ -1,4 +1,3 @@
-using PetsServer.Domain.Status.Model;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,7 +21,7 @@ public class PlanModel
     public int StatusId { get; set; }
 
     [ForeignKey(nameof(StatusId))]
-    public StatusModel Status { get; set; }
+    public PlanStatusModel Status { get; set; }
 
     public List<PlanContentModel> PlanContent { get; set; }
 

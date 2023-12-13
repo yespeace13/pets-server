@@ -20,9 +20,13 @@ namespace PetsServer.Domain.Log.Model
 
         [Column("action_date")]
         public DateTime ActionDate { get; set; }
-
+        [Column("action")]
+        public Possibilities Action { get; set; }
         [Column("entity")]
-        public string Entity { get; set; }
+        public Entities Entity { get; set; }
+
+        [Column("entity_description")]
+        public string EntityDescription { get; set; }
 
         [Column("id_object")]
         public int? ObjectId { get; set; }

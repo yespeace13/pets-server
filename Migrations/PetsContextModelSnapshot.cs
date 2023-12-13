@@ -99,7 +99,7 @@ namespace PetsServer.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("firts_name");
+                        .HasColumnName("first_name");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -131,7 +131,7 @@ namespace PetsServer.Migrations
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("Phone");
+                        .HasColumnName("phone");
 
                     b.Property<string>("Position")
                         .HasColumnType("text")
@@ -435,14 +435,22 @@ namespace PetsServer.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Action")
+                        .HasColumnType("integer")
+                        .HasColumnName("action");
+
                     b.Property<DateTime>("ActionDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("action_date");
 
-                    b.Property<string>("Entity")
+                    b.Property<int>("Entity")
+                        .HasColumnType("integer")
+                        .HasColumnName("entity");
+
+                    b.Property<string>("EntityDescription")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("entity");
+                        .HasColumnName("entity_description");
 
                     b.Property<int?>("FileId")
                         .HasColumnType("integer")
@@ -641,6 +649,25 @@ namespace PetsServer.Migrations
                     b.ToTable("plan");
                 });
 
+            modelBuilder.Entity("PetsServer.Domain.Plan.Model.PlanStatusModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("StatusName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("status_name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("plan_status");
+                });
+
             modelBuilder.Entity("PetsServer.Domain.Report.Model.ReportContentModel", b =>
                 {
                     b.Property<int>("Id")
@@ -692,16 +719,26 @@ namespace PetsServer.Migrations
                         .HasColumnType("date")
                         .HasColumnName("date_start");
 
+                    b.Property<DateTime>("DateStatus")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_status");
+
                     b.Property<int>("Number")
                         .HasColumnType("integer")
                         .HasColumnName("number");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer")
+                        .HasColumnName("status_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("report");
                 });
 
-            modelBuilder.Entity("PetsServer.Domain.Status.Model.StatusModel", b =>
+            modelBuilder.Entity("PetsServer.Domain.Report.Model.ReportStatusModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -717,7 +754,7 @@ namespace PetsServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Status");
+                    b.ToTable("report_status");
                 });
 
             modelBuilder.Entity("PetsServer.Auth.Authorization.Model.EntityPossibilities", b =>
@@ -930,7 +967,7 @@ namespace PetsServer.Migrations
 
             modelBuilder.Entity("PetsServer.Domain.Plan.Model.PlanModel", b =>
                 {
-                    b.HasOne("PetsServer.Domain.Status.Model.StatusModel", "Status")
+                    b.HasOne("PetsServer.Domain.Plan.Model.PlanStatusModel", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -956,6 +993,17 @@ namespace PetsServer.Migrations
                     b.Navigation("Locality");
 
                     b.Navigation("Report");
+                });
+
+            modelBuilder.Entity("PetsServer.Domain.Report.Model.ReportModel", b =>
+                {
+                    b.HasOne("PetsServer.Domain.Report.Model.ReportStatusModel", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("PetsServer.Auth.Authorization.Model.RoleModel", b =>
@@ -991,6 +1039,7 @@ namespace PetsServer.Migrations
                 {
                     b.Navigation("ReportContent");
                 });
+
 #pragma warning restore 612, 618
         }
     }

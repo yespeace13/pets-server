@@ -39,6 +39,32 @@ namespace PetsServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "plan_status",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    status_name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_plan_status", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "report_status",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    status_name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_report_status", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "role",
                 columns: table => new
                 {
@@ -62,6 +88,50 @@ namespace PetsServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_type_organization", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "plan",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    month = table.Column<int>(type: "integer", nullable: false),
+                    year = table.Column<int>(type: "integer", nullable: false),
+                    status_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_plan", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_plan_plan_status_status_id",
+                        column: x => x.status_id,
+                        principalTable: "plan_status",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "report",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    number = table.Column<int>(type: "integer", nullable: false),
+                    date_start = table.Column<DateOnly>(type: "date", nullable: false),
+                    date_end = table.Column<DateOnly>(type: "date", nullable: false),
+                    status_id = table.Column<int>(type: "integer", nullable: false),
+                    date_status = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_report", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_report_report_status_status_id",
+                        column: x => x.status_id,
+                        principalTable: "report_status",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,6 +166,8 @@ namespace PetsServer.Migrations
                     inn = table.Column<string>(type: "text", nullable: false),
                     kpp = table.Column<string>(type: "text", nullable: true),
                     address = table.Column<string>(type: "text", nullable: false),
+                    phone = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
                     type_organization_id = table.Column<int>(type: "integer", nullable: false),
                     legal_type_id = table.Column<int>(type: "integer", nullable: false),
                     locality_id = table.Column<int>(type: "integer", nullable: false)
@@ -119,6 +191,34 @@ namespace PetsServer.Migrations
                         name: "FK_organization_type_organization_type_organization_id",
                         column: x => x.type_organization_id,
                         principalTable: "type_organization",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "report_content",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    total_cost = table.Column<decimal>(type: "numeric", nullable: false),
+                    locality_id = table.Column<int>(type: "integer", nullable: false),
+                    number_of_animals = table.Column<int>(type: "integer", nullable: false),
+                    report_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_report_content", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_report_content_locality_locality_id",
+                        column: x => x.locality_id,
+                        principalTable: "locality",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_report_content_report_report_id",
+                        column: x => x.report_id,
+                        principalTable: "report",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -162,7 +262,14 @@ namespace PetsServer.Migrations
                     password = table.Column<string>(type: "text", nullable: false),
                     locality_id = table.Column<int>(type: "integer", nullable: false),
                     organization_id = table.Column<int>(type: "integer", nullable: false),
-                    role_id = table.Column<int>(type: "integer", nullable: true)
+                    role_id = table.Column<int>(type: "integer", nullable: true),
+                    last_name = table.Column<string>(type: "text", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    middle_name = table.Column<string>(type: "text", nullable: true),
+                    email = table.Column<string>(type: "text", nullable: true),
+                    department = table.Column<string>(type: "text", nullable: true),
+                    position = table.Column<string>(type: "text", nullable: true),
+                    phone = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -248,6 +355,71 @@ namespace PetsServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "contract_file",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    parent_id = table.Column<int>(type: "integer", nullable: false),
+                    path = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_contract_file", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_contract_file_contract_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "contract",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "log",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    action_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    action = table.Column<int>(type: "integer", nullable: false),
+                    entity = table.Column<int>(type: "integer", nullable: false),
+                    entity_description = table.Column<string>(type: "text", nullable: false),
+                    id_object = table.Column<int>(type: "integer", nullable: true),
+                    id_file = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_log", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_log_user_user_id",
+                        column: x => x.user_id,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "act_file",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    parent_id = table.Column<int>(type: "integer", nullable: false),
+                    path = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_act_file", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_act_file_act_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "act",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "animal",
                 columns: table => new
                 {
@@ -277,6 +449,61 @@ namespace PetsServer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "plan_content",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    day = table.Column<int>(type: "integer", nullable: false),
+                    locality_id = table.Column<int>(type: "integer", nullable: false),
+                    act_id = table.Column<int>(type: "integer", nullable: true),
+                    adress = table.Column<string>(type: "text", nullable: false),
+                    check = table.Column<bool>(type: "boolean", nullable: false),
+                    plan_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_plan_content", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_plan_content_act_act_id",
+                        column: x => x.act_id,
+                        principalTable: "act",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_plan_content_locality_locality_id",
+                        column: x => x.locality_id,
+                        principalTable: "locality",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_plan_content_plan_plan_id",
+                        column: x => x.plan_id,
+                        principalTable: "plan",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "animal_file",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    parent_id = table.Column<int>(type: "integer", nullable: false),
+                    path = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_animal_file", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_animal_file_animal_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "animal",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_act_contract_id",
                 table: "act",
@@ -293,9 +520,19 @@ namespace PetsServer.Migrations
                 column: "locality_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_act_file_parent_id",
+                table: "act_file",
+                column: "parent_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_animal_act_id",
                 table: "animal",
                 column: "act_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_animal_file_parent_id",
+                table: "animal_file",
+                column: "parent_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_contract_client_id",
@@ -325,6 +562,11 @@ namespace PetsServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_contract_file_parent_id",
+                table: "contract_file",
+                column: "parent_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_entity_possibilities_role_id",
                 table: "entity_possibilities",
                 column: "role_id");
@@ -342,6 +584,11 @@ namespace PetsServer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_log_user_id",
+                table: "log",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_organization_legal_type_id",
                 table: "organization",
                 column: "legal_type_id");
@@ -355,6 +602,41 @@ namespace PetsServer.Migrations
                 name: "IX_organization_type_organization_id",
                 table: "organization",
                 column: "type_organization_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_plan_status_id",
+                table: "plan",
+                column: "status_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_plan_content_act_id",
+                table: "plan_content",
+                column: "act_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_plan_content_locality_id",
+                table: "plan_content",
+                column: "locality_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_plan_content_plan_id",
+                table: "plan_content",
+                column: "plan_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_report_status_id",
+                table: "report",
+                column: "status_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_report_content_locality_id",
+                table: "report_content",
+                column: "locality_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_report_content_report_id",
+                table: "report_content",
+                column: "report_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_role_name",
@@ -388,30 +670,60 @@ namespace PetsServer.Migrations
                 name: "IX_user_role_id",
                 table: "user",
                 column: "role_id");
+            migrationBuilder.Sql(File.ReadAllText("Infrastructure\\Data\\InitData.sql"));
 
-            migrationBuilder.Sql(File.ReadAllText("InitData.sql"));
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "animal");
+                name: "act_file");
+
+            migrationBuilder.DropTable(
+                name: "animal_file");
 
             migrationBuilder.DropTable(
                 name: "contract_content");
 
             migrationBuilder.DropTable(
+                name: "contract_file");
+
+            migrationBuilder.DropTable(
                 name: "entity_possibilities");
 
             migrationBuilder.DropTable(
+                name: "log");
+
+            migrationBuilder.DropTable(
+                name: "plan_content");
+
+            migrationBuilder.DropTable(
+                name: "report_content");
+
+            migrationBuilder.DropTable(
+                name: "animal");
+
+            migrationBuilder.DropTable(
                 name: "user");
+
+            migrationBuilder.DropTable(
+                name: "plan");
+
+            migrationBuilder.DropTable(
+                name: "report");
 
             migrationBuilder.DropTable(
                 name: "act");
 
             migrationBuilder.DropTable(
                 name: "role");
+
+            migrationBuilder.DropTable(
+                name: "plan_status");
+
+            migrationBuilder.DropTable(
+                name: "report_status");
 
             migrationBuilder.DropTable(
                 name: "contract");

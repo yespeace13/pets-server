@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PetsServer.Domain.Status.Model;
+namespace PetsServer.Domain.Plan.Model;
 
-[Table("Status")]
+[Table("plan_status")]
 
-public class StatusModel
+public class PlanStatusModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id"), Key]
@@ -14,9 +14,9 @@ public class StatusModel
     [Column("status_name")]
     public string StatusName { get; set; }
 
-    public StatusModel() { }
+    public PlanStatusModel() { }
 
-    public StatusModel(int id, string statusName)
+    public PlanStatusModel(int id, string statusName)
     {
         Id = id;
         StatusName = statusName;

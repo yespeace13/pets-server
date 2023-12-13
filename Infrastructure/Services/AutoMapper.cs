@@ -107,7 +107,7 @@ namespace PetsServer.Infrastructure.Services
             CreateMap<PlanContentEdit, PlanContentModel>();
 
             CreateMap<LogModel, LogViewList>()
-                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.Patronymic))
+                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.LastName))
                 .ForMember(dest => dest.UserFirstName, opt => opt.MapFrom(src => src.User.FirstName))
                 .ForMember(dest => dest.UserPatronymic, opt => opt.MapFrom(src => src.User.Patronymic))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.Phone))
@@ -118,7 +118,7 @@ namespace PetsServer.Infrastructure.Services
                 .ForMember(dest => dest.WorkPhoneNumber, opt => opt.MapFrom(src => src.User.Organization.Phone))
                 .ForMember(dest => dest.WorkEmail, opt => opt.MapFrom(src => src.User.Organization.Email))
                 .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.User.Login))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Entity));
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.EntityDescription));
         }
     }
 }

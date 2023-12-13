@@ -40,7 +40,7 @@ public class UserModel
     [Column("last_name")]
     public string LastName { get; set; }
 
-    [Column("firts_name")]
+    [Column("first_name")]
     public string FirstName { get; set; }
     [Column("middle_name")]
     public string? Patronymic { get; set; }
@@ -50,7 +50,7 @@ public class UserModel
     public string? Department { get; set; }
     [Column("position")]
     public string? Position { get; set; }
-    [Column("Phone")]
+    [Column("phone")]
     public string Phone { get; set; }
 
     public UserModel() { }

@@ -14,7 +14,7 @@ namespace PetsServer.Domain.Organization.Controller
     [ApiController]
     [Route("organizations")]
     [Authorize]
-    public class OrganizationController(IMapper mapper, ILog logger) : ControllerBase
+    public class OrganizationController(IMapper mapper) : ControllerBase
     {
         // Сервис
         private readonly OrganizationService _service = new();
@@ -23,7 +23,7 @@ namespace PetsServer.Domain.Organization.Controller
         // Маппер для данных
         private readonly IMapper _mapper = mapper;
         private LogService _log = new(typeof(OrganizationModel));
-        private readonly ILog _logger = logger;
+        //private readonly ILog _logger = logger;
 
         [HttpGet(Name = "GetOrganizations")]
         public IActionResult GetPage(
