@@ -26,15 +26,5 @@ public class ReportModel
     [Column("date_status")]
     public DateTime DateStatus { get; set; }
 
-    public ICollection<ReportContentModel>? ReportContent { get; set; }
-
-    public ReportModel() { }
-    public ReportModel(
-            int id, int number, DateOnly dateStart, DateOnly dateEnd)
-    {
-        Id = id;
-        Number = number;
-        DateStart = dateStart;
-        DateEnd = dateEnd;
-    }
+    public ICollection<ReportContentModel> ReportContent { get; set; } = new List<ReportContentModel>();
 }

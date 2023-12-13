@@ -6,12 +6,7 @@ namespace PetsServer.Domain.Contract.Repository;
 
 public class ContractContentRepository
 {
-    private PetsContext _context;
-
-    public ContractContentRepository()
-    {
-        _context = new PetsContext();
-    }
+    private readonly PetsContext _context = new();
 
     public ContractContentModel? GetOne(int id)
     {

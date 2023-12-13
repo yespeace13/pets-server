@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetsServer.Base.Repository;
 using PetsServer.Domain.Organization.Model;
-using PetsServer.Infrastructure;
-using System.Diagnostics.Contracts;
 
 namespace PetsServer.Domain.Organization.Repository;
 
@@ -15,7 +14,7 @@ public class OrganizationRepository : BaseRepository<OrganizationModel>
 
     public List<LegalTypeModel> GetLegalTypes() => _context.LegalTypes.ToList();
 
-    public int Create(OrganizationModel organization)
+    public new int Create(OrganizationModel organization)
     {
         _context.Add(organization);
         _context.SaveChanges();

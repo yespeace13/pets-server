@@ -13,12 +13,4 @@ public class PlanStatusModel
 
     [Column("status_name")]
     public string StatusName { get; set; }
-
-    public PlanStatusModel() { }
-
-    public PlanStatusModel(int id, string statusName)
-    {
-        Id = id;
-        StatusName = statusName;
-    }
 }

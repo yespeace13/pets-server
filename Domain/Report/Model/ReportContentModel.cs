@@ -28,15 +28,4 @@ public class ReportContentModel
 
     [ForeignKey(nameof(ReportId))]
     public ReportModel Report { get; set; }
-
-    public ReportContentModel() { }
-    public ReportContentModel(
-            int id, decimal totalCost, LocalityModel locality, int numberOfAnimals, ReportModel report)
-    {
-        Id = id;
-        TotalCost = totalCost;
-        LocalityId = locality.Id;
-        NumberOfAnimals = numberOfAnimals;
-        ReportId = report.Id;
-    }
 }

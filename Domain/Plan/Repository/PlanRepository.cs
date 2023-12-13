@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using PetsServer.Base.Repository;
 using PetsServer.Domain.Plan.Model;
-using PetsServer.Infrastructure;
 
 namespace PetsServer.Domain.Plan.Repository;
 

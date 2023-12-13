@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace PetsServer.BaseFile.Model;
-
+namespace PetsServer.Base.BaseFile.Model;
 
 public class BaseFileModel<T>
 {

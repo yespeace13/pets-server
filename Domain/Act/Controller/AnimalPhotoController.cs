@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using PetsServer.Auth.Authentication;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
-using PetsServer.Domain.Animal.Service;
+using PetsServer.Domain.Act.Model;
+using PetsServer.Domain.Act.Service;
+using PetsServer.Domain.Log.Service;
 
-namespace PetsServer.Domain.Animal.Controller
+namespace PetsServer.Domain.Act.Controller
 {
     [ApiController]
     [Route("animal-photo")]
@@ -13,16 +15,17 @@ namespace PetsServer.Domain.Animal.Controller
     public class AnimalPhotoController : ControllerBase
     {
         // Сервис
-        private AnimalPhotoService _service = new AnimalPhotoService();
+        private readonly AnimalPhotoService _service = new();
         // Для привилегий и доступа
-        private AuthenticationUserService _authenticationService = new AuthenticationUserService();
+        private readonly AuthenticationService _authenticationService = new();
+        private readonly LoggerFacade _logger = new(new DbLogger(), new TxtLogger());
 
         [HttpGet("{animalId}", Name = "GetAnimalPhotos")]
         public IActionResult Get(int animalId)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var photos = _service.Get(animalId);
             return Ok(photos);
@@ -33,9 +36,10 @@ namespace PetsServer.Domain.Animal.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Insert, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            _service.AddPhoto(animalId, file);
+            var id = _service.AddPhoto(animalId, file);
+            _logger.Log(user, Entities.AnimalPhoto, Possibilities.Insert, typeof(AnimalPhoto), animalId, id);
             return Ok();
         }
 
@@ -44,9 +48,10 @@ namespace PetsServer.Domain.Animal.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Delete, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            _service.DeletePhoto(id);
+            var animalId = _service.DeletePhoto(id);
+            _logger.Log(user, Entities.AnimalPhoto, Possibilities.Delete, typeof(AnimalPhoto), animalId, id);
             return Ok();
         }
     }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -13,19 +12,11 @@ namespace PetsServer.Auth.Authentication;
 
 [Route("login")]
 [ApiController]
-public class AuthenticationUserController : ControllerBase
+public class AuthenticationController(IMapper mapper, IConfiguration configuration) : ControllerBase
 {
-    private AuthenticationUserService _authenticationService;
-
-    private IMapper _mapper;
-    private IConfiguration _configuration;
-    public AuthenticationUserController(IMapper mapper, IConfiguration configuration)
-    {
-        _authenticationService = new AuthenticationUserService();
-        _mapper = mapper;
-        _configuration = configuration;
-    }
-
+    private readonly AuthenticationService _authenticationService = new();
+    private readonly IMapper _mapper = mapper;
+    private readonly IConfiguration _configuration = configuration;
 
     [HttpPost(Name = "CreteUser")]
     public IActionResult Create([FromBody] UserEdit view)
@@ -42,20 +33,21 @@ public class AuthenticationUserController : ControllerBase
     [HttpGet]
     public IActionResult Login(string login, string password)
     {
-        UserModel? person = new AuthenticationUserService().GetUser(login);
+        UserModel? person = new AuthenticationService().GetUser(login);
 
         if (person is null) return Unauthorized();
         var result = new PasswordHasher<UserModel>().VerifyHashedPassword(person, person.Password, password);
         if (result != PasswordVerificationResult.Success) return Unauthorized();
 
-        var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Login) };
+        var claims = new List<Claim> { new(ClaimTypes.Name, person.Login) };
         var jwt = new JwtSecurityToken(
                 issuer: _configuration.GetSection("JwtSettings").GetSection("Issuer").Value,
                 audience: _configuration.GetSection("JwtSettings").GetSection("Audience").Value,
                 claims: claims,
         expires: DateTime.UtcNow.Add(TimeSpan.FromHours(12)),
                 signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings").GetSection("Key").Value)),
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings").GetSection("Key").Value)),
                     SecurityAlgorithms.HmacSha256));
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
         var response = new

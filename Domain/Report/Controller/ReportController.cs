@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Report;
 using PetsServer.Auth.Authentication;
@@ -7,6 +6,7 @@ using PetsServer.Auth.Authorization.Model;
 using PetsServer.Auth.Authorization.Service;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Log.Service;
+using PetsServer.Domain.Report.Model;
 using PetsServer.Domain.Report.Service;
 
 namespace PetsServer.Domain.Report.Controller
@@ -14,30 +14,25 @@ namespace PetsServer.Domain.Report.Controller
     [Route("reports")]
     [ApiController]
     // [Authorize]
-    public class ReportController : ControllerBase
+    public class ReportController(IMapper mapper) : ControllerBase
     {
-        private ReportService _service;
-        private AuthenticationUserService _authenticationService;
-        private IMapper _mapper;
-        private LogService d_log = new LogService(typeof(ContractModel));
-        public ReportController(IMapper mapper)
-        {
-            _service = new ReportService();
-            _authenticationService = new AuthenticationUserService();
-            _mapper = mapper;
-        }
+        private readonly ReportService _service = new();
+        private readonly AuthenticationService _authenticationService = new();
+        private readonly IMapper _mapper = mapper;
+        private readonly LoggerFacade _logger = new(new DbLogger(), new TxtLogger());
 
         [HttpPost(Name = "CreateReport")]
         public IActionResult Create(string from, string to)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Report, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Insert, Entities.Report, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             if (DateOnly.TryParse(from, out var fromDate) || DateOnly.TryParse(to, out var toDate))
                 return BadRequest();
-            _service.Create(fromDate, toDate);
+            var id = _service.Create(fromDate, toDate);
+            _logger.Log(user, Entities.Report, Possibilities.Insert, typeof(ReportModel), id);
             return Ok();
         }
 
@@ -50,7 +45,7 @@ namespace PetsServer.Domain.Report.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Report, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Report, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var views = _service.Get(page, pages, filter, sortField, sortType, user, _mapper);
             return Ok(views);
@@ -61,7 +56,7 @@ namespace PetsServer.Domain.Report.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Report, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Report, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _service.Get(id);
             var view = _mapper.Map<ReportViewOne>(entity);
@@ -73,11 +68,11 @@ namespace PetsServer.Domain.Report.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Report, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Delete, Entities.Report, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            d_log.Log(user, id);
+            _logger.Log(user, Entities.Report, Possibilities.Delete, typeof(ReportModel), id);
             return Ok();
         }
     }

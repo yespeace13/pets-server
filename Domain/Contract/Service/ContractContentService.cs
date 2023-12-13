@@ -1,16 +1,14 @@
-﻿using ModelLibrary.Model.Contract;
-using PetsServer.Domain.Contract.Model;
+﻿using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Contract.Repository;
 
-namespace PetsServer.Domain.Contract.Service
+namespace PetsServer.Domain.Contract.Service;
+
+internal class ContractContentService
 {
-    internal class ContractContentService
+    private readonly ContractContentRepository _repository = new();
+    
+    internal IQueryable<ContractContentModel> GetAllContentByContractId(int contractId)
     {
-        private ContractContentRepository _repository = new ContractContentRepository();
-        
-        internal IQueryable<ContractContentModel> GetContractAll(int contractId)
-        {
-            return _repository.GetContractAll(contractId);
-        }
+        return _repository.GetContractAll(contractId);
     }
 }

@@ -1,35 +1,38 @@
 ﻿using ModelLibrary.Model.Etc;
-using PetsServer.Domain.Animal.Model;
+using PetsServer.Domain.Act.Model;
 using PetsServer.Infrastructure.Context;
 
-namespace PetsServer.Domain.Animal.Service;
+namespace PetsServer.Domain.Act.Service;
 
 public class AnimalPhotoService
 {
-    private PetsContext _context = new PetsContext();
+    private readonly PetsContext _context = new();
 
-    public void AddPhoto(int animalId, IFormFile file)
+    public int AddPhoto(int animalId, IFormFile file)
     {
         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         var path = Path.Combine("Files", fileName);
         using var stream = new FileStream(path, FileMode.Create);
         file.CopyTo(stream);
-        _context.Add(new AnimalPhoto
+        var animalPhoto = new AnimalPhoto
         {
             ParentId = animalId,
             Path = path
-        });
+        };
+        _context.Add(animalPhoto);
         _context.SaveChanges();
+        return animalPhoto.Id;
     }
 
-    public void DeletePhoto(int id)
+    public int DeletePhoto(int id)
     {
         var photo = _context.AnimalPhotos.FirstOrDefault(p => p.Id == id);
-        if (photo == null) return;
+        if (photo == null) return -1;
         File.Delete(photo.Path);
 
         _context.AnimalPhotos.Remove(photo);
         _context.SaveChanges();
+        return photo.ParentId;
     }
 
     public List<FileBaseView> Get(int animalId)
@@ -41,6 +44,5 @@ public class AnimalPhotoService
             File = File.ReadAllBytes(p.Path)
         }).ToList();
     }
-
 }
 

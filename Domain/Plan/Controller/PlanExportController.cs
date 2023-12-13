@@ -4,21 +4,14 @@ using PetsServer.Domain.Plan.Service;
 
 namespace PetsServer.Domain.Plan.Controller;
 
-[Route("plans-excel")]
+[Route("plans-export")]
 [ApiController]
-public class PlanExportController : ControllerBase
+public class PlanExportController(IMapper mapper) : ControllerBase
 {
-
     // Маппер для данных
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper = mapper;
 
-    private PlanService _service;
-
-    public PlanExportController(IMapper mapper)
-    {
-        _service = new PlanService();
-        _mapper = mapper;
-    }
+    private PlanService _service = new();
 
     [HttpGet]
     public IActionResult Get(string? filters)

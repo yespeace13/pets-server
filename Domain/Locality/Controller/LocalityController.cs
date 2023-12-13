@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PetsServer.Domain.Locality.Repository;
+using PetsServer.Domain.Locality.Service;
 
 namespace PetsServer.Domain.Locality.Controller;
 
@@ -12,7 +12,7 @@ public class LocalityController : ControllerBase
     [HttpGet(Name = "GetLocalities")]
     public IActionResult GetAll()
     {
-        return Ok(new LocalityRepository().GetLocalitys());
+        return Ok(new LocalityService().GetLocalitys());
     }
 
     [HttpGet("{id}", Name = "GetLocality")]

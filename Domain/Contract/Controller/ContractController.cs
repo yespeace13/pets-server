@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ModelLibrary.View;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Model.Contract;
@@ -16,26 +15,18 @@ namespace PetsServer.Domain.Contract.Controller
     [ApiController]
     [Route("contracts")]
     [Authorize]
-    public class ContractController : ControllerBase
+    public class ContractController(IMapper mapper, IValidator<ContractModel> validator) : ControllerBase
     {
         // Сервис
-        private ContractService _service;
+        private readonly ContractService _service = new();
         // Для привилегий и доступа
-        private AuthenticationUserService _authenticationService;
+        private readonly AuthenticationService _authenticationService = new();
         // Маппер для данных
-        private readonly IMapper _mapper;
+        private readonly IMapper _mapper = mapper;
         // Валидатор
-        private readonly IValidator<ContractModel> _validator;
+        private readonly IValidator<ContractModel> _validator = validator;
         // Логгер
-        private LogService d_log = new LogService(typeof(ContractModel));
-
-        public ContractController(IMapper mapper, IValidator<ContractModel> validator)
-        {
-            _service = new ContractService();
-            _authenticationService = new AuthenticationUserService();
-            _mapper = mapper;
-            _validator = validator;
-        }
+        private readonly LoggerFacade _log = new(new DbLogger(), new TxtLogger());
 
         [HttpGet(Name = "GetContracts")]
         public IActionResult GetPage(
@@ -47,25 +38,22 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
+            var pageView = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
 
-            var pageView = new PageSettings<ContractViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
-
-            pageView.Items = _mapper.Map<IEnumerable<ContractViewList>>(pageModel.Items);
             return Ok(pageView);
         }
 
         [HttpGet("{id}", Name = "GetContract")]
-        public IActionResult GetOne(int id)
+        public IActionResult Get(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Contract, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
-            var entity = _service.GetOne(id);
+            var entity = _service.Get(id);
 
             if (entity == null) return BadRequest("Контракт не найден");
 
@@ -78,17 +66,16 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Contract, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Insert, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<ContractEdit, ContractModel>(view);
 
             var validationResult = _validator.Validate(entity);
             if (!validationResult.IsValid)
-            {
                 return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
-            }
+            
             var id = _service.Create(entity);
-            d_log.Log(user, id);
+            _log.Log(user,Entities.Contract, Possibilities.Insert, typeof(ContractModel), id);
             return Ok(id);
 
         }
@@ -99,7 +86,7 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Update, Entities.Contract, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Update, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             var entity = _mapper.Map<ContractEdit, ContractModel>(view);
@@ -107,11 +94,10 @@ namespace PetsServer.Domain.Contract.Controller
 
             var validationResult = _validator.Validate(entity);
             if (!validationResult.IsValid)
-            {
                 return BadRequest(String.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
-            }
+            
             _service.Update(entity);
-            d_log.Log(user, id);
+            _log.Log(user, Entities.Contract, Possibilities.Update, typeof(ContractModel), id);
             return Ok();
         }
 
@@ -120,11 +106,11 @@ namespace PetsServer.Domain.Contract.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Contract, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Delete, Entities.Contract, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            d_log.Log(user, id);
+            _log.Log(user, Entities.Contract, Possibilities.Delete, typeof(ContractModel), id);
             return Ok();
         }
     }

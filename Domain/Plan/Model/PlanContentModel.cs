@@ -38,17 +38,4 @@ public class PlanContentModel
 
     [ForeignKey(nameof(PlanId))]
     public PlanModel Plan { get; set; }
-
-    public PlanContentModel() { }
-    public PlanContentModel(
-            int id, int day, LocalityModel locality, ActModel act, string adress, bool check, PlanModel plan)
-    {
-        Id = id;
-        Day = day;
-        LocalityId = locality.Id;
-        ActId = act.Id;
-        Adress = adress;
-        Check = check;
-        PlanId = plan.Id;
-    }
 }

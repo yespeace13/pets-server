@@ -42,7 +42,7 @@ public class LogService
         var models = _repository.Get();
 
         //// Фильтрация
-        //models = Filter(models, filter);
+        models = Filter(models, filter);
 
         var views = mapper.Map<IEnumerable<LogViewList>>(models);
 
@@ -115,6 +115,7 @@ public class LogService
 
         foreach (var filter in filters.Columns)
         {
+            if (filters[filter] == "") continue;
             switch (filter)
             {
                 case "Id":
@@ -173,11 +174,6 @@ public class LogService
             }
         }
         return models;
-    }
-
-    public void Log(UserModel user, Entities entity, Possibilities action, int? idEntity = null, int? idFile = null)
-    {
-        throw new NotImplementedException();
     }
 }
 

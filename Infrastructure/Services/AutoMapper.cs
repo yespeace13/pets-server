@@ -10,7 +10,6 @@ using ModelLibrary.Model.Plan;
 using ModelLibrary.Model.Report;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Act.Model;
-using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Log.Model;

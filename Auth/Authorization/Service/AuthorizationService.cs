@@ -4,11 +4,9 @@ using PetsServer.Infrastructure.Context;
 
 namespace PetsServer.Auth.Authorization.Service;
 
-public class AuthorizationUserService
+public class AuthorizationService
 {
-    private PetsContext _context;
-
-    public AuthorizationUserService() => _context = new PetsContext();
+    private PetsContext _context = new();
 
     public static bool IsPossible(Possibilities possibility, Entities entity, UserModel user)
     {
@@ -16,7 +14,6 @@ public class AuthorizationUserService
         {
             var possibilities = user.Role.Possibilities.Where(r => r.Entity == entity);
             return possibilities.Any(p => p.Possibility == possibility);
-
         }
         return false;
     }

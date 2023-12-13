@@ -32,7 +32,7 @@
   <ItemGroup>
     <Folder Include="Domain\Plan\Service\" />
     <Folder Include="Domain\Plan\Repository\" />
-    <Folder Include="Domain\Status\Model\" />
+    <Folder Include="Files\" />
   </ItemGroup>
 
 </Project>

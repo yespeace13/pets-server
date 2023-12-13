@@ -6,8 +6,8 @@ namespace PetsServer.Domain.Contract.Validator;
 
 public class ContractValidator : AbstractValidator<ContractModel>
 {
-    private ContractRepository _repository = new ContractRepository();
-    private ContractContentRepository _contentRepository = new ContractContentRepository();
+    private readonly ContractRepository _repository = new();
+    private readonly ContractContentRepository _contentRepository = new();
 
     public ContractValidator()
     {
@@ -48,7 +48,7 @@ public class ContractValidator : AbstractValidator<ContractModel>
 
     private bool IsUnique(ContractModel contract)
     {
-        return !_repository.GetAll().Any(
+        return !_repository.Get().Any(
             c => c.Number == contract.Number
             && c.ClientId == contract.ClientId
             && c.ExecutorId == contract.ExecutorId

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Extensions;
-using ModelLibrary.View;
+﻿using ModelLibrary.View;
 
 namespace PetsServer.Infrastructure.Services
 {

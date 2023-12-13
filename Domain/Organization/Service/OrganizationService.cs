@@ -10,7 +10,7 @@ namespace PetsServer.Domain.Organization.Service;
 
 public class OrganizationService
 {
-    private OrganizationRepository _repository = new OrganizationRepository();
+    private readonly OrganizationRepository _repository = new();
 
     public int Create(OrganizationModel organization)
     {
@@ -35,16 +35,6 @@ public class OrganizationService
         var organization = GetOne(id);
         _repository.Delete(organization);
     }
-
-    public LegalTypeModel? GetLegalType(int id) => _repository.GetLegalType(id);
-
-    public TypeOrganizationModel? GetTypeOrganization(int id) => _repository.GetTypeOrganization(id);
-
-    public List<TypeOrganizationModel> GetTypesOrganization() => _repository.GetTypesOrganization();
-
-    public List<LegalTypeModel> GetLegalTypes() => _repository.GetLegalTypes();
-
-    public OrganizationModel? GetOne(int id) => _repository.Get(id);
 
     public PageSettings<OrganizationViewList> GetPage(int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)
     {
@@ -99,5 +89,15 @@ public class OrganizationService
         return ExportDataToExcel.Export(
             "Организации", organizations.ToList());
     }
+
+    public LegalTypeModel? GetLegalType(int id) => _repository.GetLegalType(id);
+
+    public TypeOrganizationModel? GetTypeOrganization(int id) => _repository.GetTypeOrganization(id);
+
+    public List<TypeOrganizationModel> GetTypesOrganization() => _repository.GetTypesOrganization();
+
+    public List<LegalTypeModel> GetLegalTypes() => _repository.GetLegalTypes();
+
+    public OrganizationModel? GetOne(int id) => _repository.Get(id);
 }
 

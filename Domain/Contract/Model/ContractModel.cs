@@ -32,20 +32,7 @@ public class ContractModel
     [ForeignKey(nameof(ClientId))]
     public OrganizationModel Client { get; set; }
 
-    public ICollection<ContractContentModel>? ContractContent { get; set; }
+    public ICollection<ContractContentModel> ContractContent { get; set; } = new List<ContractContentModel>();
 
     public ICollection<ContractPhoto>? FIles { get; set; }
-
-    public ContractModel() { }
-    public ContractModel(
-            int id, string number, DateOnly dateOfConclusion, DateOnly dateValidation,
-            OrganizationModel executors, OrganizationModel clients)
-    {
-        Id = id;
-        Number = number;
-        DateOfConclusion = dateOfConclusion;
-        DateValid = dateValidation;
-        ExecutorId = executors.Id;
-        ClientId = clients.Id;
-    }
 }

@@ -52,7 +52,9 @@ public class PlanService
         // берем по этим правилам
         var plans = _repository.Get();
 
-        var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Schedule && p.Possibility == Possibilities.Read).First().Restriction;
+        var userRestiction = user.Role.Possibilities
+            .Where(p => p.Entity == Entities.Schedule && p.Possibility == Possibilities.Read)
+            .First().Restriction;
 
         //if (userRestiction == Restrictions.Organization)
         //    plans = plans.Where(c => c. == user.Organization.Id);

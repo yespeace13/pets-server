@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Act.Model;
-using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Log.Model;
@@ -14,7 +13,7 @@ namespace PetsServer.Infrastructure.Context
 {
     // dotnet ef migrations add InitialCreate добавить миграцию
     // dotnet ef database update применить миграцию для бд
-    // Добавить в миграцию migrationBuilder.Sql(File.ReadAllText("InitData.sql"));
+    // Добавить в миграцию migrationBuilder.Sql(File.ReadAllText("Infrastructure\\Data\\InitData.sql"));
     public class PetsContext : DbContext
     {
         public DbSet<TypeOrganizationModel> TypeOrganizations { get; set; }
@@ -38,7 +37,6 @@ namespace PetsServer.Infrastructure.Context
         public DbSet<AnimalPhoto> AnimalPhotos { get; set; }
         public DbSet<ActPhoto> ActPhotos { get; set; }
         public DbSet<ContractPhoto> ContractPhotos { get; set; }
-        
         public DbSet<LogModel> Logs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

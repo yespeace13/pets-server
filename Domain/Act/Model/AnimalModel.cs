@@ -1,8 +1,7 @@
-using PetsServer.Domain.Act.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PetsServer.Domain.Animal.Model;
+namespace PetsServer.Domain.Act.Model;
 
 [Table("animal")]
 public class AnimalModel
@@ -51,24 +50,4 @@ public class AnimalModel
     public ActModel Act { get; set; }
 
     public List<AnimalPhoto>? Photos { get; set; }
-
-    public AnimalModel() { }
-    public AnimalModel(
-            int id, string category, bool sex, string breed, double size, string wool, string color,
-            string ears, string tail, string specialSigns, string identificationLabel, string chipNumber, ActModel act)
-    {
-        Id = id;
-        Category = category;
-        Sex = sex;
-        Breed = breed;
-        Size = size;
-        Wool = wool;
-        Color = color;
-        Ears = ears;
-        Tail = tail;
-        SpecialSigns = specialSigns;
-        IdentificationLabel = identificationLabel;
-        ChipNumber = chipNumber;
-        ActId = act.Id;
-    }
 }

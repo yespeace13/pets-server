@@ -4,21 +4,14 @@ using PetsServer.Domain.Organization.Service;
 
 namespace PetsServer.Domain.Organization.Controller;
 
-[Route("organizationexport")]
+[Route("organization-export")]
 [ApiController]
-public class OrganizationExportController : ControllerBase
+public class OrganizationExportController(IMapper mapper) : ControllerBase
 {
-
     // Маппер для данных
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper = mapper;
 
-    private OrganizationService _service;
-
-    public OrganizationExportController(IMapper mapper)
-    {
-        _service = new OrganizationService();
-        _mapper = mapper;
-    }
+    private readonly OrganizationService _service = new(); 
 
     [HttpGet]
     public IActionResult Get(string? filters)

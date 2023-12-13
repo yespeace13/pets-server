@@ -1,4 +1,4 @@
-﻿using PetsServer.BaseFile.Model;
+﻿using PetsServer.Base.BaseFile.Model;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetsServer.Domain.Act.Model;

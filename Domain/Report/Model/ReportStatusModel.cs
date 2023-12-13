@@ -13,13 +13,4 @@ public class ReportStatusModel
 
     [Column("status_name")]
     public string StatusName { get; set; }
-
-
-    public ReportStatusModel() { }
-
-    public ReportStatusModel(int id, string statusName)
-    {
-        Id = id;
-        StatusName = statusName;
-    }
 }

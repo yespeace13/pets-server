@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ModelLibrary.View;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetsServer.Auth.Authentication;
@@ -15,22 +14,15 @@ namespace PetsServer.Domain.Act.Controller
     [ApiController]
     [Route("acts")]
     [Authorize]
-    public class ActController : ControllerBase
+    public class ActController(IMapper mapper) : ControllerBase
     {
         // Сервис
-        private ActService _service;
+        private readonly ActService _service = new();
         // Для привилегий и доступа
-        private AuthenticationUserService _authenticationService;
+        private readonly AuthenticationService _authenticationService = new();
         // Маппер для данных
-        private readonly IMapper _mapper;
-        private LogService d_log = new LogService(typeof(ActModel));
-
-        public ActController(IMapper mapper)
-        {
-            _service = new ActService();
-            _authenticationService = new AuthenticationUserService();
-            _mapper = mapper;
-        }
+        private readonly IMapper _mapper = mapper;
+        private readonly LoggerFacade _log = new(new DbLogger(), new TxtLogger());
 
         [HttpGet(Name = "GetActs")]
         public IActionResult GetPage(
@@ -42,24 +34,20 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
+            var pageView = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
 
-            var pageView = new PageSettings<ActViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
-
-            //pageView.Items = _mapper.Map<IEnumerable<ActModel>, IEnumerable<ActViewList>>(pageModel.Items);
-            pageView.Items = pageModel.Items;
             return Ok(pageView);
         }
 
         [HttpGet("{id}", Name = "GetAct")]
-        public IActionResult GetOne(int id)
+        public IActionResult Get(int id)
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _service.GetOne(id);
             var view = _mapper.Map<ActModel, ActViewOne>(entity);
@@ -71,11 +59,11 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var entity = _mapper.Map<ActEdit, ActModel>(view);
             var id = _service.Create(entity);
-            d_log.Log(user, id);
+            _log.Log(user, Entities.Act, Possibilities.Insert, typeof(ActModel), id);
             return Ok(id);
 
         }
@@ -85,13 +73,13 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             var entity = _mapper.Map<ActEdit, ActModel>(view);
             entity.Id = id;
             _service.Update(entity);
-            d_log.Log(user, id);
+            _log.Log(user, Entities.Act, Possibilities.Update, typeof(ActModel), id);
             return Ok();
         }
 
@@ -100,11 +88,11 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);
-            d_log.Log(user, id);
+            _log.Log(user, Entities.Act, Possibilities.Delete, typeof(ActModel), id);
             return Ok();
         }
     }

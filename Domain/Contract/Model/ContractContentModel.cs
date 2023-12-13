@@ -18,21 +18,11 @@ public class ContractContentModel
     public int ContractId { get; set; }
 
     [ForeignKey(nameof(ContractId))]
-    public ContractModel Contract { get; set; }
+    public ContractModel? Contract { get; set; } = null;
 
     [Column("locality_id")]
     public int LocalityId { get; set; }
 
     [ForeignKey(nameof(LocalityId))]
-    public LocalityModel Locality { get; set; }
-
-    public ContractContentModel() { }
-    public ContractContentModel(
-            int id, decimal price, ContractModel contract, LocalityModel locality)
-    {
-        Id = id;
-        Price = price;
-        ContractId = contract.Id;
-        LocalityId = locality.Id;
-    }
+    public LocalityModel? Locality { get; set; } = null;
 }

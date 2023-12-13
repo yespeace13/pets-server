@@ -17,7 +17,7 @@ namespace PetsServer.Domain.Act.Controller
         // Сервис
         private readonly ActPhotoService _service = new();
         // Для привилегий и доступа
-        private readonly AuthenticationUserService _authenticationService = new();
+        private readonly AuthenticationService _authenticationService = new();
         private readonly LogService _log = new(typeof(ActPhoto));
 
         [HttpGet("{animalId}", Name = "GetActPhotos")]
@@ -25,7 +25,7 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var photos = _service.Get(animalId);
             return Ok(photos);
@@ -36,7 +36,7 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Insert, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Insert, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var photoId = _service.AddPhoto(actId, file);
             _log.Log(user, actId, photoId);
@@ -48,7 +48,7 @@ namespace PetsServer.Domain.Act.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Act, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Delete, Entities.Act, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var actId = _service.GetActIdByPhotoId(id);
             _service.DeletePhoto(id);

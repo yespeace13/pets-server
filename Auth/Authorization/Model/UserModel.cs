@@ -52,6 +52,4 @@ public class UserModel
     public string? Position { get; set; }
     [Column("phone")]
     public string Phone { get; set; }
-
-    public UserModel() { }
 }

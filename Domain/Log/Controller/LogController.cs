@@ -13,21 +13,14 @@ namespace PetsServer.Domain.Log.Controller
     [ApiController]
     [Route("logs")]
     [Authorize]
-    public class LogController : ControllerBase
+    public class LogController(IMapper mapper) : ControllerBase
     {
         // Сервис
-        private LogService _service;
+        private readonly LogService _service = new();
         // Для привилегий и доступа
-        private AuthenticationUserService _authenticationService;
+        private readonly AuthenticationService _authenticationService = new();
         // Маппер для данных
-        private readonly IMapper _mapper;
-
-        public LogController(IMapper mapper)
-        {
-            _service = new LogService();
-            _authenticationService = new AuthenticationUserService();
-            _mapper = mapper;
-        }
+        private readonly IMapper _mapper = mapper;
 
         [HttpGet(Name = "GetLogs")]
         public IActionResult GetPage(
@@ -39,13 +32,10 @@ namespace PetsServer.Domain.Log.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Log, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Log, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
-            var pageModel = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
-
-            var pageView = new PageSettings<LogViewList>(pageModel.Pages, pageModel.Page, pageModel.Limit);
-            pageView.Items = _mapper.Map<List<LogViewList>>(pageModel.Items);
+            var pageView = _service.GetPage(page, pages, filter, sortField, sortType, user, _mapper);
 
             return Ok(pageView);
         }
@@ -55,7 +45,7 @@ namespace PetsServer.Domain.Log.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Read, Entities.Log, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Read, Entities.Log, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
             var model = _service.GetOne(id);
             var view = _mapper.Map<LogViewList>(model);
@@ -69,7 +59,7 @@ namespace PetsServer.Domain.Log.Controller
         {
             var user = _authenticationService.GetUser(User.Identity.Name);
 
-            if (!AuthorizationUserService.IsPossible(Possibilities.Delete, Entities.Log, user))
+            if (!AuthorizationService.IsPossible(Possibilities.Delete, Entities.Log, user))
                 return Problem(null, null, 403, "У вас нет привилегий");
 
             _service.Delete(id);

@@ -1,13 +1,11 @@
 ﻿using PetsServer.Domain.Locality.Model;
 using PetsServer.Infrastructure.Context;
 
-namespace PetsServer.Domain.Locality.Repository;
+namespace PetsServer.Domain.Locality.Service;
 
-public class LocalityRepository
+public class LocalityService
 {
-    private PetsContext _context;
-
-    public LocalityRepository() => _context = new PetsContext();
+    private readonly PetsContext _context = new();
 
     public List<LocalityModel> GetLocalitys() => _context.Localities.ToList();
 

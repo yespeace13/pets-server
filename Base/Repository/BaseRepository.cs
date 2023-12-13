@@ -1,6 +1,6 @@
 ﻿using PetsServer.Infrastructure.Context;
 
-namespace PetsServer.Infrastructure
+namespace PetsServer.Base.Repository
 {
     public abstract class BaseRepository<T>
     {

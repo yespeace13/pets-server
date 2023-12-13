@@ -1,25 +1,17 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using PetsServer.Domain.Act.Service;
 using PetsServer.Domain.Contract.Service;
 
 namespace PetsServer.Domain.Contract.Controller;
 
 [Route("сontractexport")]
 [ApiController]
-public class ContractExportController : ControllerBase
+public class ContractExportController(IMapper mapper) : ControllerBase
 {
-
     // Маппер для данных
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper = mapper;
 
-    private ContractService _service;
-
-    public ContractExportController(IMapper mapper)
-    {
-        _service = new ContractService();
-        _mapper = mapper;
-    }
+    private readonly ContractService _service = new();
 
     [HttpGet]
     public IActionResult Get(string? filters)

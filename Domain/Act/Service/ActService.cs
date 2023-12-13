@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ModelLibrary.Model.Act;
-using ModelLibrary.Model.Contract;
 using ModelLibrary.View;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Act.Model;
@@ -11,7 +10,7 @@ namespace PetsServer.Domain.Act.Service;
 
 public class ActService
 {
-    private ActRepository _repository = new ActRepository();
+    private readonly ActRepository _repository = new();
 
     public int Create(ActModel model)
     {
@@ -35,7 +34,7 @@ public class ActService
         _repository.Delete(organization);
     }
 
-    public ActModel? GetOne(int id) => _repository.GetOne(id);
+    public ActModel? GetOne(int id) => _repository.Get(id);
 
     public PageSettings<ActViewList> GetPage(
         int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)
@@ -52,9 +51,9 @@ public class ActService
             pageSettings.Limit = limitQuery.Value;
 
         // берем организации по этим правилам
-        var acts = _repository.GetAll();
+        var acts = _repository.Get();
 
-        var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Organization && p.Possibility == Possibilities.Read).First().Restriction;
+        var userRestiction = user.Role.Possibilities.Where(p => p.Entity == Entities.Act && p.Possibility == Possibilities.Read).First().Restriction;
 
         if (userRestiction == Restrictions.Organization)
             acts = acts.Where(a => a.ExecutorId == user.Organization.Id);
@@ -82,10 +81,10 @@ public class ActService
 
     public byte[] ExportToExcel(string filters, IMapper mapper)
     {
-        IEnumerable<ActViewList> acts = mapper.Map<List<ActViewList>>(_repository.GetAll());
+        IEnumerable<ActViewList> acts = mapper.Map<List<ActViewList>>(_repository.Get());
         acts = new FilterObjects<ActViewList>().Filter(acts, filters);
         return ExportDataToExcel.Export(
-            "Организации", acts.ToList());
+            "Акты", acts.ToList());
     }
 }
 

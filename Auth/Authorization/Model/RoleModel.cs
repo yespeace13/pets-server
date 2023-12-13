@@ -13,15 +13,5 @@ public class RoleModel
     [Column("name")]
     public string Name { get; }
 
-    public List<EntityPossibilities> Possibilities { get; set; }
-
-
-    public RoleModel() { }
-
-    public RoleModel(int id, string name, List<EntityPossibilities> possibilities)
-    {
-        Id = id;
-        Name = name;
-        Possibilities = possibilities;
-    }
+    public IQueryable<EntityPossibilities> Possibilities { get; set; }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,14 +22,5 @@ public class PlanModel
     [ForeignKey(nameof(StatusId))]
     public PlanStatusModel Status { get; set; }
 
-    public List<PlanContentModel> PlanContent { get; set; }
-
-    public PlanModel() { }
-    public PlanModel(
-            int id, int month, int year)
-    {
-        Id = id;
-        Month = month;
-        Year = year;
-    }
+    public ICollection<PlanContentModel> PlanContent { get; set; } = new List<PlanContentModel>();
 }

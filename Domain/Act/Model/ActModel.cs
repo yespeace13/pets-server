@@ -1,4 +1,3 @@
-using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Domain.Locality.Model;
 using PetsServer.Domain.Organization.Model;
@@ -8,7 +7,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PetsServer.Domain.Act.Model;
 
 [Table("act")]
-
 public class ActModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -36,17 +34,4 @@ public class ActModel
     public List<AnimalModel> Animal { get; set; }
 
     public List<ActPhoto> Photos { get; set; }
-
-    public ActModel(
-            int id, OrganizationModel executor, LocalityModel locality, DateOnly date, ContractModel contract)
-    {
-        Id = id;
-        ExecutorId = executor.Id;
-        LocalityId = locality.Id;
-        DateOfCapture = date;
-        ContractId = contract.Id;
-    }
-
-    public ActModel() { }
-
 }

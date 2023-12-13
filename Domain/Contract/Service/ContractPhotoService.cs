@@ -1,5 +1,4 @@
 ﻿using ModelLibrary.Model.Etc;
-using PetsServer.Domain.Animal.Model;
 using PetsServer.Domain.Contract.Model;
 using PetsServer.Infrastructure.Context;
 
@@ -7,7 +6,7 @@ namespace PetsServer.Domain.Contract.Service;
 
 public class ContractPhotoService
 {
-    private PetsContext _context = new PetsContext();
+    private readonly PetsContext _context = new();
 
     public int AddPhoto(int animalId, IFormFile file)
     {
@@ -49,6 +48,5 @@ public class ContractPhotoService
             File = File.ReadAllBytes(p.Path)
         }).ToList();
     }
-
 }
 

@@ -6,11 +6,9 @@ namespace PetsServer.Domain.Act.Repository;
 
 public class ActRepository
 {
-    private PetsContext _context;
+    private readonly PetsContext _context = new();
 
-    public ActRepository() => _context = new PetsContext();
-
-    public ActModel? GetOne(int id)
+    public ActModel? Get(int id)
     {
         var act = _context.Acts
             .Include(a => a.Animal)
@@ -21,13 +19,12 @@ public class ActRepository
         return act;
     }
 
-    public IEnumerable<ActModel> GetAll()
+    public IQueryable<ActModel> Get()
     {
         return _context.Acts
             .Include(c => c.Executor)
             .Include(c => c.Locality)
-            .Include(c => c.Contract)
-            .ToList();
+            .Include(c => c.Contract);
     }
 
     public int Create(ActModel act)

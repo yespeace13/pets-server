@@ -10,7 +10,7 @@ namespace PetsServer.Domain.Contract.Service;
 
 public class ContractService
 {
-    private ContractRepository _repository = new ContractRepository();
+    private readonly ContractRepository _repository = new();
 
     public int Create(ContractModel model)
     {
@@ -19,7 +19,7 @@ public class ContractService
 
     public void Update(ContractModel model)
     {
-        var oldModel = GetOne(model.Id);
+        var oldModel = Get(model.Id);
         if (oldModel == null) return;
         oldModel.Number = model.Number;
         oldModel.DateOfConclusion = model.DateOfConclusion;
@@ -32,11 +32,11 @@ public class ContractService
 
     public void Delete(int id)
     {
-        var model = GetOne(id);
+        var model = Get(id);
         _repository.Delete(model);
     }
 
-    public ContractModel? GetOne(int id) => _repository.GetOne(id);
+    public ContractModel? Get(int id) => _repository.Get(id);
 
     public PageSettings<ContractViewList> GetPage(
         int? pageQuery, int? limitQuery, string? filter, string? sortField, int? sortType, UserModel user, IMapper mapper)
@@ -53,7 +53,6 @@ public class ContractService
             pageSettings.Limit = limitQuery.Value;
 
         var contracts = Get(user);
-
 
         // Фильтрация
         //contractsView = new FilterObjects<ContractViewList>().Filter(contractsView, filter);
@@ -93,10 +92,12 @@ public class ContractService
 
     public byte[] ExportToExcel(string filters, IMapper mapper)
     {
-        IEnumerable<ContractViewList> organizations = mapper.Map<List<ContractViewList>>(_repository.GetAll());
-        organizations = new FilterObjects<ContractViewList>().Filter(organizations, filters);
+        var models = _repository.Get();
+        models = Filter(models, filters);
+        var views = mapper.Map<IQueryable<ContractViewList>>(models)
+            .ToList();
         return ExportDataToExcel.Export(
-            "Организации", organizations.ToList());
+            "Контракты", views);
     }
 
 
@@ -117,7 +118,7 @@ public class ContractService
         foreach (string filter in filtersKeyValue)
         {
             var ketValue = filter.Split(":");
-            filters[ketValue[0]] = Uri.UnescapeDataString(ketValue[1]);
+            filters[ketValue[0]] = Uri.UnescapeDataString(ketValue[1]).ToLower();
         }
 
         if (filters.CountEmptyFileds == 0)
@@ -128,10 +129,10 @@ public class ContractService
             switch (filter)
             {
                 case "Id":
-                    models = models.Where(m => m.Id.ToString().Contains(filters[filter]));
+                    models = models.Where(m => m.Id.ToString().ToLower().Contains(filters[filter]));
                     break;
                 case "Number":
-                    models = models.Where(m => m.Number.Contains(filters[filter]));
+                    models = models.Where(m => m.Number.ToLower().Contains(filters[filter]));
                     break;
                 case "DateOfConclusion":
                     var periodDate = filters[filter].Split(' ');
@@ -144,10 +145,10 @@ public class ContractService
                         models = models.Where(m => m.DateValid >= startDate2 && m.DateValid <= endDate2);
                     break;
                 case "Executor":
-                    models = models.Where(m => m.Executor.NameOrganization.Contains(filters[filter]));
+                    models = models.Where(m => m.Executor.NameOrganization.ToLower().Contains(filters[filter]));
                     break;
                 case "Client":
-                    models = models.Where(m => m.Client.NameOrganization.Contains(filters[filter]));
+                    models = models.Where(m => m.Client.NameOrganization.ToLower().Contains(filters[filter]));
                     break;
                 default:
                     break;

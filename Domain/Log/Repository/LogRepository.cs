@@ -6,13 +6,10 @@ namespace PetsServer.Domain.Log.Repository;
 
 public class LogRepository
 {
-    private PetsContext _context = new PetsContext();
+    private readonly PetsContext _context = new();
     public LogModel? Get(int id)
     {
-        return _context.Logs
-            .Include(l => l.User)
-            .ThenInclude(u => u.Organization)
-            .FirstOrDefault(l => l.Id == id);
+        return Get().FirstOrDefault(l => l.Id == id);
     }
     public IQueryable<LogModel> Get()
     {
@@ -20,7 +17,6 @@ public class LogRepository
             .Include(l => l.User)
             .ThenInclude(u => u.Organization);
     }
-
 
     public void Delete(LogModel entity)
     {

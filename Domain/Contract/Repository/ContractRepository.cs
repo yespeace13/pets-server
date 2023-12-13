@@ -6,32 +6,11 @@ namespace PetsServer.Domain.Contract.Repository;
 
 public class ContractRepository
 {
-    private PetsContext _context;
+    private readonly PetsContext _context = new();
 
-    public ContractRepository()
+    public ContractModel? Get(int id)
     {
-        _context = new PetsContext();
-    }
-
-    public ContractModel? GetOne(int id)
-    {
-        return _context.Contracts
-            .Include(c => c.Client.TypeOrganization)
-            .Include(c => c.Client.LegalType)
-            .Include(c => c.Client.Locality)
-            .Include(c => c.Executor.TypeOrganization)
-            .Include(c => c.Executor.LegalType)
-            .Include(c => c.Executor.Locality)
-            .Include(c => c.ContractContent)
-            .ThenInclude(c => c.Locality)
-            .FirstOrDefault(o => o.Id == id);
-    }
-
-    public IEnumerable<ContractModel> GetAll()
-    {
-        return _context.Contracts
-            .Include(c => c.Client)
-            .Include(c => c.Executor);
+        return Get().FirstOrDefault(o => o.Id == id);
     }
 
     public IQueryable<ContractModel> Get()
