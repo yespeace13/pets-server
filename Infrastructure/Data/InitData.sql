@@ -54,8 +54,8 @@ VALUES
 INSERT INTO "act"
 (executor_id, locality_id, date_of_capture, contract_id)
 VALUES
-(1, 1, '2021-02-01', 1),
-(2, 2, '2021-03-01', 2);
+(1, 1, '2023-02-01', 1),
+(2, 2, '2023-03-01', 2);
 
 INSERT INTO "animal"
 (category, sex, breed, size, wool, color, ears, tail, special_signs, identification_label, chip_number, act_id)
@@ -69,11 +69,20 @@ VALUES
 --создаем суперпользователя
 INSERT INTO "role"
 ("name")
-VALUES('super-man');
+VALUES
+('super-man'),
+('test'),
+('Куратор ОМСУ'),
+('Оператор ОМСУ'),
+('Подписант ОМСУ');
 --TODO 
 INSERT INTO "user"
 ("login", "password", locality_id, organization_id, role_id, last_name, first_name, phone)
-VALUES('super', 'AQAAAAIAAYagAAAAEO/sYj4RkmFNwdqOe88+1EZEXC6s3BlUOC2kdjT4ZmPxHBMyWUWRF7SKQ8LzhZunIQ==', 1, 1, 1, 'Суперменов', 'Бэтмен', '123412');
+VALUES
+('super', 'AQAAAAIAAYagAAAAEO/sYj4RkmFNwdqOe88+1EZEXC6s3BlUOC2kdjT4ZmPxHBMyWUWRF7SKQ8LzhZunIQ==', 1, 1, 1, 'Суперменов', 'Бэтмен', '123412'),
+('oper', 'AQAAAAIAAYagAAAAEDrKNnb4dQvt2Ap6kqKaLcqpvFtXBfQQrKnzfh8BASTURGs/vG2hFO2EJfKSkIEzVQ==', 1, 9, 4, 'Иванов', 'Иван', '111111'),
+('kurator', 'QAAAAIAAYagAAAAEO1VnIzY77EXJ6Jka3BQQphfbmFepVxZasBeEW7T7eZqY6ZaXmHRdaeB5eJtdmBqFQ==', 1, 9, 3, 'Смирнов', 'Иван', '2222222'),
+('podpisant', 'AQAAAAIAAYagAAAAEJf5rw+W1iAu1ZRxLopyQLaTsIl7EEInOE9rFpQXqK365D33T2Wia0z7zlPJOXK/kg==', 1, 9, 5, 'Петров', 'Иван', '333333');
 
 INSERT INTO entity_possibilities
 (entity, possibility, restriction, role_id)
