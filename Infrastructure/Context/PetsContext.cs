@@ -38,6 +38,7 @@ namespace PetsServer.Infrastructure.Context
         public DbSet<ActPhoto> ActPhotos { get; set; }
         public DbSet<ContractPhoto> ContractPhotos { get; set; }
         public DbSet<LogModel> Logs { get; set; }
+        public DbSet<ReportStatusModel> ReportsStatuses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

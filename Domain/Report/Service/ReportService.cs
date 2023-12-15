@@ -4,6 +4,7 @@ using ModelLibrary.View;
 using PetsServer.Auth.Authorization.Model;
 using PetsServer.Domain.Report.Model;
 using PetsServer.Domain.Report.Repository;
+using PetsServer.Infrastructure.Context;
 using PetsServer.Infrastructure.Services;
 
 namespace PetsServer.Domain.Report.Service;
@@ -103,4 +104,76 @@ public class ReportService
         return ExportDataToExcel.Export(
             "Отчеты", views.ToList());
     }
+
+    internal void SetReportStatus(int reportId, int statusId)
+    {
+        var report = _repository.Get(reportId);
+        report.StatusId = statusId;
+        _repository.Update(report);
+    }
+
+    internal List<ReportStatusModel>? GetStatuses(int reportId, UserModel user)
+    {
+        var statuses = new PetsContext().ReportsStatuses;
+        var report = _repository.Get(reportId);
+        var role = user.Role.Name;
+        var reportStatus = report.Status.StatusName;
+
+        if (role == "super-man") return [.. statuses];
+
+        if (role == "Оператор ОМСУ")
+        {
+            if(reportStatus == "Черновик")
+            {
+                return [.. statuses.Where(s => s.StatusName == "Черновик"
+                    || s.StatusName == "Согласование у исполнителя Муниципального Контракта"
+                    || s.StatusName == "Доработка")];
+            }
+            if(reportStatus == "Доработка")
+            {
+                return [.. statuses.Where(s => s.StatusName == "Согласование у исполнителя Муниципального Контракта"
+                    || s.StatusName == "Доработка")];
+            }
+        }
+
+        if (role == "Куратор ОМСУ")
+        {
+            if (reportStatus == "Согласование у исполнителя Муниципального Контракта")
+            {
+                return [.. statuses.Where(s => s.StatusName == "Доработка"
+                    || s.StatusName == "Согласован у исполнителя Муниципального Контракта")];
+            }
+
+            if (reportStatus == "Утвержден у исполнителя Муниципального Контракта")
+            {
+                return [.. statuses.Where(s => s.StatusName == "Доработка"
+                    || s.StatusName == "Согласован в ОМСУ")];
+            }
+        }
+
+        if (role == "Подписант ОМСУ")
+        {
+            if(reportStatus == "Согласован у исполнителя Муниципального Контракта")
+            {
+                return [.. statuses.Where(s => s.StatusName == "Доработка"
+                    || s.StatusName == "Утвержден у исполнителя Муниципального Контракта")];
+            }
+        }
+            
+        return [report.Status];
+    }
+
+    internal ReportStatusModel? GetActualStatus(int reportId)
+    {
+        return Get(reportId)?.Status;
+    }
 }
+
+/*
+ * ('Черновик'),
+('Доработка'),
+('Согласование у исполнителя Муниципального Контракта'),
+('Согласован у исполнителя Муниципального Контракта'),
+('Утвержден у исполнителя Муниципального Контракта'),
+('Согласован в ОМСУ');
+ */

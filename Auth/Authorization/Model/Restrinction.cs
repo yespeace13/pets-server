@@ -13,7 +13,8 @@ public enum Possibilities
     Read,
     Insert,
     Update,
-    Delete
+    Delete,
+    ChangeStatus
 }
 
 public enum Entities

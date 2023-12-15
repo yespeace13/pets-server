@@ -85,7 +85,8 @@ namespace PetsServer.Infrastructure.Services
             CreateMap<EntityPossibilities, UserPossibilities>();
 
             // Report
-            CreateMap<ReportModel, ReportViewList>();
+            CreateMap<ReportModel, ReportViewList>()
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.StatusName));
 
             CreateMap<ReportContentModel, ReportContentView>()
                 .ForMember(dest => dest.Locality, opt => opt.MapFrom(src => src.Locality.Name));

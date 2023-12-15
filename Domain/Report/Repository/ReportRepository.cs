@@ -14,12 +14,14 @@ public class ReportRepository
         return _context.Reports
             .Include(r => r.ReportContent)
             .ThenInclude(r => r.Locality)
+            .Include(r => r.Status)
             .FirstOrDefault(r => r.Id == id);
     }
 
     public IQueryable<ReportModel> Get()
     {
-        return _context.Reports;
+        return _context.Reports
+            .Include(r => r.Status);
     }
 
     public void Create(ReportModel report)
@@ -32,6 +34,7 @@ public class ReportRepository
     {
         _context.Remove(report);
         _context.SaveChanges();
+
     }
 
     public IQueryable<ActModel> GetActs()
@@ -40,5 +43,10 @@ public class ReportRepository
         .Include(a => a.Animal)
         .Include(a => a.Contract)
         .ThenInclude(c => c.ContractContent);
+    }
+
+    internal void Update(ReportModel report)
+    {
+        _context.Update(report);
     }
 }
