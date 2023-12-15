@@ -15,13 +15,15 @@ public class ReportService
 
     public int Create(DateOnly from, DateOnly to)
     {
-        var model = new ReportModel();
-        model.DateStart = from;
-        model.DateEnd = to;
-        // на время
-        model.Number = new Random().Next(10000);
-        model.DateStatus = DateTime.Now;
-        model.StatusId = 1;
+        var model = new ReportModel
+        {
+            DateStart = from,
+            DateEnd = to,
+            // на время
+            Number = new Random().Next(10000),
+            DateStatus = DateTime.Now,
+            StatusId = 1
+        };
 
         var acts = _repository.GetActs()
             .Where(a => a.DateOfCapture > from && a.DateOfCapture < to);
@@ -53,6 +55,7 @@ public class ReportService
     public void Delete(int id)
     {
         var model = GetOne(id);
+        if (model == null) return;
         _repository.Delete(model);
     }
 
@@ -108,6 +111,7 @@ public class ReportService
     internal void SetReportStatus(int reportId, int statusId)
     {
         var report = _repository.Get(reportId);
+        if (report == null) return;
         report.StatusId = statusId;
         _repository.Update(report);
     }
@@ -116,8 +120,9 @@ public class ReportService
     {
         var statuses = new PetsContext().ReportsStatuses;
         var report = _repository.Get(reportId);
-        var role = user.Role.Name;
-        var reportStatus = report.Status.StatusName;
+        if(report ==  null) return null;
+        var role = user.Role?.Name ?? String.Empty;
+        var reportStatus = report?.Status.StatusName ?? String.Empty;
 
         if (role == "super-man") return [.. statuses];
 

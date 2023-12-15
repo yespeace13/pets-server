@@ -48,5 +48,6 @@ public class ReportRepository
     internal void Update(ReportModel report)
     {
         _context.Update(report);
+        _context.SaveChanges();
     }
 }
